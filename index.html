@@ -3,70 +3,60 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#06060B">
-<title>UNBOUND — Acesso Ilimitado</title>
-<meta name="description" content="Chaves de API sem rate limit, sem cota de tokens e sem fila. Capacidade reservada para Kimi K3, Opus 5 e Fable 5.1.">
-
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F7F7F6">
+<title>UNBOUND — Capacidade sem medidor</title>
+<meta name="description" content="Chaves de API sem rate limit, sem cota de tokens e sem fila. Capacidade reservada para Kimi K3, Opus 5 e Fable 5.1, vendida por lote com preço fixo.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="UNBOUND — Acesso Ilimitado">
-<meta property="og:description" content="Sem rate limit. Sem cota. Sem fila. Capacidade de IA reservada para quem roda em escala.">
+<meta property="og:title" content="UNBOUND — Capacidade sem medidor">
+<meta property="og:description" content="Sem rate limit. Sem cota. Sem fila. Capacidade de IA reservada, vendida por lote.">
 
 <!--
   ===========================================================================
-  UNBOUND · página de vendas · arquivo único (HTML + Tailwind CDN)
+  UNBOUND · página de vendas de API · arquivo único
   ===========================================================================
-  ONDE MEXER  — procure estas marcações no código:
+  ONDE MEXER:
+    [MARCA]     nome, símbolo, domínio
+    [NUMERO]    prova social, vagas, contadores  → EXEMPLOS
+    [PRECO]     valores dos planos               → EXEMPLOS
+    [CTA]       links de checkout / contato
+    [ENDPOINT]  api.unbound.ai → seu endpoint real
+    [PRAZO]     encerramento do lote (const LOTE_FECHA, no rodapé)
 
-    [MARCA]      nome, símbolo e domínio da empresa
-    [NUMERO]     prova social, vagas, contadores  → são EXEMPLOS
-    [PRECO]      valores dos planos               → são EXEMPLOS
-    [CTA]        troque href="#planos" pelo link do checkout / WhatsApp
-    [ENDPOINT]   troque api.unbound.ai pelo endpoint real
-    [PRAZO]      data de encerramento do lote (JS no rodapé do arquivo)
+  AVISO: uso, uptime, latência, vagas, preços e política de dados são
+  exemplos de layout. Confirme cada afirmação antes de publicar.
 
-  AVISO AO EDITOR: números de uso, uptime, latência, quantidade de vagas,
-  preços e a política de dados abaixo são de demonstração de layout.
-  Confirme cada afirmação antes de publicar.
-
-  ARQUITETURA VISUAL
-    Cor    void #06060B · painel #0C0C15 · ion #7C5CFF · arc #2F6BFF
-           live #3DDC97 (semântico: disponível) · halt #FF5C7A (semântico: bloqueio)
-    Tipo   Archivo (display) · IBM Plex Sans (texto) · IBM Plex Mono (telemetria)
-    Grade  trilho de 1200px, seções separadas por fio de 1px.
-           Card é reservado a objeto de produto (modelo e plano) — o resto
-           é grade com divisórias, para não achatar a hierarquia.
+  DIREÇÃO VISUAL — folha de especificação, não landing page.
+    Cor    papel #F7F7F6 · tinta #131315 · fios #E3E3E0
+           cor só carrega significado: #1F6B4C disponível, #9C3B2C encerrado.
+           Nenhum tom decorativo — o gesto forte é a chapa preta.
+    Tipo   Schibsted Grotesk (texto e display) · Spline Sans Mono (dados)
+    Grade  12 colunas de 1280px, com as guias visíveis onde a página quer
+           parecer documento técnico. Seções numeradas §00–§10 porque a
+           página É uma especificação lida em ordem.
   ===========================================================================
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-  // Marca que o JS está ativo: sem JS, nada fica escondido esperando animação.
   document.documentElement.classList.add('js');
-
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          void:  '#06060B',
-          panel: { DEFAULT:'#0C0C15', 2:'#12121D', 3:'#191926' },
-          ion:   { DEFAULT:'#7C5CFF', soft:'#A896FF', deep:'#5B3BE0' },
-          arc:   { DEFAULT:'#2F6BFF', soft:'#7FA8FF' },
-          live:  '#3DDC97',
-          halt:  '#FF5C7A',
-          chalk: '#EDECF5',
-          mute:  '#9A98B0'
+          paper:'#F7F7F6', card:'#FFFFFF', wash:'#EFEFED', wash2:'#E7E7E4',
+          rule:'#E3E3E0', ruleb:'#C8C8C4',
+          ink:'#131315', ink2:'#34343A', slate:'#66666D', mute:'#93939A',
+          ok:'#1F6B4C', gone:'#9C3B2C'
         },
         fontFamily: {
-          display: ['Archivo','Helvetica Neue','Arial','sans-serif'],
-          sans:    ['"IBM Plex Sans"','system-ui','-apple-system','sans-serif'],
-          mono:    ['"IBM Plex Mono"','ui-monospace','SFMono-Regular','monospace']
-        },
-        maxWidth: { rail: '1200px' }
+          sans: ['"Schibsted Grotesk"','system-ui','-apple-system','sans-serif'],
+          mono: ['"Spline Sans Mono"','ui-monospace','SFMono-Regular','monospace']
+        }
       }
     }
   }
@@ -75,476 +65,381 @@
 <style>
 /* ==========================================================================
    1 · TOKENS
-   Página assumidamente dark: um único mundo visual, pintado explicitamente.
+   Neutro de verdade: nenhum tom decorativo. Verde e ferrugem existem só
+   para dizer "disponível" e "encerrado" — são sinal, não identidade.
    ========================================================================== */
 :root{
-  --void:#06060B;
-  --panel:#0C0C15;
-  --panel-2:#12121D;
-  --ion:#7C5CFF;
-  --ion-soft:#A896FF;
-  --arc:#2F6BFF;
-  --live:#3DDC97;
-  --halt:#FF5C7A;
-  --chalk:#EDECF5;
-  --mute:#9A98B0;
-  /* fios com viés violeta — cinza puro lê como "não escolhido" */
-  --hair:rgba(178,166,255,.11);
-  --hair-2:rgba(178,166,255,.19);
-  --ease:cubic-bezier(.16,1,.3,1);
+  --paper:#F7F7F6; --card:#FFFFFF; --wash:#EFEFED; --wash2:#E7E7E4;
+  --rule:#E3E3E0; --rule-b:#C8C8C4;
+  --ink:#131315; --ink-2:#34343A; --slate:#66666D; --mute:#93939A;
+  --ok:#1F6B4C; --gone:#9C3B2C;
+  --gap:24px; --railw:1280px;
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
+@media (max-width:900px){ :root{ --gap:16px } }
 
-*{ -webkit-tap-highlight-color:transparent; }
-html{ background:var(--void); }
+*{ -webkit-tap-highlight-color:transparent }
+html{ background:var(--paper) }
 body{
-  background:var(--void);
-  color:var(--chalk);
+  background:var(--paper); color:var(--ink);
+  font-family:'Schibsted Grotesk',system-ui,sans-serif;
+  font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
-  font-feature-settings:"ss01","cv05";
 }
-::selection{ background:rgba(124,92,255,.34); color:#fff; }
-
-::-webkit-scrollbar{ width:11px; }
-::-webkit-scrollbar-track{ background:#08080E; }
-::-webkit-scrollbar-thumb{ background:#241f45; border:3px solid #08080E; border-radius:99px; }
-::-webkit-scrollbar-thumb:hover{ background:#372f6b; }
-
-a:focus-visible,button:focus-visible,summary:focus-visible{
-  outline:2px solid var(--ion-soft); outline-offset:3px; border-radius:10px;
+::selection{ background:var(--ink); color:var(--paper) }
+::-webkit-scrollbar{ width:12px }
+::-webkit-scrollbar-track{ background:var(--wash) }
+::-webkit-scrollbar-thumb{ background:var(--rule-b); border:3px solid var(--wash) }
+::-webkit-scrollbar-thumb:hover{ background:var(--slate) }
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{
+  outline:2px solid var(--ink); outline-offset:2px
 }
 
 /* ==========================================================================
-   2 · TIPOGRAFIA
+   2 · GRADE
+   O trilho e as guias compartilham a mesma definição, então a linha da guia
+   cai exatamente na borda da coluna do conteúdo.
    ========================================================================== */
-.display{
-  font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
-  font-weight:800; letter-spacing:-.035em; line-height:.98; text-wrap:balance;
-}
-.display-sm{
-  font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
-  font-weight:700; letter-spacing:-.025em; line-height:1.05; text-wrap:balance;
-}
-/* Rótulo de telemetria — o motivo que costura hero, números e cards */
-.tele{
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
-  font-size:11px; font-weight:500; letter-spacing:.19em; text-transform:uppercase;
+.rail{ width:min(100% - 2.5rem, var(--railw)); margin-inline:auto }
+@media (max-width:640px){ .rail{ width:calc(100% - 2rem) } }
+.g12{ display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:var(--gap) }
+.g12 > *{ min-width:0 }            /* item de grid não estica com conteúdo largo */
+
+/* guias de coluna — assinatura de folha de especificação */
+.guides{ position:absolute; inset:0; pointer-events:none; z-index:0 }
+.guides .g12{ height:100% }
+.guides i{ border-left:1px solid var(--rule); display:block; height:100% }
+.guides i:last-child{ border-right:1px solid var(--rule) }
+@media (max-width:900px){ .guides{ display:none } }
+
+/* ==========================================================================
+   3 · TIPOGRAFIA
+   ========================================================================== */
+.d1{ font-weight:800; letter-spacing:-.045em; line-height:.94; text-wrap:balance }
+.d2{ font-weight:700; letter-spacing:-.032em; line-height:1.04; text-wrap:balance }
+.d3{ font-weight:600; letter-spacing:-.022em; line-height:1.15; text-wrap:balance }
+.lab{
+  font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
   color:var(--mute);
 }
-.tnum{ font-variant-numeric:tabular-nums; font-feature-settings:"tnum"; }
-.num{ font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums; }
-.lede{ color:var(--mute); text-wrap:pretty; }
-.ink-grad{
-  background:linear-gradient(96deg,#FFFFFF 0%,#D9D2FF 34%,#A896FF 58%,#7FA8FF 82%,#FFFFFF 100%);
-  background-size:200% 100%;
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  animation:sheen 11s ease-in-out infinite;
-}
-@keyframes sheen{ 0%,100%{background-position:0 50%} 50%{background-position:100% 50%} }
+.mono{ font-family:'Spline Sans Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums }
+.tnum{ font-variant-numeric:tabular-nums }
+.prose{ color:var(--slate); text-wrap:pretty }
+.measure{ max-width:64ch }
 
-/* ==========================================================================
-   3 · ATMOSFERA (grade, ruído, halos)
-   ========================================================================== */
-.grid-far{
-  background-image:
-    linear-gradient(to right, rgba(178,166,255,.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(178,166,255,.06) 1px, transparent 1px);
-  background-size:72px 72px;
-  -webkit-mask-image:radial-gradient(ellipse 78% 62% at 50% 6%,#000 25%,transparent 76%);
-          mask-image:radial-gradient(ellipse 78% 62% at 50% 6%,#000 25%,transparent 76%);
+/* marcador de seção: §NN + fio, na margem */
+.mark{ display:flex; align-items:center; gap:.9rem }
+.mark b{
+  font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:11px; font-weight:600; letter-spacing:.1em; color:var(--ink);
 }
-.grain::after{
-  content:""; position:absolute; inset:0; pointer-events:none; opacity:.28; z-index:1;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+.mark span{
+  font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
 }
-.halo{ position:absolute; border-radius:50%; filter:blur(100px); mix-blend-mode:screen; pointer-events:none; }
-@keyframes drift{
-  0%,100%{ transform:translate3d(0,0,0) scale(1) }
-  50%    { transform:translate3d(3%,-5%,0) scale(1.14) }
-}
-.drift-a{ animation:drift 26s ease-in-out infinite }
-.drift-b{ animation:drift 38s ease-in-out infinite reverse }
-
-/* Fio de seção — separador em vez de "caixa em cima de caixa" */
-.rule{ height:1px; background:linear-gradient(90deg,transparent,var(--hair) 18%,var(--hair) 82%,transparent); }
+.mark hr{ flex:1; height:0; border:0; border-top:1px solid var(--rule) }
 
 /* ==========================================================================
    4 · SUPERFÍCIES
-   Borda luminosa por máscara (não vaza no fundo, não some no Safari).
+   Nada de sombra difusa por toda parte: fio de 1px separa, e a chapa preta
+   é o único elemento que se levanta do papel.
    ========================================================================== */
-.pane{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.014)),
-    var(--panel);
-  border:1px solid var(--hair);
-  -webkit-backdrop-filter:blur(16px) saturate(150%);
-          backdrop-filter:blur(16px) saturate(150%);
-}
-.edge{ position:relative; }
-.edge::before{
-  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; z-index:2;
-  background:linear-gradient(150deg, rgba(255,255,255,.26), rgba(255,255,255,.02) 42%, rgba(124,92,255,.34) 76%, rgba(47,107,255,.24));
-  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor; mask-composite:exclude;
-  pointer-events:none;
-}
-.edge-hot::before{
-  background:linear-gradient(150deg, rgba(216,208,255,.85), rgba(124,92,255,.42) 44%, rgba(47,107,255,.6) 78%, rgba(255,255,255,.4));
-}
-/* Luz que segue o cursor */
-.spot{ position:relative; }
-.spot::after{
-  content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:0;
-  background:radial-gradient(460px circle at var(--mx,50%) var(--my,-20%), rgba(124,92,255,.15), transparent 60%);
-  opacity:0; transition:opacity .5s var(--ease);
-}
-.spot:hover::after{ opacity:1; }
-.lift{ transition:transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease); }
-.lift:hover{ transform:translateY(-5px); box-shadow:0 34px 80px -38px rgba(91,59,224,.8); }
-.beacon{ box-shadow:0 0 0 1px rgba(124,92,255,.24), 0 30px 100px -34px rgba(124,92,255,.85); }
+.hair{ border-top:1px solid var(--rule) }
+.hair-b{ border-bottom:1px solid var(--rule) }
+.slab{ background:var(--ink); color:#F2F2F0 }
+.slab .lab{ color:rgba(242,242,240,.5) }
+.slab-row{ border-top:1px solid rgba(255,255,255,.12) }
 
-/* Ponto de status "ao vivo" */
-.pip{ width:7px; height:7px; border-radius:99px; background:var(--live); animation:pip 2.6s infinite; }
-@keyframes pip{
-  0%{ box-shadow:0 0 0 0 rgba(61,220,151,.5) }
-  70%{ box-shadow:0 0 0 9px rgba(61,220,151,0) }
-  100%{ box-shadow:0 0 0 0 rgba(61,220,151,0) }
-}
+.tile{ background:var(--card); border:1px solid var(--rule) }
+.tile-flat{ background:var(--card) }
 
-/* ==========================================================================
-   5 · BOTÕES
-   ========================================================================== */
+/* botões */
 .btn{
-  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  font-weight:600; letter-spacing:-.012em; border-radius:12px; overflow:hidden;
-  transition:transform .3s var(--ease), box-shadow .35s var(--ease), background .3s var(--ease), border-color .3s var(--ease);
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font-weight:600; font-size:15px; letter-spacing:-.01em;
+  padding:.85rem 1.4rem; border-radius:2px; border:1px solid transparent;
+  transition:background .22s var(--ease), color .22s var(--ease), border-color .22s var(--ease), transform .22s var(--ease);
 }
-.btn:active{ transform:translateY(1px) scale(.995); }
-.btn-key{
-  color:#0A0714;
-  background:linear-gradient(180deg,#F2EFFF 0%,#CFC4FF 48%,#A896FF 100%);
-  box-shadow:0 1px 0 rgba(255,255,255,.7) inset, 0 16px 44px -16px rgba(124,92,255,.95), 0 0 0 1px rgba(207,196,255,.4);
-}
-.btn-key:hover{ transform:translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.85) inset, 0 24px 62px -16px rgba(124,92,255,1), 0 0 0 1px rgba(232,226,255,.65); }
-/* A varredura fica invisivel em repouso: acesa, ela lavava o rotulo do botao. */
-.btn-key::after{
-  content:""; position:absolute; inset:0; opacity:0;
-  background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.9) 47%,transparent 63%);
-  background-size:260% 100%; background-position:190% 0;
-  transition:opacity .2s linear;
-}
-.btn-key:hover::after{ opacity:.85; animation:swipe 1s var(--ease); }
-@keyframes swipe{ to{ background-position:-90% 0 } }
-.btn-line{
-  color:var(--chalk); border:1px solid var(--hair-2); background:rgba(255,255,255,.03);
-  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-}
-.btn-line:hover{ background:rgba(255,255,255,.07); border-color:rgba(178,166,255,.34); transform:translateY(-2px); }
-.btn-dead{ color:var(--mute); border:1px solid var(--hair); background:rgba(255,255,255,.02); cursor:default; }
+.btn-ink{ background:var(--ink); color:#FAFAF9 }
+.btn-ink:hover{ background:#000; transform:translateY(-1px) }
+.btn-line{ background:transparent; color:var(--ink); border-color:var(--rule-b) }
+.btn-line:hover{ border-color:var(--ink); background:var(--card) }
+.btn-onink{ background:#FAFAF9; color:var(--ink) }
+.btn-onink:hover{ background:#fff; transform:translateY(-1px) }
+.btn-ghost-onink{ background:transparent; color:#FAFAF9; border-color:rgba(255,255,255,.28) }
+.btn-ghost-onink:hover{ border-color:#FAFAF9 }
+.btn:active{ transform:translateY(0) }
+
+/* estados de sinal */
+.sig{ display:inline-flex; align-items:center; gap:.45rem;
+  font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:10.5px; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
+  padding:.28rem .5rem; border:1px solid; border-radius:2px }
+.sig-ok{ color:var(--ok); border-color:rgba(31,107,76,.32); background:rgba(31,107,76,.06) }
+.sig-gone{ color:var(--gone); border-color:rgba(156,59,44,.32); background:rgba(156,59,44,.06) }
+.sig-live{ color:#8FE3B8; border-color:rgba(143,227,184,.3); background:rgba(143,227,184,.08) }
+.dot{ width:5px; height:5px; border-radius:50%; background:currentColor }
 
 /* ==========================================================================
-   6 · MOVIMENTO
-   Hero anima no load (nunca preso esperando scroll).
-   Seções abaixo da dobra usam observer, com destravamento por segurança.
+   5 · MOVIMENTO
+   Discreto por decisão: numa folha técnica, o movimento é ruído.
    ========================================================================== */
-@keyframes rise{ from{ opacity:0; transform:translateY(20px) } to{ opacity:1; transform:none } }
-.js .rise{ animation:rise .9s var(--ease) both; }
-.js .rise[data-d="1"]{ animation-delay:.07s } .js .rise[data-d="2"]{ animation-delay:.14s }
-.js .rise[data-d="3"]{ animation-delay:.21s } .js .rise[data-d="4"]{ animation-delay:.28s }
-.js .rise[data-d="5"]{ animation-delay:.36s } .js .rise[data-d="6"]{ animation-delay:.44s }
+@keyframes rise{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
+.js .rise{ animation:rise .7s var(--ease) both }
+.js .rise[data-d="1"]{animation-delay:.05s} .js .rise[data-d="2"]{animation-delay:.1s}
+.js .rise[data-d="3"]{animation-delay:.15s} .js .rise[data-d="4"]{animation-delay:.2s}
+.js .rise[data-d="5"]{animation-delay:.26s}
 
-.js .reveal{ opacity:0; transform:translateY(22px); }
-.js .reveal.in{ opacity:1; transform:none; transition:opacity .85s var(--ease), transform .85s var(--ease); }
-.js .reveal[data-d="1"].in{ transition-delay:.07s } .js .reveal[data-d="2"].in{ transition-delay:.14s }
-.js .reveal[data-d="3"].in{ transition-delay:.21s } .js .reveal[data-d="4"].in{ transition-delay:.28s }
-.js .reveal[data-d="5"].in{ transition-delay:.35s } .js .reveal[data-d="6"].in{ transition-delay:.42s }
+.js .rv{ opacity:0; transform:translateY(16px) }
+.js .rv.in{ opacity:1; transform:none; transition:opacity .7s var(--ease), transform .7s var(--ease) }
+.js .rv[data-d="1"].in{transition-delay:.06s} .js .rv[data-d="2"].in{transition-delay:.12s}
+.js .rv[data-d="3"].in{transition-delay:.18s} .js .rv[data-d="4"].in{transition-delay:.24s}
 
-.ticker{ display:flex; width:max-content; animation:ticker 46s linear infinite; }
-@keyframes ticker{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
-.fade-x{
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
-          mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+.ticker{ display:flex; width:max-content; animation:tick 52s linear infinite }
+@keyframes tick{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.fadex{
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
-
 /* ==========================================================================
-   7 · MEDIDOR DE LOTE
-   O mesmo componente conta três histórias: sobra, aperto e fim.
+   6 · COMPONENTES DE FICHA
    ========================================================================== */
-.meter{ height:5px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
-.meter-fill{
-  display:block; height:100%; border-radius:99px;
-  background:linear-gradient(90deg,var(--ion),var(--arc));
-  box-shadow:0 0 14px rgba(124,92,255,.65);
+
+/* item removido do trajeto */
+.strike{
+  font-size:11.5px; padding:.3rem .55rem; border:1px solid var(--rule);
+  background:var(--card); color:var(--mute);
+  text-decoration:line-through; text-decoration-color:rgba(156,59,44,.55);
 }
-.meter-low{
-  background:linear-gradient(90deg,#FF9DAE,var(--halt));
-  box-shadow:0 0 14px rgba(255,92,122,.6);
-}
-.meter-out{
+
+/* medidor de lote — mesmo componente, três histórias */
+.meter{ display:block; height:3px; background:var(--wash2); overflow:hidden }
+.meter i{ display:block; height:100%; background:var(--ink) }
+.meter i.low{ background:var(--gone) }
+.meter i.out{
   background:repeating-linear-gradient(45deg,
-    rgba(255,255,255,.13) 0 5px, rgba(255,255,255,.04) 5px 11px);
-  box-shadow:none;
+    var(--rule-b) 0 3px, transparent 3px 7px);
 }
 
 /* ==========================================================================
-   8 · PEÇA ESGOTADA (Fable 5.1)
-   Dessaturar sem apagar: a ficha continua legível, o desejo continua de pé.
-   No hover a cor volta um pouco — a peça "responde", mesmo fora de estoque.
+   7 · A COLUNA ENCERRADA (Fable 5.1)
+   Hachura de arquivo + valores riscados + carimbo. Sem borrão e sem cinza
+   morto: a ficha continua legível, e é isso que mantém o desejo de pé.
    ========================================================================== */
-.hatch{
+.gone-col{
   background-image:repeating-linear-gradient(-45deg,
-    rgba(255,255,255,.028) 0 1px, transparent 1px 9px);
+    rgba(19,19,21,.035) 0 1px, transparent 1px 7px);
+  background-color:var(--wash);
 }
-.sold-content{
-  filter:grayscale(.92) brightness(.8) contrast(.97);
-  opacity:.86;
-  transition:filter .6s var(--ease), opacity .6s var(--ease);
-}
-.sold-wrap:hover .sold-content{ filter:grayscale(.6) brightness(.92) contrast(1); opacity:.97; }
-
-.seal{
-  transform:rotate(-7deg);
-  border:1px solid rgba(255,92,122,.42);
-  border-radius:11px;
-  padding:.45rem .8rem .5rem;
-  text-align:center;
-  background:rgba(9,7,13,.62);
-  -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px);
-  box-shadow:0 0 0 3px rgba(255,92,122,.07), 0 16px 44px -20px rgba(255,92,122,.85);
-}
-.seal-line{
-  display:block; font-family:'IBM Plex Mono',ui-monospace,monospace;
-  font-size:12.5px; font-weight:500; letter-spacing:.28em; text-transform:uppercase;
-  color:#FF9DAE; text-indent:.28em;
-}
-.seal-sub{
-  display:block; margin-top:3px; font-family:'IBM Plex Mono',ui-monospace,monospace;
-  font-size:9px; letter-spacing:.15em; text-transform:uppercase;
-  color:rgba(237,236,245,.42);
+.gone-val{ color:var(--mute); text-decoration:line-through; text-decoration-color:rgba(156,59,44,.55) }
+.stamp{
+  position:absolute; right:1rem; top:1.1rem; transform:rotate(-5deg);
+  font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:9px; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--gone); border:1px solid rgba(156,59,44,.45); padding:.28rem .5rem;
+  background:rgba(247,247,246,.7); white-space:nowrap;
 }
 
 /* ==========================================================================
-   9 · FAQ
-   <details> nativo: acessível por teclado e funciona sem JS.
+   8 · PASSOS DA OPERAÇÃO
    ========================================================================== */
+.step{
+  border-top:1px solid var(--rule); padding:1.6rem 0 1.6rem 3.4rem; position:relative;
+  cursor:default; transition:opacity .35s var(--ease);
+}
+.step:last-child{ border-bottom:1px solid var(--rule) }
+.step-n{
+  position:absolute; left:0; top:1.7rem;
+  font-size:11px; font-weight:600; letter-spacing:.1em; color:var(--rule-b);
+  transition:color .35s var(--ease);
+}
+.step::before{
+  content:""; position:absolute; left:0; top:-1px; width:2.2rem; height:1px;
+  background:var(--ink); transform:scaleX(0); transform-origin:left;
+  transition:transform .45s var(--ease);
+}
+@media (min-width:1024px){ .step{ opacity:.45 } .step.on{ opacity:1 } }
+.step.on .step-n{ color:var(--ink) }
+.step.on::before{ transform:scaleX(1) }
+
+/* ==========================================================================
+   9 · DÚVIDAS
+   ========================================================================== */
+.faq{ border-bottom:1px solid var(--rule) }
 .faq summary{
   display:flex; align-items:flex-start; justify-content:space-between; gap:1.5rem;
-  padding:1.4rem 0; cursor:pointer; list-style:none;
-  font-size:16.5px; font-weight:600; line-height:1.45; color:#fff;
-  transition:color .3s var(--ease);
+  padding:1.3rem 0; cursor:pointer; list-style:none;
+  font-size:16px; font-weight:600; letter-spacing:-.012em; line-height:1.4;
+  transition:color .25s var(--ease);
 }
-.faq summary::-webkit-details-marker{ display:none; }
-.faq summary:hover{ color:var(--ion-soft); }
+.faq summary::-webkit-details-marker{ display:none }
+.faq summary:hover{ color:var(--slate) }
 .faq summary::after{
-  content:""; flex:none; margin-top:.42em; width:9px; height:9px;
-  border-right:1.7px solid var(--mute); border-bottom:1.7px solid var(--mute);
-  transform:rotate(45deg); transform-origin:60% 60%;
-  transition:transform .35s var(--ease), border-color .35s var(--ease);
+  content:"+"; flex:none; font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:15px; line-height:1.3; color:var(--mute); transition:transform .3s var(--ease);
 }
-.faq[open] summary::after{ transform:rotate(-135deg); border-color:var(--ion-soft); }
-.faq-body{ padding:0 2.5rem 1.5rem 0; }
-.faq-body p{ max-width:62ch; font-size:15px; line-height:1.7; color:var(--mute); }
-.faq[open] .faq-body{ animation:faqIn .4s var(--ease) both; }
-@keyframes faqIn{ from{ opacity:0; transform:translateY(-6px) } to{ opacity:1; transform:none } }
-
-/* Campo de e-mail: sem autofill branco do Chrome sobre fundo escuro */
-input:-webkit-autofill,
-input:-webkit-autofill:focus{
-  -webkit-text-fill-color:var(--chalk);
-  -webkit-box-shadow:0 0 0 40px #14141F inset;
-  caret-color:var(--chalk);
-}
+.faq[open] summary::after{ content:"−"; color:var(--ink) }
+.faq-body{ padding:0 2.5rem 1.4rem 0 }
+.faq-body p{ max-width:62ch; font-size:14.5px; line-height:1.7; color:var(--slate) }
+.faq[open] .faq-body{ animation:faqIn .35s var(--ease) both }
+@keyframes faqIn{ from{opacity:0; transform:translateY(-5px)} to{opacity:1; transform:none} }
 
 /* ==========================================================================
-   10 · ACESSIBILIDADE DE MOVIMENTO
+   10 · MISCELÂNEA
    ========================================================================== */
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
-  .js .reveal{ opacity:1 !important; transform:none !important; }
+#cycleMonth, #cycleYear{ color:var(--mute); transition:background .2s var(--ease), color .2s var(--ease) }
+.cyc-on{ background:var(--ink); color:#FAFAF9 !important }
+
+/* Chrome pinta o autofill de branco por cima do papel */
+input:-webkit-autofill, input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 40px var(--card) inset;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important }
+  .js .rv{ opacity:1!important; transform:none!important }
 }
 </style>
 </head>
 
-<body class="font-sans antialiased">
-
-<!-- progresso de leitura -->
-<div id="progress" class="fixed inset-x-0 top-0 z-[70] h-px w-0 origin-left bg-gradient-to-r from-ion via-arc to-live shadow-[0_0_16px_rgba(124,92,255,.9)]"></div>
+<body>
 
 <!-- =========================================================================
-     NAV
+     ÍNDICE FIXO — só em telas largas. A página é um documento; o índice
+     mostra onde você está nele.
      ========================================================================= -->
-<header id="nav" class="fixed inset-x-0 top-0 z-[60]">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div id="navbar" class="mt-3 flex items-center justify-between rounded-2xl border border-transparent px-4 py-2.5 transition-all duration-500 sm:px-5">
+<nav id="index" class="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 xl:block" aria-label="Índice da página">
+  <ol class="space-y-3">
+    <li><a href="#catalogo"    data-ix="catalogo"    class="ixlink"><i></i><b>04</b><span>Catálogo</span></a></li>
+    <li><a href="#beneficios"  data-ix="beneficios"  class="ixlink"><i></i><b>05</b><span>Benefícios</span></a></li>
+    <li><a href="#operacao"    data-ix="operacao"    class="ixlink"><i></i><b>06</b><span>Operação</span></a></li>
+    <li><a href="#comparativo" data-ix="comparativo" class="ixlink"><i></i><b>07</b><span>Comparativo</span></a></li>
+    <li><a href="#planos"      data-ix="planos"      class="ixlink"><i></i><b>08</b><span>Planos</span></a></li>
+    <li><a href="#faq"         data-ix="faq"         class="ixlink"><i></i><b>09</b><span>Dúvidas</span></a></li>
+  </ol>
+</nav>
+<style>
+  /* marca compacta: traço + número. O rótulo só entra quando a janela tem
+     folga além do trilho de 1280px — senão ele deitaria sobre o conteúdo. */
+  .ixlink{ display:flex; align-items:center; gap:7px; color:var(--mute);
+           font-family:'Spline Sans Mono',ui-monospace,monospace; font-size:10px;
+           letter-spacing:.1em; transition:color .25s var(--ease) }
+  .ixlink i{ display:block; width:10px; height:1px; background:currentColor;
+             transition:width .3s var(--ease), background .25s var(--ease) }
+  .ixlink b{ font-weight:500 }
+  .ixlink span{ display:none; text-transform:uppercase; white-space:nowrap }
+  .ixlink:hover{ color:var(--ink) }
+  .ixlink.on{ color:var(--ink) }
+  .ixlink.on i{ width:22px; background:var(--ink) }
+  .ixlink.on b{ font-weight:600 }
+  @media (min-width:1560px){ .ixlink span{ display:block } }
+</style>
 
+<!-- =========================================================================
+     CABEÇALHO
+     ========================================================================= -->
+<header id="top" class="sticky top-0 z-50 border-b border-rule bg-paper/85 backdrop-blur-md">
+  <div class="rail flex h-14 items-center justify-between">
+    <a href="#top" class="flex items-baseline gap-2.5">
       <!-- [MARCA] -->
-      <a href="#topo" class="flex items-center gap-2.5" aria-label="UNBOUND, início">
-        <span class="grid h-8 w-8 place-items-center rounded-[10px] bg-gradient-to-br from-ion to-arc shadow-[0_10px_26px_-10px_rgba(124,92,255,.95)]">
-          <svg viewBox="0 0 24 24" class="h-[18px] w-[18px] text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <path d="M6.4 8.9c1.9 0 2.6 6.2 4.5 6.2a3.1 3.1 0 1 0 0-6.2c-1.9 0-2.6 6.2-4.5 6.2a3.1 3.1 0 1 1 0-6.2Z"/>
-          </svg>
-        </span>
-        <span class="display-sm text-[17px] text-white">UNBOUND</span>
-      </a>
+      <span class="d3 text-[17px] tracking-[-.02em]">UNBOUND</span>
+      <span class="lab hidden sm:inline">provisionamento de capacidade</span>
+    </a>
 
-      <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Seções">
-        <a href="#modelos"     class="rounded-lg px-3.5 py-2 text-[14px] text-mute transition hover:bg-white/5 hover:text-chalk">Modelos</a>
-        <a href="#beneficios"  class="rounded-lg px-3.5 py-2 text-[14px] text-mute transition hover:bg-white/5 hover:text-chalk">Benefícios</a>
-        <a href="#comparativo" class="rounded-lg px-3.5 py-2 text-[14px] text-mute transition hover:bg-white/5 hover:text-chalk">Comparativo</a>
-        <a href="#planos"      class="rounded-lg px-3.5 py-2 text-[14px] text-mute transition hover:bg-white/5 hover:text-chalk">Planos</a>
-        <a href="#faq"         class="rounded-lg px-3.5 py-2 text-[14px] text-mute transition hover:bg-white/5 hover:text-chalk">Dúvidas</a>
+    <div class="flex items-center gap-5">
+      <nav class="hidden items-center gap-5 md:flex" aria-label="Navegação">
+        <a href="#catalogo"   class="text-[13.5px] text-slate transition hover:text-ink">Catálogo</a>
+        <a href="#operacao"   class="text-[13.5px] text-slate transition hover:text-ink">Operação</a>
+        <a href="#planos"     class="text-[13.5px] text-slate transition hover:text-ink">Planos</a>
+        <a href="#faq"        class="text-[13.5px] text-slate transition hover:text-ink">Dúvidas</a>
       </nav>
-
-      <div class="flex items-center gap-3">
-        <span class="hidden items-center gap-2 rounded-lg border border-live/20 bg-live/[.07] px-2.5 py-1.5 md:inline-flex">
-          <span class="pip"></span><span class="tele !text-live !tracking-[.14em]">2 modelos on</span>
-        </span>
-        <!-- [CTA] -->
-        <a href="#planos" class="btn btn-key hidden px-4 py-2.5 text-[13.5px] sm:inline-flex">Garantir acesso</a>
-        <button id="menuBtn" class="grid h-9 w-9 place-items-center rounded-[10px] border border-white/10 bg-white/5 text-chalk lg:hidden" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
-          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <div id="mobileMenu" class="pane mt-2 hidden rounded-2xl p-2 lg:hidden">
-      <a href="#modelos"     class="block rounded-xl px-4 py-3 text-[15px] text-chalk/85 transition hover:bg-white/5">Modelos</a>
-      <a href="#beneficios"  class="block rounded-xl px-4 py-3 text-[15px] text-chalk/85 transition hover:bg-white/5">Benefícios</a>
-      <a href="#comparativo" class="block rounded-xl px-4 py-3 text-[15px] text-chalk/85 transition hover:bg-white/5">Comparativo</a>
-      <a href="#planos"      class="block rounded-xl px-4 py-3 text-[15px] text-chalk/85 transition hover:bg-white/5">Planos</a>
-      <a href="#faq"         class="block rounded-xl px-4 py-3 text-[15px] text-chalk/85 transition hover:bg-white/5">Dúvidas</a>
-      <a href="#planos" class="btn btn-key mt-2 w-full px-4 py-3 text-sm">Garantir acesso ilimitado</a>
+      <!-- [CTA] -->
+      <a href="#planos" class="btn btn-ink !px-4 !py-2 !text-[13.5px]">Garantir chave</a>
     </div>
   </div>
 </header>
 
 <!-- =========================================================================
-     HERO
-     Tese da página: um console de infraestrutura. O produto não é "um chat
-     bonito", é capacidade — então o herói mostra instrumentos, não ilustração.
+     §00 · ABERTURA
+     Composição assimétrica: manchete nas colunas 1–8, anotação de margem nas
+     10–12, chapa de especificação atravessando 7–12. As guias ficam visíveis
+     porque a página quer ser lida como documento.
      ========================================================================= -->
-<section id="topo" class="grain relative overflow-hidden pt-[132px] pb-20 sm:pt-[150px] sm:pb-28">
+<section class="relative overflow-hidden pt-16 pb-0 sm:pt-24">
+  <div class="rail relative">
+    <div class="guides" aria-hidden="true">
+      <div class="g12"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
 
-  <!-- atmosfera -->
-  <canvas id="flux" class="pointer-events-none absolute inset-0 h-full w-full opacity-[.55]" aria-hidden="true"></canvas>
-  <div class="grid-far pointer-events-none absolute inset-0" aria-hidden="true"></div>
-  <div class="halo drift-a left-1/2 top-[-14rem] h-[38rem] w-[38rem] -translate-x-1/2 bg-ion/25" aria-hidden="true"></div>
-  <div class="halo drift-b left-[6%] top-[16rem] h-[26rem] w-[26rem] bg-arc/20" aria-hidden="true"></div>
-  <div class="halo drift-a right-[4%] top-[10rem] h-[22rem] w-[22rem] bg-ion-deep/25" aria-hidden="true"></div>
-  <!-- arco de luz no topo -->
-  <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ion-soft/50 to-transparent" aria-hidden="true"></div>
+    <div class="relative z-10">
+      <div class="mark rise"><b>§00</b><span>Abertura</span><hr></div>
 
-  <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
+      <div class="g12 mt-8 items-end sm:mt-12">
+        <h1 class="rise d1 col-span-12 text-[clamp(3rem,9vw,7.5rem)] lg:col-span-8" data-d="1">
+          Sem limite.<br>Sem cota.<br>Sem fila.
+        </h1>
 
-    <!-- selo de acesso -->
-    <div class="rise flex justify-center" data-d="1">
-      <div class="edge inline-flex items-center gap-2.5 rounded-full bg-white/[.04] px-3.5 py-1.5 backdrop-blur-md">
-        <span class="pip"></span>
-        <span class="tele !text-chalk/80">Acesso ilimitado</span>
-        <span class="h-3 w-px bg-white/15"></span>
-        <!-- [NUMERO] vagas do lote -->
-        <span class="tele !text-ion-soft"><span class="hidden sm:inline">Lote 07 · </span>46 chaves</span>
+        <!-- anotação de margem, no registro de ficha técnica -->
+        <aside class="rise col-span-12 mt-6 border-t border-rule pt-4 lg:col-span-3 lg:col-start-10 lg:mt-0" data-d="2">
+          <p class="lab">Nota</p>
+          <p class="mono mt-2.5 text-[12px] leading-[1.7] text-slate">
+            A UNBOUND provisiona capacidade de IA reservada e a entrega por chave nominal.
+            <span class="text-ink">Lote 07 aberto — 46 chaves de 150.</span>
+          </p>
+        </aside>
       </div>
-    </div>
 
-    <!-- manchete -->
-    <h1 class="rise display mx-auto mt-7 max-w-[24ch] text-center text-[clamp(1.9rem,7.2vw,5.6rem)] text-white" data-d="2">
-      <span class="block">Pare de contar tokens.</span>
-      <span class="ink-grad block">Comece a dominar.</span>
-    </h1>
-
-    <p class="rise lede mx-auto mt-7 max-w-[62ch] text-center text-[17px] leading-[1.65] sm:text-[19px]" data-d="3">
-      Chaves de API <span class="text-chalk">verdadeiramente ilimitadas</span> para Kimi&nbsp;K3, Opus&nbsp;5 e Fable&nbsp;5.1.
-      Sem rate limit. Sem cota mensal. Sem fila. Você roda o quanto quiser, na velocidade
-      que quiser — 24 horas por dia, todos os dias.
-    </p>
-
-    <!-- ações -->
-    <div class="rise mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row" data-d="4">
-      <!-- [CTA] -->
-      <a href="#planos" class="btn btn-key w-full px-7 py-4 text-[15px] sm:w-auto">
-        Garantir minha chave ilimitada
-        <svg viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5.5 18.5 12 12 18.5"/></svg>
-      </a>
-      <a href="#modelos" class="btn btn-line w-full px-7 py-4 text-[15px] sm:w-auto">Ver modelos disponíveis</a>
-    </div>
-
-    <p class="rise mt-5 text-center text-[13px] text-mute" data-d="5">
-      Ativação em minutos · Sem fidelidade · 7 dias de garantia
-    </p>
-
-    <!-- ===================================================================
-         CONSOLE — a prova visual do "ilimitado"
-         =================================================================== -->
-    <div class="rise mt-14 sm:mt-16" data-d="6">
-      <div class="edge edge-hot spot lift beacon relative overflow-hidden rounded-[22px] bg-panel/80 backdrop-blur-xl" data-spot>
-
-        <!-- barra de status -->
-        <div class="relative z-[3] flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/[.07] px-4 py-3 sm:px-6">
-          <div class="flex items-center gap-2">
-            <span class="pip"></span>
-            <span class="tele !text-live">Operacional</span>
+      <div class="g12 mt-12 sm:mt-16">
+        <div class="rise col-span-12 lg:col-span-5" data-d="3">
+          <p class="prose text-[17px] leading-[1.62]">
+            Chaves de API para <span class="text-ink">Kimi K3</span>, <span class="text-ink">Opus 5</span>
+            e <span class="text-ink">Fable 5.1</span> sem rate limit, sem cota de tokens e sem fila de
+            prioridade. Capacidade comprada em volume, repassada a preço fixo por mês.
+          </p>
+          <div class="mt-7 flex flex-col gap-2.5 sm:flex-row">
+            <!-- [CTA] -->
+            <a href="#planos" class="btn btn-ink">Garantir minha chave</a>
+            <a href="#catalogo" class="btn btn-line">Ver o catálogo</a>
           </div>
-          <!-- [ENDPOINT] -->
-          <code class="num text-[12.5px] text-chalk/70">api.unbound.ai/v1</code>
-          <span class="hidden h-3 w-px bg-white/12 sm:block"></span>
-          <span class="tele hidden sm:inline">região sa-east-1</span>
-          <div class="ml-auto flex items-center gap-2 rounded-lg border border-ion/25 bg-ion/10 px-2.5 py-1">
-            <span class="text-[13px] leading-none text-ion-soft">∞</span>
-            <span class="tele !text-ion-soft !tracking-[.15em]">sem teto</span>
-          </div>
+          <p class="lab mt-6">Ativação em minutos · sem fidelidade · 7 dias de garantia</p>
         </div>
 
-        <div class="relative z-[3] grid gap-px bg-white/[.06] md:grid-cols-[1.08fr_.92fr]">
-
-          <!-- requisição -->
-          <div class="min-w-0 bg-panel/90 p-5 sm:p-7">
-            <p class="tele mb-4">Requisição</p>
-<pre class="num overflow-x-auto text-[11px] leading-[1.85] text-chalk/85 sm:text-[12.5px]"><span class="text-mute">$</span> curl https://<span class="text-ion-soft">api.unbound.ai</span>/v1/chat/completions \
-  -H <span class="text-live">"Authorization: Bearer sk-unb-••••••7f2a"</span> \
-  -d <span class="text-live">'{</span>
-       <span class="text-live">"model"</span>: <span class="text-arc-soft">"opus-5"</span>,
-       <span class="text-live">"stream"</span>: <span class="text-arc-soft">true</span>,
-       <span class="text-live">"max_tokens"</span>: <span class="text-arc-soft">"unlimited"</span>
-     <span class="text-live">}'</span></pre>
-
-            <div class="mt-5 flex flex-wrap items-center gap-2">
-              <span class="rounded-md border border-live/25 bg-live/10 px-2 py-1 text-[11px] font-medium text-live">200 OK</span>
-              <span class="num text-[11.5px] text-mute">ttft 148&nbsp;ms</span>
-              <span class="h-3 w-px bg-white/10"></span>
-              <span class="num text-[11.5px] text-mute">retry 0</span>
-              <span class="h-3 w-px bg-white/10"></span>
-              <span class="num text-[11.5px] text-mute">throttle off</span>
-            </div>
+        <!-- chapa preta: o único elemento que se levanta do papel -->
+        <div class="rise slab col-span-12 mt-10 lg:col-span-6 lg:col-start-7 lg:mt-0" data-d="4">
+          <div class="flex items-center justify-between px-5 py-3.5">
+            <span class="sig sig-live"><span class="dot"></span>operacional</span>
+            <!-- [ENDPOINT] -->
+            <code class="mono text-[12px] text-white/60">api.unbound.ai/v1</code>
           </div>
 
-          <!-- instrumentos -->
-          <div class="min-w-0 bg-panel/90 p-5 sm:p-7">
-            <div class="mb-4 flex items-baseline justify-between">
-              <p class="tele">Vazão · últimos 60&nbsp;s</p>
-              <p class="num text-[11.5px] text-live" id="rps">— req/s</p>
+          <dl class="text-[13px]">
+            <div class="slab-row flex items-center justify-between px-5 py-2.5">
+              <dt class="lab">Rate limit</dt><dd class="mono text-white/95">—</dd>
             </div>
-            <canvas id="throughput" class="h-[86px] w-full" aria-label="Gráfico de vazão de requisições nos últimos 60 segundos"></canvas>
+            <div class="slab-row flex items-center justify-between px-5 py-2.5">
+              <dt class="lab">Cota de tokens</dt><dd class="mono text-white/95">—</dd>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-2.5">
+              <dt class="lab">Fila de prioridade</dt><dd class="mono text-white/95">0</dd>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-2.5">
+              <dt class="lab">Concorrência</dt><dd class="mono text-white/95">sem teto</dd>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-2.5">
+              <dt class="lab">TTFT · p50</dt><dd class="mono text-white/95">148 ms</dd>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-2.5">
+              <dt class="lab">Erros 429 · 30 dias</dt><dd class="mono text-[#8FE3B8]">0,00 %</dd>
+            </div>
+          </dl>
 
-            <!-- leituras -->
-            <dl class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/[.06]">
-              <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px] shrink-0 pt-px">Rate limit</dt>
-                <dd class="display-sm mt-1.5 text-[22px] text-white">Nenhum</dd>
-              </div>
-              <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px] shrink-0 pt-px">Erros 429</dt>
-                <dd class="num mt-1.5 text-[22px] font-medium text-live">0,00%</dd>
-              </div>
-              <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px] shrink-0 pt-px">Fila</dt>
-                <dd class="num mt-1.5 text-[22px] font-medium text-white">0</dd>
-              </div>
-              <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px] shrink-0 pt-px">Cota restante</dt>
-                <dd class="mt-1.5 text-[22px] leading-[1.1] text-ion-soft">∞</dd>
-              </div>
-            </dl>
+          <div class="slab-row px-5 py-4">
+            <pre class="mono overflow-x-auto text-[11px] leading-[1.8] text-white/70"><span class="text-white/35">$</span> curl https://api.unbound.ai/v1/chat/completions \
+    -H <span class="text-[#8FE3B8]">"Authorization: Bearer sk-unb-••••7f2a"</span> \
+    -d <span class="text-[#8FE3B8]">'{"model":"opus-5","stream":true}'</span></pre>
           </div>
         </div>
       </div>
@@ -553,637 +448,527 @@ input:-webkit-autofill:focus{
 </section>
 
 <!-- =========================================================================
-     PROVA SOCIAL — faixa de operações
-     [NUMERO] nomes de exemplo. Troque pelos seus clientes reais.
+     §01 · NÚMEROS
+     Linha de indicadores com fio, sem caixas: a leitura é de tabela.
+     [NUMERO] todos os valores são exemplos.
      ========================================================================= -->
-<section class="relative border-y border-white/[.06] bg-panel/40 py-7" aria-label="Quem usa">
-  <p class="tele mb-6 text-center">Infraestrutura por trás de operações que não podem parar</p>
-  <div class="fade-x relative overflow-hidden">
-    <div class="ticker gap-12 px-6 sm:gap-16">
-      <!-- duplicado para o loop contínuo -->
-      <div class="flex shrink-0 items-center gap-12 sm:gap-16">
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Vantek&nbsp;Labs</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Norsul&nbsp;AI</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Cortex&nbsp;Bureau</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Piraquê&nbsp;Digital</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Helion&nbsp;Systems</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Aurelia&nbsp;Group</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Meridiano&nbsp;27</span>
-      </div>
-      <div class="flex shrink-0 items-center gap-12 sm:gap-16" aria-hidden="true">
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Vantek&nbsp;Labs</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Norsul&nbsp;AI</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Cortex&nbsp;Bureau</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Piraquê&nbsp;Digital</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Helion&nbsp;Systems</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Aurelia&nbsp;Group</span>
-        <span class="display-sm whitespace-nowrap text-[19px] text-white/35">Meridiano&nbsp;27</span>
-      </div>
-    </div>
-  </div>
-</section>
+<section class="mt-20 sm:mt-28" aria-label="Indicadores da operação">
+  <div class="rail">
+    <div class="mark rv"><b>§01</b><span>Operação em números</span><hr></div>
 
-<!-- =========================================================================
-     NÚMEROS
-     Grade com divisórias de 1px — não são quatro cards soltos, é um painel.
-     [NUMERO] todos os valores abaixo são exemplos.
-     ========================================================================= -->
-<section class="relative py-16 sm:py-20" aria-label="Números da operação">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <dl class="reveal grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/[.07] bg-white/[.06] lg:grid-cols-4">
-
-      <div class="bg-void px-5 py-7 sm:px-7 sm:py-8">
-        <dt class="tele">Tokens processados / mês</dt>
-        <dd class="display-sm mt-3 text-[clamp(1.9rem,4vw,2.6rem)] text-white">
-          <span class="tnum" data-count="41.7" data-dec="1">0</span><span class="text-ion-soft"> bi</span>
+    <dl class="g12 mt-8 border-t border-ink">
+      <div class="col-span-6 border-b border-rule py-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:pr-6">
+        <dt class="lab">Tokens processados · mês</dt>
+        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)]">
+          <span data-count="41.7" data-dec="1">41,7</span> <span class="text-mute">bi</span>
         </dd>
-        <p class="mt-2 text-[13px] text-mute">sem uma única cobrança por excedente</p>
+        <p class="mt-2 text-[13px] text-mute">sem uma única cobrança de excedente</p>
       </div>
-
-      <div class="bg-void px-5 py-7 sm:px-7 sm:py-8">
-        <dt class="tele">Chaves ativas em produção</dt>
-        <dd class="display-sm mt-3 text-[clamp(1.9rem,4vw,2.6rem)] text-white">
-          <span class="tnum" data-count="1284">0</span><span class="text-ion-soft">+</span>
+      <div class="col-span-6 border-b border-rule py-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:px-6">
+        <dt class="lab">Chaves em produção</dt>
+        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)]">
+          <span data-count="1284">1.284</span><span class="text-mute">+</span>
         </dd>
-        <p class="mt-2 text-[13px] text-mute">agentes, SaaS e automações 24/7</p>
+        <p class="mt-2 text-[13px] text-mute">agentes, SaaS e automação contínua</p>
       </div>
-
-      <div class="bg-void px-5 py-7 sm:px-7 sm:py-8">
-        <dt class="tele">Disponibilidade · 90 dias</dt>
-        <dd class="display-sm mt-3 text-[clamp(1.9rem,4vw,2.6rem)] text-live">
-          <span class="tnum" data-count="99.98" data-dec="2">0</span>%
+      <div class="col-span-6 py-6 lg:col-span-3 lg:border-r lg:px-6">
+        <dt class="lab">Disponibilidade · 90 dias</dt>
+        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)] text-ok">
+          <span data-count="99.98" data-dec="2">99,98</span> %
         </dd>
         <p class="mt-2 text-[13px] text-mute">roteamento com failover automático</p>
       </div>
-
-      <div class="bg-void px-5 py-7 sm:px-7 sm:py-8">
-        <dt class="tele">Requisições recusadas por limite</dt>
-        <dd class="display-sm mt-3 text-[clamp(1.9rem,4vw,2.6rem)] text-white">0</dd>
+      <div class="col-span-6 py-6 lg:col-span-3 lg:pl-6">
+        <dt class="lab">Recusas por limite</dt>
+        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)]">0</dd>
         <p class="mt-2 text-[13px] text-mute">é o número que define o produto</p>
       </div>
     </dl>
   </div>
 </section>
 
-<div class="rule mx-auto max-w-rail"></div>
+<!-- =========================================================================
+     PROVA SOCIAL · [NUMERO] nomes de exemplo
+     ========================================================================= -->
+<section class="mt-16 border-y border-rule bg-wash py-5" aria-label="Quem usa">
+  <p class="lab mb-4 text-center">Em produção em operações que não podem parar</p>
+  <div class="fadex overflow-hidden">
+    <div class="ticker gap-10 px-6 sm:gap-14">
+      <div class="flex shrink-0 items-center gap-10 sm:gap-14">
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Vantek Labs</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Norsul AI</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Cortex Bureau</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Piraquê Digital</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Helion Systems</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Aurelia Group</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Meridiano 27</span>
+      </div>
+      <div class="flex shrink-0 items-center gap-10 sm:gap-14" aria-hidden="true">
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Vantek Labs</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Norsul AI</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Cortex Bureau</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Piraquê Digital</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Helion Systems</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Aurelia Group</span>
+        <span class="d3 whitespace-nowrap text-[16px] text-mute">Meridiano 27</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- =========================================================================
-     O PROBLEMA
-     Sem caixas aqui: lista com fio divisório. O código de erro é o rótulo —
-     a estrutura carrega informação em vez de decorar.
+     §02 · O PROBLEMA
+     Tabela de erratas: o código de erro é o rótulo da dor. Sem caixas.
      ========================================================================= -->
-<section class="relative py-20 sm:py-28" aria-labelledby="h-problema">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+<section class="mt-20 sm:mt-28" aria-labelledby="h-problema">
+  <div class="rail">
+    <div class="mark rv"><b>§02</b><span>O custo do limite</span><hr></div>
 
-      <div class="lg:sticky lg:top-28 lg:self-start">
-        <p class="reveal tele !text-halt">O custo do limite</p>
-        <h2 id="h-problema" class="reveal display-sm mt-4 text-[clamp(1.85rem,3.5vw,2.7rem)] text-white" data-d="1">
-          Você não tem um problema de modelo.<br class="hidden sm:block">
-          Tem um problema de <span class="text-halt">teto</span>.
+    <div class="g12 mt-8">
+      <div class="col-span-12 lg:col-span-5 lg:sticky lg:top-24 lg:self-start">
+        <h2 id="h-problema" class="rv d2 text-[clamp(1.9rem,3.4vw,2.8rem)]">
+          Você não tem um problema de modelo. Tem um problema de <span class="text-gone">teto</span>.
         </h2>
-        <p class="reveal lede mt-5 max-w-[46ch] text-[16px] leading-relaxed" data-d="2">
-          Toda API tradicional foi desenhada para racionar. O provedor protege a
-          infraestrutura dele — e o gargalo cai no seu produto, na frente do seu cliente.
+        <p class="rv prose measure mt-5 text-[16px]" data-d="1">
+          Toda API tradicional foi desenhada para racionar. O provedor protege a infraestrutura
+          dele — e o gargalo aparece no seu produto, na frente do seu cliente.
         </p>
-
-        <!-- terminal de erro: o inimigo, dito na língua dele -->
-        <div class="reveal mt-8 overflow-hidden rounded-xl border border-halt/20 bg-halt/[.05] p-4" data-d="3">
-          <p class="num text-[12px] leading-[1.9] text-halt/85">
-            HTTP/1.1 <span class="font-medium">429</span> Too Many Requests<br>
-            retry-after: <span class="text-chalk/70">37</span><br>
+        <div class="rv mt-7 border border-rule bg-card p-4" data-d="2">
+          <p class="mono text-[12px] leading-[1.9]">
+            <span class="text-mute">HTTP/1.1</span> <span class="text-gone">429</span> Too Many Requests<br>
+            <span class="text-mute">retry-after:</span> 37<br>
             <span class="text-mute">// seu usuário está vendo isso agora</span>
           </p>
         </div>
       </div>
 
-      <!-- lista de dores -->
-      <ul class="divide-y divide-white/[.07] border-y border-white/[.07]">
-        <li class="reveal group py-6 sm:py-7">
-          <p class="num text-[12px] tracking-tight text-halt/80">429 · too_many_requests</p>
-          <h3 class="mt-2.5 text-[19px] font-semibold text-white sm:text-[21px]">Seu pico de demanda vira erro</h3>
-          <p class="lede mt-2 max-w-[58ch] text-[15px] leading-relaxed">
-            O dia em que a campanha funciona é o dia em que a API te derruba. Quem vê a falha
-            não é o provedor — é o seu cliente.
-          </p>
-        </li>
-        <li class="reveal py-6 sm:py-7" data-d="1">
-          <p class="num text-[12px] tracking-tight text-halt/80">402 · quota_exceeded</p>
-          <h3 class="mt-2.5 text-[19px] font-semibold text-white sm:text-[21px]">A cota acaba no dia 18. O mês, não.</h3>
-          <p class="lede mt-2 max-w-[58ch] text-[15px] leading-relaxed">
-            Você passa a segunda metade do mês administrando escassez em vez de crescimento —
-            ou paga excedente a preço de emergência.
-          </p>
-        </li>
-        <li class="reveal py-6 sm:py-7" data-d="2">
-          <p class="num text-[12px] tracking-tight text-halt/80">529 · overloaded_error</p>
-          <h3 class="mt-2.5 text-[19px] font-semibold text-white sm:text-[21px]">Na fila, você é sempre o último</h3>
-          <p class="lede mt-2 max-w-[58ch] text-[15px] leading-relaxed">
-            Prioridade se compra em contrato de milhões. No horário de pico, quem não comprou
-            espera — e a espera aparece no seu tempo de resposta.
-          </p>
-        </li>
-        <li class="reveal py-6 sm:py-7" data-d="3">
-          <p class="num text-[12px] tracking-tight text-halt/80">tpm · silent_throttle</p>
-          <h3 class="mt-2.5 text-[19px] font-semibold text-white sm:text-[21px]">Throttling que ninguém te avisa</h3>
-          <p class="lede mt-2 max-w-[58ch] text-[15px] leading-relaxed">
-            Não vem erro. Vem lentidão. Seu agente que rodava em 2 minutos passa a rodar em 11,
-            e você perde uma semana procurando bug no seu código.
-          </p>
-        </li>
-        <li class="reveal py-6 sm:py-7" data-d="4">
-          <p class="num text-[12px] tracking-tight text-halt/80">billing · variable_cost</p>
-          <h3 class="mt-2.5 text-[19px] font-semibold text-white sm:text-[21px]">Fatura que você não consegue prever</h3>
-          <p class="lede mt-2 max-w-[58ch] text-[15px] leading-relaxed">
-            Precificar um produto em cima de um custo variável por token é apostar. Um loop mal
-            fechado numa madrugada custa mais que o seu servidor no ano.
-          </p>
-        </li>
-        <li class="reveal py-6 sm:py-7" data-d="5">
-          <p class="num text-[12px] tracking-tight text-halt/80">roadmap · blocked</p>
-          <h3 class="mt-2.5 text-[19px] font-semibold text-white sm:text-[21px]">As melhores ideias morrem no orçamento</h3>
-          <p class="lede mt-2 max-w-[58ch] text-[15px] leading-relaxed">
-            Reprocessar toda a base? Rodar cem variações? Deixar o agente pensar de verdade?
-            Com limite, tudo isso vira "depois". E "depois" é onde os concorrentes te alcançam.
-          </p>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- =========================================================================
-     A SOLUÇÃO
-     ========================================================================= -->
-<section class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="h-solucao">
-  <div class="halo drift-a left-1/2 top-0 h-[30rem] w-[46rem] -translate-x-1/2 bg-ion/[.18]" aria-hidden="true"></div>
-  <div class="grid-far pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
-
-  <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
-    <div class="mx-auto max-w-[900px] text-center">
-      <p class="reveal tele !text-ion-soft">A virada</p>
-      <h2 id="h-solucao" class="reveal display mt-4 text-[clamp(1.95rem,5.2vw,3.6rem)] text-white" data-d="1">
-        Nós compramos a capacidade.<br>
-        <span class="ink-grad">Você usa sem contar.</span>
-      </h2>
-      <p class="reveal lede mx-auto mt-6 max-w-[58ch] text-[17px] leading-[1.65]" data-d="2">
-        A UNBOUND mantém capacidade reservada em volume e entrega ela por trás de uma chave só sua.
-        A camada que media, enfileira e corta você simplesmente não existe no caminho.
-      </p>
-    </div>
-
-    <!-- mecanismo: mostra o que foi removido do caminho -->
-    <div class="reveal mt-14" data-d="3">
-      <div class="pane edge relative overflow-hidden rounded-[22px] p-5 sm:p-8">
-        <div class="relative z-[3] grid items-stretch gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr]">
-
-          <div class="rounded-2xl border border-white/[.08] bg-panel-2 p-5">
-            <p class="tele">Origem</p>
-            <p class="mt-2 text-[16px] font-semibold text-white">Sua aplicação</p>
-            <p class="mt-1.5 text-[13.5px] text-mute">Agentes, SaaS, jobs em lote, tudo junto.</p>
+      <div class="col-span-12 mt-10 lg:col-span-6 lg:col-start-7 lg:mt-0">
+        <dl class="border-t border-ink">
+          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
+            <dt class="mono text-[11px] leading-[1.9] text-gone">429<br><span class="text-mute">too_many_requests</span></dt>
+            <dd><h3 class="d3 text-[18px]">Seu pico de demanda vira erro</h3>
+              <p class="prose mt-1.5 text-[14.5px]">O dia em que a campanha funciona é o dia em que a API te derruba. Quem vê a falha é o seu cliente.</p></dd>
           </div>
-
-          <div class="flex items-center justify-center py-1 md:py-0" aria-hidden="true">
-            <svg viewBox="0 0 40 24" class="h-6 w-10 rotate-90 text-ion-soft/60 md:rotate-0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-              <path d="M2 12h30M27 6.5 33 12l-6 5.5"/>
-            </svg>
+          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
+            <dt class="mono text-[11px] leading-[1.9] text-gone">402<br><span class="text-mute">quota_exceeded</span></dt>
+            <dd><h3 class="d3 text-[18px]">A cota acaba no dia 18. O mês, não.</h3>
+              <p class="prose mt-1.5 text-[14.5px]">Você passa a segunda metade do mês administrando escassez — ou paga excedente a preço de emergência.</p></dd>
           </div>
-
-          <div class="edge-hot edge relative rounded-2xl bg-gradient-to-b from-ion/[.16] to-transparent p-5">
-            <div class="relative z-[3]">
-              <p class="tele !text-ion-soft">Camada UNBOUND</p>
-              <p class="mt-2 text-[16px] font-semibold text-white">Capacidade reservada</p>
-              <p class="mt-1.5 text-[13.5px] text-mute">Pool próprio, roteamento e failover. Sem medidor no meio.</p>
-            </div>
+          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
+            <dt class="mono text-[11px] leading-[1.9] text-gone">529<br><span class="text-mute">overloaded_error</span></dt>
+            <dd><h3 class="d3 text-[18px]">Na fila, você é sempre o último</h3>
+              <p class="prose mt-1.5 text-[14.5px]">Prioridade se compra em contrato de milhões. No pico, quem não comprou espera — e a espera vira o seu tempo de resposta.</p></dd>
           </div>
-
-          <div class="flex items-center justify-center py-1 md:py-0" aria-hidden="true">
-            <svg viewBox="0 0 40 24" class="h-6 w-10 rotate-90 text-ion-soft/60 md:rotate-0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-              <path d="M2 12h30M27 6.5 33 12l-6 5.5"/>
-            </svg>
+          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
+            <dt class="mono text-[11px] leading-[1.9] text-gone">tpm<br><span class="text-mute">silent_throttle</span></dt>
+            <dd><h3 class="d3 text-[18px]">Throttling que ninguém avisa</h3>
+              <p class="prose mt-1.5 text-[14.5px]">Não vem erro, vem lentidão. O agente que rodava em 2 minutos passa a rodar em 11, e você perde uma semana caçando bug no seu código.</p></dd>
           </div>
-
-          <div class="rounded-2xl border border-white/[.08] bg-panel-2 p-5">
-            <p class="tele">Destino</p>
-            <p class="mt-2 text-[16px] font-semibold text-white">Kimi K3 · Opus 5 · Fable 5.1</p>
-            <p class="mt-1.5 text-[13.5px] text-mute">Os mesmos modelos. Sem a coleira.</p>
+          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
+            <dt class="mono text-[11px] leading-[1.9] text-gone">billing<br><span class="text-mute">variable_cost</span></dt>
+            <dd><h3 class="d3 text-[18px]">Fatura que você não consegue prever</h3>
+              <p class="prose mt-1.5 text-[14.5px]">Precificar produto em cima de custo variável por token é apostar. Um loop mal fechado numa madrugada custa mais que o servidor no ano.</p></dd>
           </div>
-        </div>
-
-        <!-- o que sai do caminho -->
-        <div class="relative z-[3] mt-6 flex flex-wrap items-center gap-2 border-t border-white/[.07] pt-6">
-          <span class="tele mr-1">Removido do trajeto</span>
-          <span class="num rounded-md border border-white/[.08] bg-white/[.03] px-2.5 py-1 text-[11.5px] text-mute line-through decoration-halt/70">rate limiter</span>
-          <span class="num rounded-md border border-white/[.08] bg-white/[.03] px-2.5 py-1 text-[11.5px] text-mute line-through decoration-halt/70">quota check</span>
-          <span class="num rounded-md border border-white/[.08] bg-white/[.03] px-2.5 py-1 text-[11.5px] text-mute line-through decoration-halt/70">priority queue</span>
-          <span class="num rounded-md border border-white/[.08] bg-white/[.03] px-2.5 py-1 text-[11.5px] text-mute line-through decoration-halt/70">tpm throttle</span>
-          <span class="num rounded-md border border-white/[.08] bg-white/[.03] px-2.5 py-1 text-[11.5px] text-mute line-through decoration-halt/70">overage billing</span>
-        </div>
+          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
+            <dt class="mono text-[11px] leading-[1.9] text-gone">roadmap<br><span class="text-mute">blocked</span></dt>
+            <dd><h3 class="d3 text-[18px]">As melhores ideias morrem no orçamento</h3>
+              <p class="prose mt-1.5 text-[14.5px]">Reprocessar toda a base? Cem variações? Deixar o agente pensar de verdade? Com limite, tudo vira "depois" — e "depois" é onde o concorrente te alcança.</p></dd>
+          </div>
+        </dl>
       </div>
     </div>
   </div>
 </section>
 
-<div class="rule mx-auto max-w-rail"></div>
-
 <!-- =========================================================================
-     MODELOS
-     Aqui o card se justifica: cada um é um objeto de produto comprável.
-     O Fable 5.1 recebe tratamento de peça encerrada — dessaturado, velado e
-     lacrado, mas com a ficha inteira legível. Esgotado precisa dar vontade.
+     §03 · A SOLUÇÃO — o mecanismo, e o que sai do caminho
      ========================================================================= -->
-<section id="modelos" class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="h-modelos">
-  <div class="halo drift-b right-[-6rem] top-[8rem] h-[26rem] w-[26rem] bg-arc/[.16]" aria-hidden="true"></div>
+<section class="mt-20 sm:mt-28" aria-labelledby="h-solucao">
+  <div class="rail">
+    <div class="mark rv"><b>§03</b><span>A virada</span><hr></div>
 
-  <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
-    <div class="mx-auto max-w-[900px] text-center">
-      <p class="reveal tele !text-ion-soft">Catálogo · Lote 07</p>
-      <h2 id="h-modelos" class="reveal display mt-4 text-[clamp(1.95rem,5vw,3.5rem)] text-white" data-d="1">
-        Três modelos.<br>Um único regime: <span class="ink-grad">sem limite.</span>
+    <div class="g12 mt-8 items-end">
+      <h2 id="h-solucao" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
+        Nós compramos a capacidade. Você usa sem contar.
       </h2>
-      <p class="reveal lede mx-auto mt-5 max-w-[60ch] text-[16.5px] leading-relaxed" data-d="2">
-        Cada chave é nominal e liberada por lote. Quando a capacidade reservada de um modelo
-        acaba, ele sai do ar até o próximo lote — não fatiamos o que já foi vendido.
+      <p class="rv prose col-span-12 mt-4 text-[16px] lg:col-span-4 lg:col-start-9 lg:mt-0" data-d="1">
+        A camada que media, enfileira e corta você não existe no caminho. Não é otimização —
+        é a remoção de um componente.
       </p>
     </div>
 
-    <div class="mt-14 grid items-stretch gap-5 lg:grid-cols-3 lg:gap-6">
-
-      <!-- ============ KIMI K3 · disponível ============ -->
-      <article class="reveal edge spot lift relative flex flex-col overflow-hidden rounded-[22px] bg-panel/85 p-6 backdrop-blur-xl sm:p-7" data-spot>
-        <div class="relative z-[3] flex flex-1 flex-col">
-          <header class="flex items-start justify-between gap-3">
-            <div>
-              <p class="tele">Alta vazão</p>
-              <h3 class="display-sm mt-2 text-[30px] text-white">Kimi K3</h3>
-            </div>
-            <span class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-live/25 bg-live/10 px-2.5 py-1.5">
-              <span class="pip"></span><span class="tele !text-live !text-[10px]">disponível</span>
-            </span>
-          </header>
-
-          <p class="mt-4 text-[15.5px] leading-relaxed text-chalk/80">
-            Contexto longo e apetite para volume bruto. É a chave que aguenta reprocessar
-            a base inteira numa madrugada sem você olhar o medidor.
-          </p>
-
-          <dl class="mt-6 space-y-px overflow-hidden rounded-xl bg-white/[.06] text-[13.5px]">
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Melhor para</dt><dd class="text-chalk/90">Lote, RAG, agentes</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Requisições</dt><dd class="num text-live">ilimitadas</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Tokens</dt><dd class="num text-live">ilimitados</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Concorrência</dt><dd class="text-ion-soft">sem teto</dd>
-            </div>
-          </dl>
-
-          <!-- disponibilidade do lote · [NUMERO] -->
-          <div class="mt-6">
-            <div class="flex items-baseline justify-between">
-              <span class="tele !text-[10px]">Chaves no lote</span>
-              <span class="num text-[12px] text-chalk/75"><b class="font-medium text-white">37</b> de 100</span>
-            </div>
-            <div class="meter mt-2"><span class="meter-fill" style="width:37%"></span></div>
-            <p class="mt-2 text-[12px] text-mute">Ritmo atual: cerca de 6 chaves por dia.</p>
-          </div>
-
-          <div class="mt-auto pt-7">
-            <!-- [CTA] -->
-            <a href="#planos" class="btn btn-line w-full px-5 py-3.5 text-[14.5px]">Garantir Kimi K3</a>
-            <p class="mt-3 text-center text-[12px] text-mute">Chave liberada em minutos.</p>
-          </div>
+    <div class="rv mt-10 border-t border-ink pt-8" data-d="2">
+      <div class="g12 items-stretch gap-y-3">
+        <div class="col-span-12 border border-rule bg-card p-5 lg:col-span-4">
+          <p class="lab">Origem</p>
+          <p class="d3 mt-2 text-[17px]">Sua aplicação</p>
+          <p class="prose mt-1.5 text-[14px]">Agentes, SaaS, jobs em lote — tudo na mesma chave.</p>
         </div>
-      </article>
-
-      <!-- ============ OPUS 5 · disponível · destaque ============ -->
-      <article class="reveal edge edge-hot spot lift beacon relative flex flex-col overflow-hidden rounded-[22px] bg-gradient-to-b from-ion/[.13] via-panel/90 to-panel/90 p-6 backdrop-blur-xl sm:p-7 lg:-my-3 lg:z-10" data-spot data-d="1">
-        <!-- faixa de destaque -->
-        <div class="absolute inset-x-0 top-0 z-[4] flex justify-center">
-          <span class="rounded-b-lg bg-gradient-to-r from-ion to-arc px-3 py-1 text-[10px] font-semibold uppercase tracking-[.16em] text-white shadow-[0_8px_24px_-8px_rgba(124,92,255,.9)]">Mais disputado</span>
+        <div class="slab col-span-12 p-5 lg:col-span-4">
+          <p class="lab">Camada UNBOUND</p>
+          <p class="d3 mt-2 text-[17px] text-white">Capacidade reservada</p>
+          <p class="mt-1.5 text-[14px] text-white/55">Pool próprio, roteamento e failover. Sem medidor no meio.</p>
         </div>
-
-        <div class="relative z-[3] flex flex-1 flex-col pt-4">
-          <header class="flex items-start justify-between gap-3">
-            <div>
-              <p class="tele !text-ion-soft">Topo de linha</p>
-              <h3 class="display-sm mt-2 text-[30px] text-white">Opus 5</h3>
-            </div>
-            <span class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-live/25 bg-live/10 px-2.5 py-1.5">
-              <span class="pip"></span><span class="tele !text-live !text-[10px]">disponível</span>
-            </span>
-          </header>
-
-          <p class="mt-4 text-[15.5px] leading-relaxed text-chalk/85">
-            O melhor raciocínio que você consegue comprar — e, pela primeira vez,
-            sem alguém decidindo quanto dele você pode usar hoje.
-          </p>
-
-          <dl class="mt-6 space-y-px overflow-hidden rounded-xl bg-white/[.08] text-[13.5px]">
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Melhor para</dt><dd class="text-right text-chalk/90">Código, análise, agentes longos</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Requisições</dt><dd class="num text-live">ilimitadas</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Tokens</dt><dd class="num text-live">ilimitados</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Prioridade</dt><dd class="text-ion-soft">máxima, sempre</dd>
-            </div>
-          </dl>
-
-          <div class="mt-6">
-            <div class="flex items-baseline justify-between">
-              <span class="tele !text-[10px]">Chaves no lote</span>
-              <span class="num text-[12px] text-chalk/75"><b class="font-medium text-halt">9</b> de 50</span>
-            </div>
-            <div class="meter mt-2"><span class="meter-fill meter-low" style="width:18%"></span></div>
-            <p class="mt-2 text-[12px] text-halt/90">Ritmo atual: o lote fecha antes do fim da semana.</p>
-          </div>
-
-          <div class="mt-auto pt-7">
-            <a href="#planos" class="btn btn-key w-full px-5 py-3.5 text-[14.5px]">Garantir Opus 5</a>
-            <p class="mt-3 text-center text-[12px] text-mute">Chave liberada em minutos.</p>
-          </div>
+        <div class="col-span-12 border border-rule bg-card p-5 lg:col-span-4">
+          <p class="lab">Destino</p>
+          <p class="d3 mt-2 text-[17px]">Kimi K3 · Opus 5 · Fable 5.1</p>
+          <p class="prose mt-1.5 text-[14px]">Os mesmos modelos. Sem a coleira.</p>
         </div>
-      </article>
+      </div>
 
-      <!-- ============ FABLE 5.1 · esgotado ============ -->
-      <article class="reveal edge lift sold-wrap relative flex flex-col overflow-hidden rounded-[22px] bg-panel/70 p-6 backdrop-blur-xl sm:p-7" data-d="2" aria-label="Fable 5.1 — esgotado">
-        <!-- textura de peça encerrada -->
-        <div class="hatch pointer-events-none absolute inset-0 z-[1]" aria-hidden="true"></div>
-        <div class="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-2/3 bg-gradient-to-t from-void/85 to-transparent" aria-hidden="true"></div>
+      <div class="mt-6 flex flex-wrap items-center gap-2 border-t border-rule pt-6">
+        <span class="lab mr-1">Removido do trajeto</span>
+        <span class="mono strike">rate limiter</span>
+        <span class="mono strike">quota check</span>
+        <span class="mono strike">priority queue</span>
+        <span class="mono strike">tpm throttle</span>
+        <span class="mono strike">overage billing</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- lacre -->
-        <div class="pointer-events-none absolute right-5 top-5 z-[6] sm:right-6 sm:top-6" aria-hidden="true">
-          <div class="seal">
-            <span class="seal-line">esgotado</span>
-            <span class="seal-sub">lote 06 · encerrado</span>
-          </div>
-        </div>
+<!-- =========================================================================
+     §04 · CATÁLOGO
+     Matriz de especificação, não três cards: comparar linha a linha é como
+     se compra infraestrutura. A coluna do Fable 5.1 fica hachurada, com os
+     valores riscados e o carimbo de encerrado — legível e ainda desejável.
+     Primeira coluna gruda na rolagem horizontal, para o rótulo nunca sumir.
+     ========================================================================= -->
+<section id="catalogo" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-catalogo">
+  <div class="rail">
+    <div class="mark rv"><b>§04</b><span>Catálogo · lote 07</span><hr></div>
 
-        <div class="sold-content relative z-[3] flex flex-col">
-          <header>
-            <p class="tele">Edição narrativa</p>
-            <h3 class="display-sm mt-2 text-[30px] text-white">Fable 5.1</h3>
-          </header>
-
-          <p class="mt-4 max-w-[34ch] text-[15.5px] leading-relaxed text-chalk/70">
-            A chave mais desejada que já vendemos. Voz, ritmo e continuidade longa em um nível
-            que ninguém mais entrega — e que esgotou em 40 horas.
-          </p>
-
-          <dl class="mt-6 space-y-px overflow-hidden rounded-xl bg-white/[.05] text-[13.5px]">
-            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Melhor para</dt><dd class="text-chalk/70">Narrativa, roteiro, marca</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Lote 06</dt><dd class="num text-chalk/70">80 de 80 vendidas</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Tempo até esgotar</dt><dd class="num text-chalk/70">40 h</dd>
-            </div>
-            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px] shrink-0 pt-px">Na lista de espera</dt><dd class="num text-chalk/70">312 pessoas</dd>
-            </div>
-          </dl>
-
-          <div class="mt-6">
-            <div class="flex items-baseline justify-between">
-              <span class="tele !text-[10px]">Chaves no lote</span>
-              <span class="num text-[12px] text-chalk/60"><b class="font-medium text-halt">0</b> de 80</span>
-            </div>
-            <div class="meter mt-2"><span class="meter-fill meter-out" style="width:100%"></span></div>
-            <p class="mt-2 text-[12px] text-halt/80">Lote encerrado. Reabertura sem data.</p>
-          </div>
-        </div>
-
-        <!-- ação: nítida por cima do véu, para a lista de espera converter -->
-        <div class="relative z-[6] mt-auto pt-7">
-          <a href="#espera" class="btn btn-line w-full border-halt/25 bg-halt/[.06] px-5 py-3.5 text-[14.5px] hover:border-halt/45 hover:bg-halt/10">
-            Entrar na lista de espera
-          </a>
-          <p class="mt-3 text-center text-[12px] text-mute">Avisamos por e-mail na reabertura.</p>
-        </div>
-      </article>
+    <div class="g12 mt-8 items-end">
+      <h2 id="h-catalogo" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
+        Três modelos. Um único regime de uso.
+      </h2>
+      <p class="rv prose col-span-12 mt-4 text-[16px] lg:col-span-4 lg:col-start-9 lg:mt-0" data-d="1">
+        Cada chave é nominal e liberada por lote. Quando a capacidade reservada de um modelo
+        acaba, ele sai do ar — não fatiamos o que já foi vendido.
+      </p>
     </div>
 
-    <p class="reveal mt-8 text-center text-[13px] text-mute" data-d="3">
-      Cada lote é limitado pela capacidade que conseguimos reservar. É por isso que o Fable 5.1 está fora —
+    <div class="rv mt-10 overflow-x-auto" data-d="2">
+      <table class="w-full min-w-[880px] border-collapse text-left">
+        <caption class="sr-only">Especificação e disponibilidade dos três modelos</caption>
+        <colgroup><col style="width:22%"><col style="width:26%"><col style="width:26%"><col style="width:26%"></colgroup>
+
+        <thead>
+          <tr class="border-y border-ink align-bottom">
+            <th scope="col" class="sticky left-0 z-10 bg-paper py-5 pr-4">
+              <span class="lab">Especificação</span>
+            </th>
+            <th scope="col" class="px-5 py-5">
+              <span class="lab">Alta vazão</span>
+              <span class="d2 mt-1.5 block text-[26px]">Kimi K3</span>
+              <span class="sig sig-ok mt-3"><span class="dot"></span>disponível</span>
+            </th>
+            <th scope="col" class="bg-wash px-5 py-5">
+              <span class="lab">Topo de linha</span>
+              <span class="d2 mt-1.5 block text-[26px]">Opus 5</span>
+              <span class="sig sig-ok mt-3"><span class="dot"></span>disponível</span>
+            </th>
+            <th scope="col" class="gone-col relative px-5 py-5">
+              <span class="lab">Edição narrativa</span>
+              <span class="d2 mt-1.5 block text-[26px] text-slate">Fable 5.1</span>
+              <span class="sig sig-gone mt-3">esgotado</span>
+              <span class="stamp" aria-hidden="true">lote 06 encerrado</span>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="text-[14.5px]">
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Posicionamento</span></th>
+            <td class="px-5 py-4">Volume bruto e contexto longo</td>
+            <td class="bg-wash px-5 py-4">Raciocínio de topo, sem racionamento</td>
+            <td class="gone-col px-5 py-4 text-slate">Voz, ritmo e continuidade longa</td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Melhor para</span></th>
+            <td class="px-5 py-4">Lote, RAG, agentes</td>
+            <td class="bg-wash px-5 py-4">Código, análise, agentes longos</td>
+            <td class="gone-col px-5 py-4 text-slate">Narrativa, roteiro, marca</td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Requisições</span></th>
+            <td class="mono px-5 py-4 text-ok">ilimitadas</td>
+            <td class="mono bg-wash px-5 py-4 text-ok">ilimitadas</td>
+            <td class="gone-col px-5 py-4"><span class="gone-val mono">ilimitadas</span></td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Tokens</span></th>
+            <td class="mono px-5 py-4 text-ok">ilimitados</td>
+            <td class="mono bg-wash px-5 py-4 text-ok">ilimitados</td>
+            <td class="gone-col px-5 py-4"><span class="gone-val mono">ilimitados</span></td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Concorrência</span></th>
+            <td class="mono px-5 py-4">sem teto</td>
+            <td class="mono bg-wash px-5 py-4">sem teto</td>
+            <td class="gone-col px-5 py-4"><span class="gone-val mono">sem teto</span></td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Prioridade de rota</span></th>
+            <td class="mono px-5 py-4">alta</td>
+            <td class="mono bg-wash px-5 py-4">máxima</td>
+            <td class="gone-col px-5 py-4"><span class="gone-val mono">máxima</span></td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Chaves no lote</span></th>
+            <td class="px-5 py-4">
+              <span class="mono tnum"><b class="font-semibold">37</b> <span class="text-mute">de 100</span></span>
+              <span class="meter mt-2"><i style="width:37%"></i></span>
+            </td>
+            <td class="bg-wash px-5 py-4">
+              <span class="mono tnum"><b class="font-semibold text-gone">9</b> <span class="text-mute">de 50</span></span>
+              <span class="meter mt-2"><i class="low" style="width:18%"></i></span>
+            </td>
+            <td class="gone-col px-5 py-4">
+              <span class="mono tnum text-mute"><b class="font-semibold text-gone">0</b> de 80</span>
+              <span class="meter mt-2"><i class="out" style="width:100%"></i></span>
+            </td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Ritmo do lote</span></th>
+            <td class="px-5 py-4 text-[13.5px] text-slate">cerca de 6 chaves por dia</td>
+            <td class="bg-wash px-5 py-4 text-[13.5px] text-gone">fecha antes do fim da semana</td>
+            <td class="gone-col px-5 py-4 text-[13.5px] text-slate">esgotou em 40 h · 312 na espera</td>
+          </tr>
+          <tr class="border-b border-rule">
+            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Ativação</span></th>
+            <td class="px-5 py-4">em minutos</td>
+            <td class="bg-wash px-5 py-4">em minutos</td>
+            <td class="gone-col px-5 py-4 text-slate">reabertura sem data</td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td class="sticky left-0 z-10 bg-paper py-6 pr-4"></td>
+            <!-- [CTA] -->
+            <td class="px-5 py-6"><a href="#planos" class="btn btn-line w-full">Garantir Kimi K3</a></td>
+            <td class="bg-wash px-5 py-6"><a href="#planos" class="btn btn-ink w-full">Garantir Opus 5</a></td>
+            <td class="gone-col px-5 py-6"><a href="#espera" class="btn btn-line w-full !border-gone/40 !text-gone hover:!border-gone">Entrar na lista de espera</a></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <p class="rv mt-5 text-[13px] text-mute" data-d="3">
+      O lote é limitado pela capacidade que conseguimos reservar. É por isso que o Fable 5.1 está fora —
       e por isso que não vendemos o que não conseguimos entregar.
     </p>
   </div>
 </section>
 
-<div class="rule mx-auto max-w-rail"></div>
-
 <!-- =========================================================================
-     BENEFÍCIOS
-     Grade com divisórias em vez de oito cards — os cards já foram gastos nos
-     modelos; repeti-los aqui achataria a hierarquia da página.
+     §05 · BENEFÍCIOS
+     Cada item entra como chave de especificação, não como card com ícone.
      ========================================================================= -->
-<section id="beneficios" class="relative py-20 sm:py-28" aria-labelledby="h-beneficios">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="max-w-[880px]">
-      <p class="reveal tele !text-ion-soft">O que vem com a chave</p>
-      <h2 id="h-beneficios" class="reveal display-sm mt-4 text-[clamp(1.85rem,3.7vw,2.8rem)] text-white" data-d="1">
-        Tudo que uma API deveria ser antes de alguém inventar cota.
-      </h2>
-    </div>
+<section id="beneficios" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-beneficios">
+  <div class="rail">
+    <div class="mark rv"><b>§05</b><span>O que vem com a chave</span><hr></div>
 
-    <div class="reveal mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/[.07] bg-white/[.06] sm:grid-cols-2 lg:grid-cols-4" data-d="2">
+    <h2 id="h-beneficios" class="rv d2 mt-8 max-w-[20ch] text-[clamp(1.9rem,3.6vw,3rem)]">
+      Tudo que uma API deveria ser antes de alguém inventar cota.
+    </h2>
 
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Zero rate limit</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Nenhuma chamada sua volta com 429. Não existe política de vazão na sua chave.</p>
+    <div class="rv g12 mt-10 gap-y-0 border-t border-ink" data-d="1">
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-r lg:pr-6">
+        <p class="lab">Limite</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Zero rate limit</h3>
+        <p class="prose mt-2 text-[14px]">Nenhuma chamada sua volta com 429. Não existe política de vazão na sua chave.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6.4 8.9c1.9 0 2.6 6.2 4.5 6.2a3.1 3.1 0 1 0 0-6.2c-1.9 0-2.6 6.2-4.5 6.2a3.1 3.1 0 1 1 0-6.2Z"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Tokens sem contador</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Entrada e saída liberadas. Ninguém desliga sua operação no dia 18 do mês.</p>
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-r lg:px-6">
+        <p class="lab">Cota</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Tokens sem contador</h3>
+        <p class="prose mt-2 text-[14px]">Entrada e saída liberadas. Ninguém desliga sua operação no dia 18 do mês.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h6M4 12h10M4 18h7"/><path d="M17 5v14M14 8l3-3 3 3"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Concorrência aberta</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Dispare centenas de chamadas em paralelo. O paralelismo é seu, não nosso.</p>
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-r lg:px-6">
+        <p class="lab">Paralelismo</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Concorrência aberta</h3>
+        <p class="prose mt-2 text-[14px]">Centenas de chamadas simultâneas. O paralelismo é seu, não nosso.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M8 7h6.5a2.5 2.5 0 0 1 0 5H9.5a2.5 2.5 0 0 0 0 5H16"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Custo que não surpreende</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Valor fixo mensal. A fatura do dia 31 é idêntica à do dia 1, use o quanto usar.</p>
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:pl-6">
+        <p class="lab">Custo</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Fatura que não surpreende</h3>
+        <p class="prose mt-2 text-[14px]">Valor fixo mensal. O dia 31 custa o mesmo que o dia 1, use o quanto usar.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 8-5 4 5 4M15 8l5 4-5 4"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Cai no seu código atual</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Padrão de mercado. Você troca a <code class="num text-chalk/80">base_url</code> e a chave — e acabou.</p>
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:pr-6">
+        <p class="lab">Integração</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Cai no seu código atual</h3>
+        <p class="prose mt-2 text-[14px]">Padrão de mercado: troque a <code class="mono text-ink">base_url</code> e a chave. Acabou.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Ativação em minutos</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Sem formulário de vendas, sem call de descoberta, sem espera por aprovação.</p>
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:px-6">
+        <p class="lab">Ativação</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Pronto em minutos</h3>
+        <p class="prose mt-2 text-[14px]">Sem formulário de vendas, sem call de descoberta, sem fila de aprovação.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 4.5 6.3v5.4c0 4.3 3.1 7.8 7.5 9.1 4.4-1.3 7.5-4.8 7.5-9.1V6.3L12 3.2Z"/><path d="m9.3 12 1.9 1.9 3.6-3.7"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Failover automático</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Roteamento redundante entre pools. Uma rota cai, a chamada segue por outra.</p>
+      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:px-6">
+        <p class="lab">Resiliência</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Failover automático</h3>
+        <p class="prose mt-2 text-[14px]">Roteamento redundante entre pools. Uma rota cai, a chamada segue por outra.</p>
       </div>
-
-      <div class="group bg-void p-6 transition-colors duration-500 hover:bg-panel">
-        <svg viewBox="0 0 24 24" class="h-[22px] w-[22px] text-ion-soft" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5a2.5 2.5 0 0 1-2.5 2.5H8l-4 3.5V6a2.5 2.5 0 0 1 2.5-2.5h11A2.5 2.5 0 0 1 20 6v8.5Z"/></svg>
-        <h3 class="mt-4 text-[16px] font-semibold text-white">Linha direta com engenharia</h3>
-        <p class="mt-2 text-[14px] leading-relaxed text-mute">Canal privado com quem opera a infra. Sem robô de atendimento no meio.</p>
+      <div class="col-span-12 py-6 sm:col-span-6 lg:col-span-3 lg:pl-6">
+        <p class="lab">Suporte</p>
+        <h3 class="d3 mt-2.5 text-[17px]">Linha direta com engenharia</h3>
+        <p class="prose mt-2 text-[14px]">Canal privado com quem opera a infra. Sem robô de atendimento no meio.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     COMO FUNCIONA
-     Numeração aqui é legítima: existe ordem real e cada passo depende do anterior.
+     §06 · OPERAÇÃO
+     Painel fixo que troca conforme o passo entra em tela: o leitor vê o
+     artefato de cada etapa em vez de ler quatro parágrafos sobre eles.
      ========================================================================= -->
-<section class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="h-como">
-  <div class="halo drift-a left-[8%] top-[4rem] h-[22rem] w-[30rem] bg-ion/[.14]" aria-hidden="true"></div>
+<section id="operacao" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-operacao">
+  <div class="rail">
+    <div class="mark rv"><b>§06</b><span>Do pagamento à primeira chamada</span><hr></div>
 
-  <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
-    <div class="max-w-[840px]">
-      <p class="reveal tele !text-ion-soft">Do pagamento à primeira chamada</p>
-      <h2 id="h-como" class="reveal display-sm mt-4 text-[clamp(1.85rem,3.7vw,2.8rem)] text-white" data-d="1">
-        <span class="block">Quatro passos.</span>
-        <span class="block text-mute">Nenhum deles é uma reunião.</span>
+    <div class="g12 mt-8 items-end">
+      <h2 id="h-operacao" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
+        Quatro passos. Nenhum deles é uma reunião.
       </h2>
     </div>
 
-    <ol class="mt-14 grid gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
-      <li class="reveal relative">
-        <div class="flex items-center gap-3">
-          <span class="num grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-ion/30 bg-ion/10 text-[14px] font-medium text-ion-soft">01</span>
-          <span class="h-px flex-1 bg-gradient-to-r from-ion/35 to-transparent"></span>
-        </div>
-        <h3 class="mt-5 text-[18px] font-semibold text-white">Escolha o modelo e o lote</h3>
-        <p class="mt-2.5 max-w-[34ch] text-[14.5px] leading-relaxed text-mute">Kimi K3 ou Opus 5, conforme o trabalho. Você vê quantas chaves restam antes de pagar.</p>
-      </li>
-      <li class="reveal relative" data-d="1">
-        <div class="flex items-center gap-3">
-          <span class="num grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-ion/30 bg-ion/10 text-[14px] font-medium text-ion-soft">02</span>
-          <span class="h-px flex-1 bg-gradient-to-r from-ion/35 to-transparent"></span>
-        </div>
-        <h3 class="mt-5 text-[18px] font-semibold text-white">Pague e verifique</h3>
-        <p class="mt-2.5 max-w-[34ch] text-[14.5px] leading-relaxed text-mute">Checkout direto. A verificação existe porque a chave é nominal e não pode ser repassada.</p>
-      </li>
-      <li class="reveal relative" data-d="2">
-        <div class="flex items-center gap-3">
-          <span class="num grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-ion/30 bg-ion/10 text-[14px] font-medium text-ion-soft">03</span>
-          <span class="h-px flex-1 bg-gradient-to-r from-ion/35 to-transparent"></span>
-        </div>
-        <h3 class="mt-5 text-[18px] font-semibold text-white">Receba chave e endpoint</h3>
-        <p class="mt-2.5 max-w-[34ch] text-[14.5px] leading-relaxed text-mute">Chegam em minutos, junto com o painel de uso e o canal de suporte.</p>
-      </li>
-      <li class="reveal relative" data-d="3">
-        <div class="flex items-center gap-3">
-          <span class="num grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-live/35 bg-live/10 text-[14px] font-medium text-live">04</span>
-        </div>
-        <h3 class="mt-5 text-[18px] font-semibold text-white">Troque duas linhas e escale</h3>
-        <p class="mt-2.5 max-w-[34ch] text-[14.5px] leading-relaxed text-mute">Sem SDK novo, sem refatoração. A partir daqui, o limite é a sua ambição.</p>
-      </li>
-    </ol>
+    <div class="g12 mt-12">
+      <ol class="col-span-12 lg:col-span-5">
+        <li class="step" data-step="1">
+          <p class="mono step-n">01</p>
+          <h3 class="d3 text-[19px]">Escolha o modelo e o lote</h3>
+          <p class="prose mt-2 text-[15px]">Kimi K3 ou Opus 5, conforme o trabalho. Você vê quantas chaves restam antes de pagar — o número da tabela é o número real.</p>
+        </li>
+        <li class="step" data-step="2">
+          <p class="mono step-n">02</p>
+          <h3 class="d3 text-[19px]">Pague e verifique</h3>
+          <p class="prose mt-2 text-[15px]">Checkout direto, sem proposta comercial. A verificação existe porque a chave é nominal e não pode ser repassada.</p>
+        </li>
+        <li class="step" data-step="3">
+          <p class="mono step-n">03</p>
+          <h3 class="d3 text-[19px]">Receba chave e endpoint</h3>
+          <p class="prose mt-2 text-[15px]">Chegam em minutos, junto com o painel de uso e o canal de suporte. Nada de período de provisionamento.</p>
+        </li>
+        <li class="step" data-step="4">
+          <p class="mono step-n">04</p>
+          <h3 class="d3 text-[19px]">Troque duas linhas e escale</h3>
+          <p class="prose mt-2 text-[15px]">Sem SDK novo, sem refatoração. A partir daqui o limite é a sua ambição, não o seu plano.</p>
+        </li>
+      </ol>
 
-    <!-- as duas linhas, literalmente -->
-    <div class="reveal pane edge mt-12 overflow-hidden rounded-2xl" data-d="4">
-      <div class="flex items-center gap-2 border-b border-white/[.07] px-5 py-3">
-        <span class="h-2.5 w-2.5 rounded-full bg-halt/60"></span>
-        <span class="h-2.5 w-2.5 rounded-full bg-white/20"></span>
-        <span class="h-2.5 w-2.5 rounded-full bg-live/50"></span>
-        <span class="tele ml-2">client.py</span>
+      <div class="col-span-12 mt-8 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:sticky lg:top-24 lg:self-start">
+        <div class="slab min-h-[300px]" id="panels">
+
+          <div class="panel" data-panel="1">
+            <div class="flex items-center justify-between px-5 py-3.5">
+              <span class="lab">Lote 07 · disponível</span><span class="mono text-[11px] text-white/45">1 / 4</span>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-3.5">
+              <span class="text-[14px] text-white/90">Kimi K3</span>
+              <span class="mono text-[13px] text-white/60">37 <span class="text-white/35">de 100</span></span>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-3.5">
+              <span class="text-[14px] text-white/90">Opus 5</span>
+              <span class="mono text-[13px] text-[#E8A398]">9 <span class="text-white/35">de 50</span></span>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-3.5">
+              <span class="text-[14px] text-white/40 line-through">Fable 5.1</span>
+              <span class="mono text-[13px] text-white/35">esgotado</span>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="2" hidden>
+            <div class="flex items-center justify-between px-5 py-3.5">
+              <span class="lab">Confirmação</span><span class="mono text-[11px] text-white/45">2 / 4</span>
+            </div>
+            <div class="slab-row px-5 py-4">
+              <p class="mono text-[12px] leading-[2] text-white/70">
+                <span class="text-white/40">plano</span>        Escala · mensal<br>
+                <span class="text-white/40">modelos</span>      Kimi K3, Opus 5<br>
+                <span class="text-white/40">chaves</span>       5 nominais<br>
+                <span class="text-white/40">recorrência</span>  sem fidelidade<br>
+                <span class="text-white/40">garantia</span>     <span class="text-[#8FE3B8]">7 dias</span>
+              </p>
+            </div>
+            <div class="slab-row px-5 py-3.5">
+              <span class="mono text-[12px] text-white/45">verificação concluída · 00:41</span>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="3" hidden>
+            <div class="flex items-center justify-between px-5 py-3.5">
+              <span class="lab">Credenciais</span><span class="mono text-[11px] text-white/45">3 / 4</span>
+            </div>
+            <div class="slab-row px-5 py-4">
+              <p class="lab mb-1.5">Chave</p>
+              <p class="mono text-[13px] text-white/90">sk-unb-live-7f2a••••••••••••••••3c91</p>
+            </div>
+            <div class="slab-row px-5 py-4">
+              <p class="lab mb-1.5">Endpoint</p>
+              <p class="mono text-[13px] text-white/90">https://api.unbound.ai/v1</p>
+            </div>
+            <div class="slab-row flex items-center justify-between px-5 py-3.5">
+              <span class="lab">Estado</span>
+              <span class="sig sig-live"><span class="dot"></span>ativa</span>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="4" hidden>
+            <div class="flex items-center justify-between px-5 py-3.5">
+              <span class="lab">client.py</span><span class="mono text-[11px] text-white/45">4 / 4</span>
+            </div>
+            <div class="slab-row px-5 py-4">
+<pre class="mono overflow-x-auto text-[12px] leading-[2] text-white/80">client = OpenAI(
+    base_url = <span class="text-[#8FE3B8]">"https://api.unbound.ai/v1"</span>,
+    api_key  = <span class="text-[#8FE3B8]">"sk-unb-live-..."</span>
+)</pre>
+            </div>
+            <div class="slab-row px-5 py-3.5">
+              <span class="mono text-[12px] text-white/45">nenhuma outra alteração necessária</span>
+            </div>
+          </div>
+        </div>
       </div>
-<pre class="num overflow-x-auto px-5 py-5 text-[11px] leading-[1.95] text-chalk/85 sm:text-[12.5px]">client = OpenAI(
-    base_url = <span class="text-live">"https://api.unbound.ai/v1"</span>,   <span class="text-mute"># [ENDPOINT]</span>
-    api_key  = <span class="text-live">"sk-unb-..."</span>
-)                                        <span class="text-mute"># pronto. sem mais nada.</span></pre>
     </div>
   </div>
 </section>
 
-<div class="rule mx-auto max-w-rail"></div>
-
 <!-- =========================================================================
-     COMPARATIVO
+     §07 · COMPARATIVO
      ========================================================================= -->
-<section id="comparativo" class="relative py-20 sm:py-28" aria-labelledby="h-comparativo">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="mx-auto max-w-[780px] text-center">
-      <p class="reveal tele !text-ion-soft">Lado a lado</p>
-      <h2 id="h-comparativo" class="reveal display-sm mt-4 text-[clamp(1.85rem,4vw,2.9rem)] text-white" data-d="1">
-        A diferença não é de preço.<br>É de <span class="ink-grad">permissão.</span>
+<section id="comparativo" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-comparativo">
+  <div class="rail">
+    <div class="mark rv"><b>§07</b><span>Lado a lado</span><hr></div>
+
+    <div class="g12 mt-8 items-end">
+      <h2 id="h-comparativo" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
+        A diferença não é de preço. É de permissão.
       </h2>
     </div>
 
-    <div class="reveal mt-12 overflow-x-auto rounded-2xl border border-white/[.07]" data-d="2">
-      <table class="w-full min-w-[640px] border-collapse text-left">
-        <caption class="sr-only">Comparação entre APIs tradicionais e a UNBOUND</caption>
+    <div class="rv mt-10 overflow-x-auto" data-d="1">
+      <table class="w-full min-w-[720px] border-collapse text-left">
+        <caption class="sr-only">Comparação entre API tradicional e UNBOUND</caption>
+        <colgroup><col style="width:34%"><col style="width:33%"><col style="width:33%"></colgroup>
         <thead>
-          <tr class="bg-panel">
-            <th scope="col" class="tele w-[38%] px-5 py-4 font-normal sm:px-6">Critério</th>
-            <th scope="col" class="px-5 py-4 text-[13.5px] font-semibold text-mute sm:px-6">API tradicional</th>
-            <th scope="col" class="relative bg-ion/[.09] px-5 py-4 sm:px-6">
-              <span class="display-sm text-[15px] text-white">UNBOUND</span>
-              <span class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ion to-transparent"></span>
-            </th>
+          <tr class="border-y border-ink">
+            <th scope="col" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Critério</span></th>
+            <th scope="col" class="px-5 py-4"><span class="lab">API tradicional</span></th>
+            <th scope="col" class="bg-wash px-5 py-4"><span class="d3 text-[15px]">UNBOUND</span></th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-white/[.07] text-[14.5px]">
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Requisições por minuto</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Teto rígido por tier</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Sem teto</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Cota de tokens</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Mensal, acaba antes do mês</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Não existe</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Comportamento no pico</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Fila, throttle ou 429</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Passa direto</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Custo do mês</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Variável por token</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Fixo, definido antes</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Agente rodando 24/7</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Inviável ou caríssimo</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">É o caso de uso padrão</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Aumento de limite</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Formulário e espera de dias</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Não se aplica</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Suporte</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Ticket, SLA de dias</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Canal privado com engenharia</td>
-          </tr>
-          <tr class="bg-void/60">
-            <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Surpresa na fatura</th>
-            <td class="px-5 py-4 text-mute sm:px-6">Regra da casa</td>
-            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Impossível por construção</td>
-          </tr>
+        <tbody class="text-[14.5px]">
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Requisições por minuto</th><td class="px-5 py-4 text-slate">Teto rígido por tier</td><td class="bg-wash px-5 py-4 font-medium">Sem teto</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Cota de tokens</th><td class="px-5 py-4 text-slate">Mensal, acaba antes do mês</td><td class="bg-wash px-5 py-4 font-medium">Não existe</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Comportamento no pico</th><td class="px-5 py-4 text-slate">Fila, throttle ou 429</td><td class="bg-wash px-5 py-4 font-medium">Passa direto</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Custo do mês</th><td class="px-5 py-4 text-slate">Variável por token</td><td class="bg-wash px-5 py-4 font-medium">Fixo, definido antes</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Agente rodando 24/7</th><td class="px-5 py-4 text-slate">Inviável ou caríssimo</td><td class="bg-wash px-5 py-4 font-medium">É o caso de uso padrão</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Aumento de limite</th><td class="px-5 py-4 text-slate">Formulário e espera de dias</td><td class="bg-wash px-5 py-4 font-medium">Não se aplica</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Suporte</th><td class="px-5 py-4 text-slate">Ticket, SLA de dias</td><td class="bg-wash px-5 py-4 font-medium">Canal privado com engenharia</td></tr>
+          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Surpresa na fatura</th><td class="px-5 py-4 text-slate">Regra da casa</td><td class="bg-wash px-5 py-4 font-medium">Impossível por construção</td></tr>
         </tbody>
       </table>
     </div>
@@ -1191,262 +976,180 @@ input:-webkit-autofill:focus{
 </section>
 
 <!-- =========================================================================
-     PLANOS
+     §08 · PLANOS
      [PRECO] valores de exemplo. O ciclo anual cobra 10 meses.
+     O plano do meio é a chapa preta — a ênfase da página inteira é a tinta.
      ========================================================================= -->
-<section id="planos" class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="h-planos">
-  <div class="halo drift-a left-1/2 top-[2rem] h-[32rem] w-[44rem] -translate-x-1/2 bg-ion/[.16]" aria-hidden="true"></div>
-  <div class="grid-far pointer-events-none absolute inset-0 opacity-50" aria-hidden="true"></div>
+<section id="planos" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-planos">
+  <div class="rail">
+    <div class="mark rv"><b>§08</b><span>Planos</span><hr></div>
 
-  <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
-    <div class="mx-auto max-w-[840px] text-center">
-      <p class="reveal tele !text-ion-soft">Planos</p>
-      <h2 id="h-planos" class="reveal display mt-4 text-[clamp(1.95rem,4.9vw,3.4rem)] text-white" data-d="1">
-        Um preço. <span class="ink-grad">Todo o resto é seu.</span>
+    <div class="g12 mt-8 items-end">
+      <h2 id="h-planos" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-6">
+        Um preço. Todo o resto é seu.
       </h2>
-      <p class="reveal lede mx-auto mt-5 max-w-[56ch] text-[16.5px] leading-relaxed" data-d="2">
-        Você não paga por token, por requisição ou por surpresa. Paga pela capacidade —
-        e depois esquece que ela tem dono.
-      </p>
-    </div>
-
-    <!-- ciclo -->
-    <div class="reveal mt-9 flex justify-center" data-d="3">
-      <div class="inline-flex items-center gap-1 rounded-xl border border-white/[.09] bg-white/[.04] p-1" role="group" aria-label="Ciclo de cobrança">
-        <button id="cycleMonth" class="rounded-lg bg-chalk px-4 py-2 text-[13.5px] font-medium text-void transition" aria-pressed="true">Mensal</button>
-        <button id="cycleYear" class="rounded-lg px-4 py-2 text-[13.5px] font-medium text-mute transition" aria-pressed="false">
-          Anual <span class="text-live">−2 meses</span>
-        </button>
+      <div class="rv col-span-12 mt-6 flex lg:col-span-4 lg:col-start-9 lg:mt-0 lg:justify-end" data-d="1">
+        <div class="inline-flex border border-rule bg-card p-1" role="group" aria-label="Ciclo de cobrança">
+          <button id="cycleMonth" class="px-4 py-2 text-[13px] font-medium" aria-pressed="true">Mensal</button>
+          <button id="cycleYear"  class="px-4 py-2 text-[13px] font-medium" aria-pressed="false">Anual <span class="text-ok">−2 meses</span></button>
+        </div>
       </div>
     </div>
 
-    <div class="mt-12 grid items-stretch gap-5 lg:grid-cols-3 lg:gap-6">
+    <div class="rv g12 mt-10 items-stretch gap-y-4" data-d="2">
 
       <!-- OPERADOR -->
-      <article class="reveal edge spot lift relative flex flex-col overflow-hidden rounded-[22px] bg-panel/85 p-7 backdrop-blur-xl" data-spot>
-        <div class="relative z-[3] flex flex-1 flex-col">
-          <h3 class="display-sm text-[21px] text-white">Operador</h3>
-          <p class="mt-2 text-[14.5px] leading-relaxed text-mute">Para quem tem um produto rodando e cansou de administrar cota.</p>
-
-          <p class="mt-7 flex items-baseline gap-1.5">
-            <span class="text-[15px] text-mute">R$</span>
-            <span class="display tnum text-[46px] text-white" data-price data-month="1.497" data-year="1.247">1.497</span>
-            <span class="text-[14px] text-mute">/mês</span>
-          </p>
-          <p class="mt-1.5 text-[12.5px] text-mute" data-note>cobrado mensalmente</p>
-
-          <ul class="mt-7 space-y-3 border-t border-white/[.07] pt-7 text-[14.5px]">
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85"><b class="font-semibold text-white">1 chave</b> nominal, uso ilimitado</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">1 modelo à sua escolha</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">Concorrência alta</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">Painel de uso em tempo real</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">Suporte por e-mail em até 24 h</span></li>
-          </ul>
-
-          <div class="mt-auto pt-8">
-            <!-- [CTA] -->
-            <a href="#espera" class="btn btn-line w-full px-5 py-3.5 text-[14.5px]">Assinar Operador</a>
-          </div>
-        </div>
+      <article class="col-span-12 flex flex-col border border-rule bg-card p-7 lg:col-span-4">
+        <p class="lab">Operador</p>
+        <p class="prose mt-3 text-[14.5px]">Para quem tem um produto rodando e cansou de administrar cota.</p>
+        <p class="mt-8 flex items-baseline gap-1.5">
+          <span class="text-[15px] text-mute">R$</span>
+          <span class="d1 text-[42px]" data-price data-month="1.497" data-year="1.247">1.497</span>
+          <span class="text-[14px] text-mute">/mês</span>
+        </p>
+        <p class="mt-1.5 text-[12.5px] text-mute" data-note>cobrado mensalmente</p>
+        <ul class="mt-7 space-y-2.5 border-t border-rule pt-7 text-[14.5px]">
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">01</span><span><b class="font-semibold">1 chave</b> nominal, uso ilimitado</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">02</span><span>1 modelo à sua escolha</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">03</span><span>Concorrência alta</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">04</span><span>Painel de uso em tempo real</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">05</span><span>Suporte por e-mail em até 24 h</span></li>
+        </ul>
+        <div class="mt-auto pt-8"><a href="#espera" class="btn btn-line w-full">Assinar Operador</a></div>
       </article>
 
-      <!-- ESCALA · destaque -->
-      <article class="reveal edge edge-hot spot lift beacon relative flex flex-col overflow-hidden rounded-[22px] bg-gradient-to-b from-ion/[.14] via-panel/90 to-panel/90 p-7 backdrop-blur-xl lg:-my-4 lg:z-10" data-spot data-d="1">
-        <div class="absolute inset-x-0 top-0 z-[4] flex justify-center">
-          <span class="rounded-b-lg bg-gradient-to-r from-ion to-arc px-3 py-1 text-[10px] font-semibold uppercase tracking-[.16em] text-white">Escolha de 8 em cada 10</span>
+      <!-- ESCALA -->
+      <article class="slab col-span-12 flex flex-col p-7 lg:col-span-4">
+        <div class="flex items-center justify-between">
+          <p class="lab">Escala</p>
+          <span class="sig sig-live">mais assinado</span>
         </div>
-
-        <div class="relative z-[3] flex flex-1 flex-col pt-5">
-          <h3 class="display-sm text-[21px] text-white">Escala</h3>
-          <p class="mt-2 text-[14.5px] leading-relaxed text-chalk/70">Para times que rodam agente, produto e experimento ao mesmo tempo.</p>
-
-          <p class="mt-7 flex items-baseline gap-1.5">
-            <span class="text-[15px] text-mute">R$</span>
-            <span class="display tnum text-[46px] text-white" data-price data-month="3.997" data-year="3.331">3.997</span>
-            <span class="text-[14px] text-mute">/mês</span>
-          </p>
-          <p class="mt-1.5 text-[12.5px] text-mute" data-note>cobrado mensalmente</p>
-
-          <ul class="mt-7 space-y-3 border-t border-white/[.09] pt-7 text-[14.5px]">
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/90"><b class="font-semibold text-white">5 chaves</b> nominais, uso ilimitado</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/90"><b class="font-semibold text-white">Todos</b> os modelos disponíveis</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/90">Concorrência máxima e prioridade de rota</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/90">Onboarding técnico de 45 min</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/90">Canal privado com engenharia</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/90">Reserva garantida no próximo lote</span></li>
-          </ul>
-
-          <div class="mt-auto pt-8">
-            <a href="#espera" class="btn btn-key w-full px-5 py-3.5 text-[14.5px]">Assinar Escala</a>
-            <p class="mt-3 text-center text-[12px] text-mute">7 dias de garantia · cancela quando quiser</p>
-          </div>
+        <p class="mt-3 text-[14.5px] text-white/60">Para times que rodam agente, produto e experimento ao mesmo tempo.</p>
+        <p class="mt-8 flex items-baseline gap-1.5">
+          <span class="text-[15px] text-white/45">R$</span>
+          <span class="d1 text-[42px] text-white" data-price data-month="3.997" data-year="3.331">3.997</span>
+          <span class="text-[14px] text-white/45">/mês</span>
+        </p>
+        <p class="mt-1.5 text-[12.5px] text-white/45" data-note>cobrado mensalmente</p>
+        <ul class="mt-7 space-y-2.5 border-t border-white/15 pt-7 text-[14.5px] text-white/90">
+          <li class="flex gap-3"><span class="lab pt-1">01</span><span><b class="font-semibold text-white">5 chaves</b> nominais, uso ilimitado</span></li>
+          <li class="flex gap-3"><span class="lab pt-1">02</span><span><b class="font-semibold text-white">Todos</b> os modelos disponíveis</span></li>
+          <li class="flex gap-3"><span class="lab pt-1">03</span><span>Concorrência máxima e prioridade de rota</span></li>
+          <li class="flex gap-3"><span class="lab pt-1">04</span><span>Onboarding técnico de 45 min</span></li>
+          <li class="flex gap-3"><span class="lab pt-1">05</span><span>Canal privado com engenharia</span></li>
+          <li class="flex gap-3"><span class="lab pt-1">06</span><span>Reserva garantida no próximo lote</span></li>
+        </ul>
+        <div class="mt-auto pt-8">
+          <a href="#espera" class="btn btn-onink w-full">Assinar Escala</a>
+          <p class="mt-3 text-center text-[12px] text-white/45">7 dias de garantia · cancela quando quiser</p>
         </div>
       </article>
 
       <!-- SOBERANO -->
-      <article class="reveal edge spot lift relative flex flex-col overflow-hidden rounded-[22px] bg-panel/85 p-7 backdrop-blur-xl" data-spot data-d="2">
-        <div class="relative z-[3] flex flex-1 flex-col">
-          <h3 class="display-sm text-[21px] text-white">Soberano</h3>
-          <p class="mt-2 text-[14.5px] leading-relaxed text-mute">Para operações onde a IA não é uma feature — é o produto.</p>
-
-          <p class="mt-7 flex items-baseline gap-2">
-            <span class="display text-[40px] leading-none text-white">Sob medida</span>
-          </p>
-          <p class="mt-2.5 text-[12.5px] text-mute">contrato anual · faturamento PJ</p>
-
-          <ul class="mt-7 space-y-3 border-t border-white/[.07] pt-7 text-[14.5px]">
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85"><b class="font-semibold text-white">Chaves ilimitadas</b> para o time inteiro</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">Capacidade dedicada, isolada da fila comum</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">SLA contratual de 99,99%</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">Engenheiro de plantão nomeado</span></li>
-            <li class="flex gap-2.5"><span class="mt-[3px] text-live">✓</span><span class="text-chalk/85">Prioridade de compra em lançamentos</span></li>
-          </ul>
-
-          <div class="mt-auto pt-8">
-            <a href="#espera" class="btn btn-line w-full px-5 py-3.5 text-[14.5px]">Falar com a engenharia</a>
-          </div>
-        </div>
+      <article class="col-span-12 flex flex-col border border-rule bg-card p-7 lg:col-span-4">
+        <p class="lab">Soberano</p>
+        <p class="prose mt-3 text-[14.5px]">Para operações onde a IA não é uma feature — é o produto.</p>
+        <p class="mt-8"><span class="d1 text-[38px] leading-none">Sob medida</span></p>
+        <p class="mt-2.5 text-[12.5px] text-mute">contrato anual · faturamento PJ</p>
+        <ul class="mt-7 space-y-2.5 border-t border-rule pt-7 text-[14.5px]">
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">01</span><span><b class="font-semibold">Chaves ilimitadas</b> para o time inteiro</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">02</span><span>Capacidade dedicada, isolada da fila comum</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">03</span><span>SLA contratual de 99,99 %</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">04</span><span>Engenheiro de plantão nomeado</span></li>
+          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">05</span><span>Prioridade de compra em lançamentos</span></li>
+        </ul>
+        <div class="mt-auto pt-8"><a href="#espera" class="btn btn-line w-full">Falar com a engenharia</a></div>
       </article>
     </div>
 
-    <p class="reveal mt-8 text-center text-[13px] text-mute" data-d="3">
+    <p class="rv mt-6 text-[13px] text-mute" data-d="3">
       Uso ilimitado sujeito à política de uso justo: sem revenda da chave, sem compartilhamento fora da conta.
     </p>
   </div>
 </section>
 
 <!-- =========================================================================
-     LISTA DE ESPERA / CONTATO
-     [CTA] O formulário abre o cliente de e-mail. Troque o action pelo seu
-     endpoint (RD Station, Brevo, Formspree…) quando tiver um.
+     LISTA DE ESPERA
+     [CTA] Sem backend, o envio abre o cliente de e-mail. Troque por fetch()
+     para o seu endpoint quando tiver um.
      ========================================================================= -->
-<section id="espera" class="relative py-16 sm:py-20" aria-labelledby="h-espera">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="reveal pane edge relative overflow-hidden rounded-[22px] p-7 sm:p-10">
-      <div class="relative z-[3] grid items-center gap-8 md:grid-cols-[1.1fr_.9fr]">
-        <div>
-          <p class="tele !text-ion-soft">Reserva e lista de espera</p>
-          <h2 id="h-espera" class="display-sm mt-3 text-[clamp(1.6rem,3.4vw,2.2rem)] text-white">
-            Deixe seu e-mail e entre na frente da fila.
-          </h2>
-          <p class="lede mt-3 max-w-[52ch] text-[15px] leading-relaxed">
-            Avisamos primeiro quando o Fable 5.1 reabrir e quando as últimas chaves de
-            Opus 5 forem liberadas. Sem newsletter, sem spam — só abertura de lote.
-          </p>
-        </div>
-
-        <form id="waitForm" class="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
-          <label for="email" class="sr-only">Seu melhor e-mail</label>
-          <input id="email" name="email" type="email" required autocomplete="email"
-                 placeholder="voce@suaempresa.com"
-                 class="num w-full rounded-xl border border-white/[.12] bg-white/[.04] px-4 py-3.5 text-[14.5px] text-chalk placeholder:text-mute/70 focus:border-ion/50 focus:bg-white/[.06] focus:outline-none">
-          <button type="submit" class="btn btn-key shrink-0 px-6 py-3.5 text-[14.5px]">Entrar na lista</button>
-        </form>
+<section id="espera" class="mt-20 scroll-mt-20" aria-labelledby="h-espera">
+  <div class="rail">
+    <div class="g12 items-center border-y border-ink py-10">
+      <div class="col-span-12 lg:col-span-6">
+        <p class="lab">Reserva e lista de espera</p>
+        <h2 id="h-espera" class="d2 mt-3 text-[clamp(1.5rem,2.6vw,2rem)]">
+          Deixe seu e-mail e entre na frente da fila.
+        </h2>
+        <p class="prose measure mt-3 text-[15px]">
+          Avisamos primeiro quando o Fable 5.1 reabrir e quando as últimas chaves de Opus 5 forem
+          liberadas. Sem newsletter — só abertura de lote.
+        </p>
       </div>
+      <form id="waitForm" class="col-span-12 mt-6 flex flex-col gap-2.5 sm:flex-row lg:col-span-5 lg:col-start-8 lg:mt-0">
+        <label for="email" class="sr-only">Seu melhor e-mail</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="voce@suaempresa.com"
+               class="mono w-full border border-ruleb bg-card px-4 py-3 text-[14px] placeholder:text-mute focus:border-ink focus:outline-none">
+        <button type="submit" class="btn btn-ink shrink-0">Entrar na lista</button>
+      </form>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     FAQ
+     §09 · DÚVIDAS
      ========================================================================= -->
-<section id="faq" class="relative py-20 sm:py-28" aria-labelledby="h-faq">
-  <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="grid gap-12 lg:grid-cols-[.95fr_1.05fr] lg:gap-16">
-      <div class="lg:sticky lg:top-28 lg:self-start">
-        <p class="reveal tele !text-ion-soft">Antes de você perguntar</p>
-        <h2 id="h-faq" class="reveal display-sm mt-4 text-[clamp(1.8rem,3.1vw,2.4rem)] text-white" data-d="1">
+<section id="faq" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-faq">
+  <div class="rail">
+    <div class="mark rv"><b>§09</b><span>Antes de você perguntar</span><hr></div>
+
+    <div class="g12 mt-8">
+      <div class="col-span-12 lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
+        <h2 id="h-faq" class="rv d2 text-[clamp(1.7rem,2.8vw,2.3rem)]">
           As dúvidas que todo mundo tem — respondidas sem rodeio.
         </h2>
-        <p class="reveal lede mt-5 max-w-[40ch] text-[15px] leading-relaxed" data-d="2">
+        <p class="rv prose mt-4 text-[15px]" data-d="1">
           Ficou algo de fora? Fale direto com quem opera a infraestrutura.
-          <a href="#espera" class="text-ion-soft underline decoration-ion/40 underline-offset-4 hover:decoration-ion">Manda o e-mail</a>.
+          <a href="#espera" class="border-b border-ink text-ink">Manda o e-mail</a>.
         </p>
       </div>
 
-      <div class="reveal divide-y divide-white/[.07] border-y border-white/[.07]">
-
-        <details class="faq group" open>
+      <div class="rv col-span-12 mt-8 border-t border-ink lg:col-span-7 lg:col-start-6 lg:mt-0" data-d="1">
+        <details class="faq" open>
           <summary>Ilimitado é ilimitado mesmo, ou tem letra miúda?</summary>
-          <div class="faq-body"><p>
-            É ilimitado no que importa: não há teto de requisições por minuto, não há cota de tokens
-            e não há corte no fim do mês. A única regra é a política de uso justo — a chave é nominal,
-            não pode ser revendida nem compartilhada fora da sua conta. Quebrou isso, a chave é revogada.
-            Fora isso, use até cansar.
-          </p></div>
+          <div class="faq-body"><p>É ilimitado no que importa: não há teto de requisições por minuto, não há cota de tokens e não há corte no fim do mês. A única regra é a política de uso justo — a chave é nominal, não pode ser revendida nem compartilhada fora da sua conta. Quebrou isso, a chave é revogada. Fora isso, use até cansar.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>Como vocês conseguem oferecer isso?</summary>
-          <div class="faq-body"><p>
-            Comprando capacidade em volume e operando a camada de roteamento por conta própria.
-            Nosso custo é de capacidade reservada, não de token avulso — por isso conseguimos
-            cobrar fixo de você. É o mesmo motivo pelo qual vendemos por lote: quando a capacidade
-            reservada acaba, o modelo sai do ar até a próxima rodada.
-          </p></div>
+          <div class="faq-body"><p>Comprando capacidade em volume e operando a camada de roteamento por conta própria. Nosso custo é de capacidade reservada, não de token avulso — por isso conseguimos cobrar fixo de você. É o mesmo motivo pelo qual vendemos por lote: quando a capacidade acaba, o modelo sai do ar até a próxima rodada.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>Funciona com o código que eu já tenho?</summary>
-          <div class="faq-body"><p>
-            Sim. O endpoint segue o padrão de mercado usado pela maioria dos SDKs. Na prática você
-            troca a <code class="num text-chalk">base_url</code> e a chave, e o resto do seu código continua igual —
-            streaming, function calling e tudo mais que você já usa.
-          </p></div>
+          <div class="faq-body"><p>Sim. O endpoint segue o padrão de mercado usado pela maioria dos SDKs. Na prática você troca a <code class="mono text-ink">base_url</code> e a chave, e o resto continua igual — streaming, function calling e tudo mais que você já usa.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>E se eu precisar de mais paralelismo?</summary>
-          <div class="faq-body"><p>
-            Dispare. A concorrência do plano Escala é a máxima que a nossa infraestrutura entrega,
-            e o Soberano roda em capacidade isolada da fila comum. Se você tem um pico previsto —
-            uma migração, um reprocessamento de base — avise no canal e reservamos rota extra sem custo.
-          </p></div>
+          <div class="faq-body"><p>Dispare. A concorrência do plano Escala é a máxima que a nossa infraestrutura entrega, e o Soberano roda em capacidade isolada da fila comum. Se você tem um pico previsto — uma migração, um reprocessamento de base — avise no canal e reservamos rota extra sem custo.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>Quando o Fable 5.1 volta?</summary>
-          <div class="faq-body"><p>
-            Quando conseguirmos reservar capacidade nova, e não antes. O lote 06 foi de 80 chaves e
-            esgotou em 40 horas. Não abrimos overbooking nem fatiamos a capacidade de quem já comprou —
-            preferimos deixar esgotado a entregar uma chave pior. Quem está na lista de espera é avisado primeiro.
-          </p></div>
+          <div class="faq-body"><p>Quando conseguirmos reservar capacidade nova, e não antes. O lote 06 foi de 80 chaves e esgotou em 40 horas. Não abrimos overbooking nem fatiamos a capacidade de quem já comprou — preferimos deixar esgotado a entregar uma chave pior. Quem está na lista de espera é avisado primeiro.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>Posso revender ou dividir a chave?</summary>
-          <div class="faq-body"><p>
-            Não. Cada chave é nominal e vinculada à sua conta. Revenda, compartilhamento ou proxy
-            aberto para terceiros encerram o acesso sem reembolso. É essa regra que mantém a
-            capacidade disponível para quem comprou.
-          </p></div>
+          <div class="faq-body"><p>Não. Cada chave é nominal e vinculada à sua conta. Revenda, compartilhamento ou proxy aberto para terceiros encerram o acesso sem reembolso. É essa regra que mantém a capacidade disponível para quem comprou.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>Tem fidelidade ou multa?</summary>
-          <div class="faq-body"><p>
-            Nenhuma no plano mensal: você cancela quando quiser e o acesso vai até o fim do ciclo pago.
-            O anual tem desconto de dois meses justamente porque é um compromisso maior — e o Soberano
-            é contrato, com escopo definido em conjunto.
-          </p></div>
+          <div class="faq-body"><p>Nenhuma no plano mensal: você cancela quando quiser e o acesso vai até o fim do ciclo pago. O anual tem desconto de dois meses porque é um compromisso maior — e o Soberano é contrato, com escopo definido em conjunto.</p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>Vocês olham ou treinam com os meus dados?</summary>
-          <div class="faq-body"><p>
-            Não treinamos nada com o seu tráfego. Guardamos apenas metadados de faturamento e
-            diagnóstico — volume, latência, código de status — nunca o conteúdo das mensagens.
-            <span class="text-mute">[Confirme esta política com a sua operação antes de publicar.]</span>
-          </p></div>
+          <div class="faq-body"><p>Não treinamos nada com o seu tráfego. Guardamos apenas metadados de faturamento e diagnóstico — volume, latência, código de status — nunca o conteúdo das mensagens. <span class="text-mute">[Confirme esta política com a sua operação antes de publicar.]</span></p></div>
         </details>
-
-        <details class="faq group">
+        <details class="faq">
           <summary>E se não for o que eu esperava?</summary>
-          <div class="faq-body"><p>
-            Você tem 7 dias para testar em carga real. Se a chave não entregar o que está escrito
-            nesta página, devolvemos o valor integral — sem formulário de retenção e sem ligação
-            de "última oferta".
-          </p></div>
+          <div class="faq-body"><p>Você tem 7 dias para testar em carga real. Se a chave não entregar o que está escrito nesta página, devolvemos o valor integral — sem formulário de retenção e sem ligação de "última oferta".</p></div>
         </details>
       </div>
     </div>
@@ -1454,52 +1157,38 @@ input:-webkit-autofill:focus{
 </section>
 
 <!-- =========================================================================
-     CTA FINAL + GARANTIA
+     §10 · FECHAMENTO — chapa preta de sangria total
      ========================================================================= -->
-<section class="relative overflow-hidden py-20 sm:py-28" aria-labelledby="h-final">
-  <div class="halo drift-a left-1/2 top-[1rem] h-[34rem] w-[52rem] -translate-x-1/2 bg-ion/[.22]" aria-hidden="true"></div>
-  <div class="grid-far pointer-events-none absolute inset-0" aria-hidden="true"></div>
-
-  <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
-    <div class="reveal edge edge-hot beacon relative overflow-hidden rounded-[26px] bg-panel/85 px-6 py-14 backdrop-blur-2xl sm:px-12 sm:py-16">
-      <div class="relative z-[3] mx-auto max-w-[840px] text-center">
-
-        <!-- contador do lote · [PRAZO] no script -->
-        <div class="mb-8 inline-flex items-center gap-2.5 rounded-full border border-halt/25 bg-halt/[.07] px-4 py-2">
-          <span class="h-1.5 w-1.5 rounded-full bg-halt"></span>
-          <span class="tele !text-[10px] !text-halt/90">Lote 07 encerra em</span>
-          <span class="num text-[13px] font-medium text-white" id="countdown">—</span>
+<section class="slab mt-24 py-20 sm:py-24" aria-labelledby="h-final">
+  <div class="rail">
+    <div class="g12 items-end">
+      <div class="col-span-12 lg:col-span-7">
+        <div class="mark"><b class="!text-white/70">§10</b><span class="!text-white/40">Fechamento</span><hr class="!border-white/15"></div>
+        <div class="mt-7 inline-flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
+          <span class="dot text-[#E8A398]"></span>
+          <span class="lab !text-white/50">Lote 07 encerra em</span>
+          <span class="mono text-[13px] text-white" id="countdown">—</span>
         </div>
-
-        <h2 id="h-final" class="display text-[clamp(1.95rem,5.2vw,3.6rem)] text-white">
-          O acesso é limitado.<br><span class="ink-grad">O uso, nunca.</span>
+        <h2 id="h-final" class="d1 mt-6 text-[clamp(2.2rem,5vw,4rem)] text-white">
+          O acesso é limitado.<br>O uso, nunca.
         </h2>
-
-        <p class="lede mx-auto mt-6 max-w-[54ch] text-[17px] leading-[1.65]">
-          Enquanto o seu concorrente decide quantas chamadas cabem no orçamento do mês,
-          você já rodou dez mil. É essa a vantagem — e ela tem prazo, porque a capacidade tem.
+        <p class="measure mt-6 text-[16.5px] leading-[1.6] text-white/60">
+          Enquanto o seu concorrente decide quantas chamadas cabem no orçamento do mês, você já
+          rodou dez mil. É essa a vantagem — e ela tem prazo, porque a capacidade tem.
         </p>
-
-        <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a href="#planos" class="btn btn-key w-full px-8 py-4 text-[15px] sm:w-auto">
-            Garantir minha chave ilimitada
-            <svg viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5.5 18.5 12 12 18.5"/></svg>
-          </a>
-          <a href="#espera" class="btn btn-line w-full px-8 py-4 text-[15px] sm:w-auto">Falar com a engenharia</a>
-        </div>
-
-        <!-- garantia -->
-        <div class="mt-10 flex flex-col items-center gap-3 border-t border-white/[.08] pt-8 sm:flex-row sm:justify-center sm:gap-4 sm:text-left">
-          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-live/30 bg-live/10">
-            <svg viewBox="0 0 24 24" class="h-5 w-5 text-live" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 4.5 6.3v5.4c0 4.3 3.1 7.8 7.5 9.1 4.4-1.3 7.5-4.8 7.5-9.1V6.3L12 3.2Z"/><path d="m9.3 12 1.9 1.9 3.6-3.7"/></svg>
-          </span>
-          <p class="max-w-[42ch] text-center text-[14px] leading-relaxed text-chalk/80 sm:text-left">
-            <b class="font-semibold text-white">7 dias de garantia incondicional.</b>
-            Teste em carga real. Se não entregar o que está escrito aqui, devolvemos tudo —
-            sem formulário de retenção.
-          </p>
+        <div class="mt-8 flex flex-col gap-2.5 sm:flex-row">
+          <a href="#planos" class="btn btn-onink">Garantir minha chave</a>
+          <a href="#espera" class="btn btn-ghost-onink">Falar com a engenharia</a>
         </div>
       </div>
+
+      <aside class="col-span-12 mt-10 border-t border-white/15 pt-6 lg:col-span-4 lg:col-start-9 lg:mt-0">
+        <p class="lab">Garantia</p>
+        <p class="mt-3 text-[15px] leading-[1.6] text-white/80">
+          <b class="font-semibold text-white">7 dias, incondicional.</b> Teste em carga real. Se não
+          entregar o que está escrito nesta página, devolvemos tudo — sem formulário de retenção.
+        </p>
+      </aside>
     </div>
   </div>
 </section>
@@ -1507,60 +1196,49 @@ input:-webkit-autofill:focus{
 <!-- =========================================================================
      RODAPÉ
      ========================================================================= -->
-<footer class="relative border-t border-white/[.07] bg-panel/30">
-  <div class="mx-auto max-w-rail px-5 py-14 sm:px-8">
-    <div class="grid gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr]">
-
-      <div>
-        <a href="#topo" class="flex items-center gap-2.5">
-          <span class="grid h-8 w-8 place-items-center rounded-[10px] bg-gradient-to-br from-ion to-arc">
-            <svg viewBox="0 0 24 24" class="h-[18px] w-[18px] text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6.4 8.9c1.9 0 2.6 6.2 4.5 6.2a3.1 3.1 0 1 0 0-6.2c-1.9 0-2.6 6.2-4.5 6.2a3.1 3.1 0 1 1 0-6.2Z"/></svg>
-          </span>
-          <span class="display-sm text-[17px] text-white">UNBOUND</span>
-        </a>
-        <p class="lede mt-4 max-w-[38ch] text-[14px] leading-relaxed">
-          Capacidade de IA reservada, entregue por chave nominal. Sem cota, sem fila,
-          sem alguém decidindo quanto você pode usar hoje.
+<footer class="border-t border-rule">
+  <div class="rail py-12">
+    <div class="g12 gap-y-8">
+      <div class="col-span-12 lg:col-span-5">
+        <p class="d3 text-[17px]">UNBOUND</p>
+        <p class="prose measure mt-3 text-[14px]">
+          Capacidade de IA reservada, entregue por chave nominal. Sem cota, sem fila, sem alguém
+          decidindo quanto você pode usar hoje.
         </p>
-        <div class="mt-5 inline-flex items-center gap-2 rounded-lg border border-live/20 bg-live/[.06] px-2.5 py-1.5">
-          <span class="pip"></span><span class="tele !text-live !text-[10px]">todos os sistemas operando</span>
-        </div>
+        <p class="sig sig-ok mt-5"><span class="dot"></span>todos os sistemas operando</p>
       </div>
-
-      <nav aria-label="Produto">
-        <p class="tele">Produto</p>
-        <ul class="mt-4 space-y-2.5 text-[14px]">
-          <li><a href="#modelos" class="text-mute transition hover:text-chalk">Modelos</a></li>
-          <li><a href="#beneficios" class="text-mute transition hover:text-chalk">Benefícios</a></li>
-          <li><a href="#comparativo" class="text-mute transition hover:text-chalk">Comparativo</a></li>
-          <li><a href="#planos" class="text-mute transition hover:text-chalk">Planos</a></li>
+      <nav class="col-span-6 lg:col-span-2 lg:col-start-7" aria-label="Produto">
+        <p class="lab">Produto</p>
+        <ul class="mt-4 space-y-2 text-[14px]">
+          <li><a href="#catalogo" class="text-slate transition hover:text-ink">Catálogo</a></li>
+          <li><a href="#beneficios" class="text-slate transition hover:text-ink">Benefícios</a></li>
+          <li><a href="#comparativo" class="text-slate transition hover:text-ink">Comparativo</a></li>
+          <li><a href="#planos" class="text-slate transition hover:text-ink">Planos</a></li>
         </ul>
       </nav>
-
-      <nav aria-label="Suporte">
-        <p class="tele">Suporte</p>
-        <ul class="mt-4 space-y-2.5 text-[14px]">
-          <li><a href="#faq" class="text-mute transition hover:text-chalk">Dúvidas frequentes</a></li>
-          <li><a href="#espera" class="text-mute transition hover:text-chalk">Lista de espera</a></li>
-          <li><a href="#espera" class="text-mute transition hover:text-chalk">Falar com engenharia</a></li>
-          <li><a href="#topo" class="text-mute transition hover:text-chalk">Status da plataforma</a></li>
+      <nav class="col-span-6 lg:col-span-2" aria-label="Suporte">
+        <p class="lab">Suporte</p>
+        <ul class="mt-4 space-y-2 text-[14px]">
+          <li><a href="#faq" class="text-slate transition hover:text-ink">Dúvidas</a></li>
+          <li><a href="#espera" class="text-slate transition hover:text-ink">Lista de espera</a></li>
+          <li><a href="#operacao" class="text-slate transition hover:text-ink">Operação</a></li>
+          <li><a href="#top" class="text-slate transition hover:text-ink">Status</a></li>
         </ul>
       </nav>
-
-      <nav aria-label="Legal">
-        <p class="tele">Legal</p>
-        <ul class="mt-4 space-y-2.5 text-[14px]">
-          <li><a href="#" class="text-mute transition hover:text-chalk">Termos de uso</a></li>
-          <li><a href="#" class="text-mute transition hover:text-chalk">Política de privacidade</a></li>
-          <li><a href="#" class="text-mute transition hover:text-chalk">Política de uso justo</a></li>
+      <nav class="col-span-12 lg:col-span-2" aria-label="Legal">
+        <p class="lab">Legal</p>
+        <ul class="mt-4 space-y-2 text-[14px]">
+          <li><a href="#" class="text-slate transition hover:text-ink">Termos de uso</a></li>
+          <li><a href="#" class="text-slate transition hover:text-ink">Privacidade</a></li>
+          <li><a href="#" class="text-slate transition hover:text-ink">Uso justo</a></li>
         </ul>
       </nav>
     </div>
 
-    <div class="mt-12 flex flex-col gap-4 border-t border-white/[.07] pt-7 sm:flex-row sm:items-center sm:justify-between">
+    <div class="mt-12 flex flex-col gap-3 border-t border-rule pt-6 sm:flex-row sm:items-start sm:justify-between">
       <p class="text-[12.5px] text-mute">© <span id="year">2026</span> UNBOUND. Todos os direitos reservados.</p>
-      <p class="max-w-[62ch] text-[12px] leading-relaxed text-mute/80">
-        <!-- [MARCA] Mantenha este aviso: deixa claro que você revende acesso e não representa os detentores das marcas. -->
+      <p class="max-w-[64ch] text-[12px] leading-relaxed text-mute">
+        <!-- [MARCA] Mantenha este aviso: deixa claro que você provisiona acesso e não representa as marcas. -->
         A UNBOUND é um serviço independente de provisionamento de acesso. Os nomes dos modelos citados
         pertencem aos seus respectivos detentores e são usados apenas para identificar o que é oferecido.
       </p>
@@ -1574,148 +1252,120 @@ input:-webkit-autofill:focus{
 <script>
 (function () {
   'use strict';
-
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasIO  = 'IntersectionObserver' in window;
 
-  /* ---- 1. progresso de leitura + estado da navegação --------------------- */
-  var bar = document.getElementById('progress');
-  var navbar = document.getElementById('navbar');
-  function onScroll() {
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
-    if (window.scrollY > 16) {
-      navbar.classList.add('pane', 'shadow-[0_18px_50px_-24px_rgba(0,0,0,.9)]');
-    } else {
-      navbar.classList.remove('pane', 'shadow-[0_18px_50px_-24px_rgba(0,0,0,.9)]');
-    }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* ---- 2. menu mobile ---------------------------------------------------- */
-  var menuBtn = document.getElementById('menuBtn');
-  var menu = document.getElementById('mobileMenu');
-  menuBtn.addEventListener('click', function () {
-    var open = menu.classList.toggle('hidden') === false;
-    menuBtn.setAttribute('aria-expanded', String(open));
-  });
-  menu.querySelectorAll('a').forEach(function (a) {
-    a.addEventListener('click', function () {
-      menu.classList.add('hidden');
-      menuBtn.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  /* ---- 3. entrada das seções -------------------------------------------- */
-  var revealables = document.querySelectorAll('.reveal');
-  function showAll() { revealables.forEach(function (el) { el.classList.add('in'); }); }
-  if ('IntersectionObserver' in window && !reduce) {
-    var anyRevealed = false;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); anyRevealed = true; io.unobserve(e.target); }
+  /* ---- 1 · entrada das seções ------------------------------------------- */
+  var rvs = document.querySelectorAll('.rv');
+  function showAll(){ rvs.forEach(function(el){ el.classList.add('in'); }); }
+  if (hasIO && !reduce) {
+    var any = false;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); any = true; io.unobserve(e.target); }
       });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
-    revealables.forEach(function (el) { io.observe(el); });
-    // Rede de segurança: só entra em ação se o observer não marcou nada.
-    // Um destravamento cego revelaria a página toda enquanto o leitor ainda
-    // está no herói, matando a animação de quem lê devagar.
-    setTimeout(function () { if (!anyRevealed) showAll(); }, 2500);
-  } else {
-    showAll();
-  }
+    }, { rootMargin: '0px 0px -10% 0px', threshold: .06 });
+    rvs.forEach(function (el) { io.observe(el); });
+    // só entra em ação se o observer não marcou nada
+    setTimeout(function(){ if (!any) showAll(); }, 2500);
+  } else { showAll(); }
 
-  /* ---- 4. contadores ----------------------------------------------------- */
-  function runCounter(el) {
-    var target = parseFloat(el.dataset.count);
-    var dec = parseInt(el.dataset.dec || '0', 10);
-    var dur = 1500, t0 = performance.now();
-    function frame(now) {
+  /* ---- 2 · contadores ---------------------------------------------------- */
+  function fmt(v, d){ return v.toLocaleString('pt-BR', { minimumFractionDigits:d, maximumFractionDigits:d }); }
+  function count(el){
+    var target = parseFloat(el.dataset.count), d = parseInt(el.dataset.dec || '0', 10);
+    var t0 = performance.now(), dur = 1100;
+    (function frame(now){
       var p = Math.min((now - t0) / dur, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = (target * eased).toLocaleString('pt-BR', {
-        minimumFractionDigits: dec, maximumFractionDigits: dec
-      });
+      el.textContent = fmt(target * (1 - Math.pow(1 - p, 3)), d);
       if (p < 1) requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
+    })(performance.now());
   }
   var counters = document.querySelectorAll('[data-count]');
-  if ('IntersectionObserver' in window && !reduce) {
-    var cio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { runCounter(e.target); cio.unobserve(e.target); }
-      });
-    }, { threshold: 0.4 });
+  if (hasIO && !reduce) {
+    var cio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { count(e.target); cio.unobserve(e.target); } });
+    }, { threshold: .5 });
     counters.forEach(function (el) { cio.observe(el); });
-  } else {
-    counters.forEach(function (el) {
-      var d = parseInt(el.dataset.dec || '0', 10);
-      el.textContent = parseFloat(el.dataset.count).toLocaleString('pt-BR', {
-        minimumFractionDigits: d, maximumFractionDigits: d
+  }
+
+  /* ---- 3 · índice fixo acompanha a leitura ------------------------------- */
+  var links = document.querySelectorAll('.ixlink');
+  if (hasIO && links.length) {
+    var byId = {};
+    links.forEach(function (a) { byId[a.dataset.ix] = a; });
+    var sio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var a = byId[e.target.id];
+        if (!a) return;
+        if (e.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('on'); });
+          a.classList.add('on');
+        }
       });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(byId).forEach(function (id) {
+      var s = document.getElementById(id); if (s) sio.observe(s);
     });
   }
 
-  /* ---- 5. luz que segue o cursor ---------------------------------------- */
-  document.querySelectorAll('[data-spot]').forEach(function (card) {
-    card.classList.add('spot');
-    card.addEventListener('pointermove', function (ev) {
-      var r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', ((ev.clientX - r.left) / r.width) * 100 + '%');
-      card.style.setProperty('--my', ((ev.clientY - r.top) / r.height) * 100 + '%');
+  /* ---- 4 · painel que segue o passo -------------------------------------- */
+  // O painel é fixo e o conteúdo troca: o leitor vê o artefato de cada etapa
+  // em vez de ler quatro parágrafos sobre elas.
+  var steps  = document.querySelectorAll('.step');
+  var panels = document.querySelectorAll('.panel');
+  function activate(n){
+    steps.forEach(function (s) { s.classList.toggle('on', s.dataset.step === n); });
+    panels.forEach(function (p) { p.hidden = (p.dataset.panel !== n); });
+  }
+  if (steps.length) {
+    activate('1');
+    if (hasIO) {
+      var pio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) activate(e.target.dataset.step); });
+      }, { rootMargin: '-45% 0px -45% 0px' });
+      steps.forEach(function (s) { pio.observe(s); });
+    }
+    // no toque, tocar no passo também troca o painel
+    steps.forEach(function (s) {
+      s.addEventListener('click', function () { activate(s.dataset.step); });
     });
-  });
+  }
 
-  /* ---- 6. ciclo de cobrança --------------------------------------------- */
-  var bMonth = document.getElementById('cycleMonth');
-  var bYear = document.getElementById('cycleYear');
-  var ON = ['bg-chalk', 'text-void'];
-  var OFF = ['text-mute'];
-  function setCycle(yearly) {
+  /* ---- 5 · ciclo de cobrança --------------------------------------------- */
+  var bM = document.getElementById('cycleMonth'), bY = document.getElementById('cycleYear');
+  function setCycle(yearly){
     document.querySelectorAll('[data-price]').forEach(function (el) {
       el.textContent = yearly ? el.dataset.year : el.dataset.month;
     });
     document.querySelectorAll('[data-note]').forEach(function (el) {
       el.textContent = yearly ? 'cobrado anualmente · 10 meses pelo preço de 12' : 'cobrado mensalmente';
     });
-    (yearly ? bYear : bMonth).classList.add.apply((yearly ? bYear : bMonth).classList, ON);
-    (yearly ? bYear : bMonth).classList.remove.apply((yearly ? bYear : bMonth).classList, OFF);
-    (yearly ? bMonth : bYear).classList.remove.apply((yearly ? bMonth : bYear).classList, ON);
-    (yearly ? bMonth : bYear).classList.add.apply((yearly ? bMonth : bYear).classList, OFF);
-    bMonth.setAttribute('aria-pressed', String(!yearly));
-    bYear.setAttribute('aria-pressed', String(yearly));
+    bM.classList.toggle('cyc-on', !yearly);
+    bY.classList.toggle('cyc-on', yearly);
+    bM.setAttribute('aria-pressed', String(!yearly));
+    bY.setAttribute('aria-pressed', String(yearly));
   }
-  bMonth.addEventListener('click', function () { setCycle(false); });
-  bYear.addEventListener('click', function () { setCycle(true); });
+  bM.addEventListener('click', function(){ setCycle(false); });
+  bY.addEventListener('click', function(){ setCycle(true); });
   setCycle(false);
 
-  /* ---- 7. contagem regressiva do lote ------------------------------------ */
-  // [PRAZO] Defina a data real de encerramento. Se ela passar, o contador
-  // avança para a semana seguinte — troque por uma data fixa se preferir.
-  var LOTE_FECHA = new Date('2026-09-14T23:59:00-03:00');
+  /* ---- 6 · contagem regressiva do lote ----------------------------------- */
+  // [PRAZO] data real de encerramento. Se passar, avança uma semana.
+  var FECHA = new Date('2026-09-14T23:59:00-03:00');
   var out = document.getElementById('countdown');
-  function tick() {
+  function tick(){
     var now = Date.now();
-    while (LOTE_FECHA.getTime() < now) {
-      LOTE_FECHA = new Date(LOTE_FECHA.getTime() + 7 * 864e5);
-    }
-    var d = LOTE_FECHA.getTime() - now;
-    var dd = Math.floor(d / 864e5),
-        hh = Math.floor(d / 36e5) % 24,
-        mm = Math.floor(d / 6e4) % 60,
-        ss = Math.floor(d / 1e3) % 60;
-    var p = function (n) { return String(n).padStart(2, '0'); };
-    out.textContent = dd + 'd ' + p(hh) + 'h ' + p(mm) + 'm ' + p(ss) + 's';
+    while (FECHA.getTime() < now) FECHA = new Date(FECHA.getTime() + 7 * 864e5);
+    var d = FECHA.getTime() - now, p = function (n) { return String(n).padStart(2, '0'); };
+    out.textContent = Math.floor(d / 864e5) + 'd ' + p(Math.floor(d / 36e5) % 24) + 'h '
+                    + p(Math.floor(d / 6e4) % 60) + 'm ' + p(Math.floor(d / 1e3) % 60) + 's';
   }
-  tick();
-  setInterval(tick, 1000);
+  tick(); setInterval(tick, 1000);
 
-  /* ---- 8. lista de espera ------------------------------------------------ */
-  // [CTA] Sem backend, o envio abre o cliente de e-mail do visitante.
-  // Troque por fetch() para o seu endpoint quando tiver um.
-  var form = document.getElementById('waitForm');
-  form.addEventListener('submit', function (ev) {
+  /* ---- 7 · lista de espera ----------------------------------------------- */
+  // [CTA] Sem backend, abre o cliente de e-mail. Troque por fetch() no seu endpoint.
+  document.getElementById('waitForm').addEventListener('submit', function (ev) {
     ev.preventDefault();
     var mail = document.getElementById('email').value.trim();
     if (!mail) return;
@@ -1724,112 +1374,8 @@ input:-webkit-autofill:focus{
       + '&body=' + encodeURIComponent('Quero ser avisado na abertura do próximo lote.\n\nE-mail: ' + mail);
   });
 
-  /* ---- 9. ano no rodapé -------------------------------------------------- */
+  /* ---- 8 · ano ------------------------------------------------------------ */
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  /* ---- 10. fundo: fluxo de pacotes --------------------------------------- */
-  var flux = document.getElementById('flux');
-  if (flux && flux.getContext) {
-    var fx = flux.getContext('2d'), streaks = [], W = 0, H = 0, dpr = 1, running = false;
-    function sizeFlux() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = flux.clientWidth; H = flux.clientHeight;
-      flux.width = W * dpr; flux.height = H * dpr;
-      fx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    function seed() {
-      streaks = [];
-      var n = Math.round(Math.min(W / 12, 90));
-      for (var i = 0; i < n; i++) {
-        streaks.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          len: 30 + Math.random() * 130,
-          v: 0.35 + Math.random() * 1.9,
-          a: 0.06 + Math.random() * 0.3,
-          blue: Math.random() > 0.6
-        });
-      }
-    }
-    function drawFlux() {
-      fx.clearRect(0, 0, W, H);
-      for (var i = 0; i < streaks.length; i++) {
-        var s = streaks[i];
-        var g = fx.createLinearGradient(s.x - s.len, s.y, s.x, s.y);
-        var c = s.blue ? '47,107,255' : '124,92,255';
-        g.addColorStop(0, 'rgba(' + c + ',0)');
-        g.addColorStop(1, 'rgba(' + c + ',' + s.a + ')');
-        fx.strokeStyle = g; fx.lineWidth = 1;
-        fx.beginPath(); fx.moveTo(s.x - s.len, s.y); fx.lineTo(s.x, s.y); fx.stroke();
-        s.x += s.v;
-        if (s.x - s.len > W) { s.x = -Math.random() * 120; s.y = Math.random() * H; }
-      }
-      if (!reduce && !document.hidden) { requestAnimationFrame(drawFlux); } else { running = false; }
-    }
-    sizeFlux(); seed(); running = true; drawFlux();
-    window.addEventListener('resize', function () { sizeFlux(); seed(); });
-    document.addEventListener('visibilitychange', function () {
-      // sem a trava, voltar para a aba iniciava um segundo laço sobre o primeiro
-      if (!document.hidden && !reduce && !running) { running = true; requestAnimationFrame(drawFlux); }
-    });
-  }
-
-  /* ---- 11. instrumento de vazão ------------------------------------------ */
-  var tp = document.getElementById('throughput');
-  var rpsOut = document.getElementById('rps');
-  if (tp && tp.getContext) {
-    var ctx = tp.getContext('2d'), pts = [], TW = 0, TH = 0, tdpr = 1, phase = 0;
-    for (var k = 0; k < 60; k++) pts.push(48 + Math.random() * 22);
-    function sizeTp() {
-      tdpr = Math.min(window.devicePixelRatio || 1, 2);
-      TW = tp.clientWidth; TH = tp.clientHeight;
-      tp.width = TW * tdpr; tp.height = TH * tdpr;
-      ctx.setTransform(tdpr, 0, 0, tdpr, 0, 0);
-    }
-    function drawTp() {
-      ctx.clearRect(0, 0, TW, TH);
-      var max = Math.max.apply(null, pts) * 1.18, step = TW / (pts.length - 1);
-      var y = function (v) { return TH - (v / max) * (TH - 8) - 4; };
-
-      // grade de referência
-      ctx.strokeStyle = 'rgba(178,166,255,.07)'; ctx.lineWidth = 1;
-      for (var g2 = 1; g2 <= 2; g2++) {
-        var gy = (TH / 3) * g2;
-        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(TW, gy); ctx.stroke();
-      }
-
-      // área
-      var grad = ctx.createLinearGradient(0, 0, 0, TH);
-      grad.addColorStop(0, 'rgba(124,92,255,.34)');
-      grad.addColorStop(1, 'rgba(124,92,255,0)');
-      ctx.beginPath(); ctx.moveTo(0, TH);
-      pts.forEach(function (v, i) { ctx.lineTo(i * step, y(v)); });
-      ctx.lineTo(TW, TH); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
-
-      // linha
-      ctx.beginPath();
-      pts.forEach(function (v, i) { i ? ctx.lineTo(i * step, y(v)) : ctx.moveTo(0, y(v)); });
-      ctx.strokeStyle = '#A896FF'; ctx.lineWidth = 1.6;
-      ctx.shadowColor = 'rgba(124,92,255,.85)'; ctx.shadowBlur = 10;
-      ctx.stroke(); ctx.shadowBlur = 0;
-
-      // ponta destacada
-      var last = pts[pts.length - 1];
-      ctx.beginPath(); ctx.arc(TW - 3.5, y(last), 2.8, 0, Math.PI * 2);
-      ctx.fillStyle = '#3DDC97'; ctx.fill();
-    }
-    function stepTp() {
-      phase += 0.06;
-      var base = 54 + Math.sin(phase) * 12 + Math.sin(phase * 2.7) * 5;
-      pts.push(Math.max(18, base + (Math.random() - 0.5) * 16));
-      pts.shift();
-      if (rpsOut) rpsOut.textContent = Math.round(pts[pts.length - 1] * 21).toLocaleString('pt-BR') + ' req/s';
-      drawTp();
-    }
-    sizeTp(); drawTp(); stepTp();
-    window.addEventListener('resize', function () { sizeTp(); drawTp(); });
-    if (!reduce) setInterval(function () { if (!document.hidden) stepTp(); }, 900);
-  }
 })();
 </script>
 
