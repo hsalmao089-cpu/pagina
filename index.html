@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#F7F7F6">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#060507">
 <title>UNBOUND — Capacidade sem medidor</title>
 <meta name="description" content="Chaves de API sem rate limit, sem cota de tokens e sem fila. Capacidade reservada para Kimi K3, Opus 5 e Fable 5.1, vendida por lote com preço fixo.">
 <meta property="og:type" content="website">
@@ -16,916 +16,1005 @@
   UNBOUND · página de vendas de API · arquivo único
   ===========================================================================
   ONDE MEXER:
-    [MARCA]     nome, símbolo, domínio
-    [NUMERO]    prova social, vagas, contadores  → EXEMPLOS
-    [PRECO]     valores dos planos               → EXEMPLOS
-    [CTA]       links de checkout / contato
-    [ENDPOINT]  api.unbound.ai → seu endpoint real
-    [PRAZO]     encerramento do lote (const LOTE_FECHA, no rodapé)
+    [MARCA] nome e domínio · [NUMERO] prova social e vagas · [PRECO] planos
+    [CTA] links de checkout · [ENDPOINT] api.unbound.ai · [PRAZO] LOTE_FECHA
 
   AVISO: uso, uptime, latência, vagas, preços e política de dados são
   exemplos de layout. Confirme cada afirmação antes de publicar.
 
-  DIREÇÃO VISUAL — folha de especificação, não landing page.
-    Cor    papel #F7F7F6 · tinta #131315 · fios #E3E3E0
-           cor só carrega significado: #1F6B4C disponível, #9C3B2C encerrado.
-           Nenhum tom decorativo — o gesto forte é a chapa preta.
-    Tipo   Schibsted Grotesk (texto e display) · Spline Sans Mono (dados)
-    Grade  12 colunas de 1280px, com as guias visíveis onde a página quer
-           parecer documento técnico. Seções numeradas §00–§10 porque a
-           página É uma especificação lida em ordem.
+  DIREÇÃO — preto de estúdio, uma cor só quando ela significa algo.
+    Cor    breu #060507, osso #F2EFE9. Verde e vermelho aparecem apenas
+           para dizer "disponível" e "esgotado". Nenhum tom decorativo:
+           o drama vem de escala, profundidade e luz, não de néon.
+    Tipo   Bricolage Grotesque (display) · Instrument Sans (texto)
+           Spline Sans Mono (dados)
+    Arte   campo de fluxo em canvas, desenhado na hora. Sem imagem externa.
+
+  SEM DEPENDÊNCIA EXTERNA: nada de framework CSS nem biblioteca de JS.
+  O único recurso remoto é a fonte, com pilha de fallback.
   ===========================================================================
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-<script>
-  // Sem JS nada fica escondido esperando animação — esta classe é o interruptor.
-  document.documentElement.classList.add('js');
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600;12..96,75..100,800&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 /* ==========================================================================
    1 · TOKENS
-   Neutro de verdade: nenhum tom decorativo. Verde e ferrugem existem só
-   para dizer "disponível" e "encerrado" — são sinal, não identidade.
+   Monocromático por decisão. Verde e vermelho são sinais, não identidade —
+   é o que faz um deles significar alguma coisa quando aparece.
    ========================================================================== */
 :root{
-  --paper:#F7F7F6; --card:#FFFFFF; --wash:#EFEFED; --wash2:#E7E7E4;
-  --rule:#E3E3E0; --rule-b:#C8C8C4;
-  --ink:#131315; --ink-2:#34343A; --slate:#66666D; --mute:#93939A;
-  --ok:#1F6B4C; --gone:#9C3B2C;
-  --gap:24px; --railw:1280px;
-  --ease:cubic-bezier(.2,.8,.2,1);
-}
-@media (max-width:900px){ :root{ --gap:16px } }
-
-*{ -webkit-tap-highlight-color:transparent }
-html{ background:var(--paper) }
-body{
-  background:var(--paper); color:var(--ink);
-  font-family:'Schibsted Grotesk',system-ui,sans-serif;
-  font-size:16px; line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-::selection{ background:var(--ink); color:var(--paper) }
-::-webkit-scrollbar{ width:12px }
-::-webkit-scrollbar-track{ background:var(--wash) }
-::-webkit-scrollbar-thumb{ background:var(--rule-b); border:3px solid var(--wash) }
-::-webkit-scrollbar-thumb:hover{ background:var(--slate) }
-a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{
-  outline:2px solid var(--ink); outline-offset:2px
+  --pitch:#060507;
+  --void:#0A090C;
+  --surf:#111015;
+  --surf-2:#17161C;
+  --edge:rgba(242,239,233,.09);
+  --edge-2:rgba(242,239,233,.17);
+  --bone:#F2EFE9;
+  --ash:#9E9A94;
+  --dim:#66625D;
+  --live:#3FBF7F;
+  --halt:#E5565B;
+  --wrap:1240px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --slow:cubic-bezier(.16,1,.3,1);
 }
 
 /* ==========================================================================
-   2 · GRADE
-   O trilho e as guias compartilham a mesma definição, então a linha da guia
-   cai exatamente na borda da coluna do conteúdo.
+   2 · BASE
    ========================================================================== */
-.rail{ width:min(100% - 2.5rem, var(--railw)); margin-inline:auto }
-@media (max-width:640px){ .rail{ width:calc(100% - 2rem) } }
-.g12{ display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:var(--gap) }
-.g12 > *{ min-width:0 }            /* item de grid não estica com conteúdo largo */
-
-/* guias de coluna — assinatura de folha de especificação */
-.guides{ position:absolute; inset:0; pointer-events:none; z-index:0 }
-.guides .g12{ height:100% }
-.guides i{ border-left:1px solid var(--rule); display:block; height:100% }
-.guides i:last-child{ border-right:1px solid var(--rule) }
-@media (max-width:900px){ .guides{ display:none } }
+*,*::before,*::after{ box-sizing:border-box }
+*{ margin:0; padding:0; -webkit-tap-highlight-color:transparent }
+html{ background:var(--pitch); scroll-behavior:smooth; -webkit-text-size-adjust:100% }
+body{
+  background:var(--pitch); color:var(--bone);
+  font-family:'Instrument Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.6; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+img,svg,canvas{ display:block; max-width:100% }
+ul,ol{ list-style:none }
+a{ color:inherit; text-decoration:none }
+button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer }
+table{ border-collapse:collapse; width:100% }
+::selection{ background:var(--bone); color:var(--pitch) }
+::-webkit-scrollbar{ width:11px }
+::-webkit-scrollbar-track{ background:var(--pitch) }
+::-webkit-scrollbar-thumb{ background:#26242B; border:3px solid var(--pitch); border-radius:99px }
+::-webkit-scrollbar-thumb:hover{ background:#3A3742 }
+:focus-visible{ outline:2px solid var(--bone); outline-offset:3px; border-radius:2px }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap }
 
 /* ==========================================================================
    3 · TIPOGRAFIA
+   A escala é o gesto: 96px contra 11px na mesma tela.
    ========================================================================== */
-.d1{ font-weight:800; letter-spacing:-.045em; line-height:.94; text-wrap:balance }
-.d2{ font-weight:700; letter-spacing:-.032em; line-height:1.04; text-wrap:balance }
-.d3{ font-weight:600; letter-spacing:-.022em; line-height:1.15; text-wrap:balance }
-.lab{
-  font-family:'Spline Sans Mono',ui-monospace,monospace;
-  font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--mute);
+.dsp{
+  font-family:'Bricolage Grotesque','Instrument Sans',sans-serif;
+  font-weight:800; font-variation-settings:'wdth' 96,'opsz' 48;
+  letter-spacing:-.042em; line-height:.9; text-wrap:balance;
 }
-.mono{ font-family:'Spline Sans Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums }
-.tnum{ font-variant-numeric:tabular-nums }
-.prose{ color:var(--slate); text-wrap:pretty }
-.measure{ max-width:64ch }
-
-/* marcador de seção: §NN + fio, na margem */
-.mark{ display:flex; align-items:center; gap:.9rem }
-.mark b{
-  font-family:'Spline Sans Mono',ui-monospace,monospace;
-  font-size:11px; font-weight:600; letter-spacing:.1em; color:var(--ink);
+.dsp-2{
+  font-family:'Bricolage Grotesque','Instrument Sans',sans-serif;
+  font-weight:800; font-variation-settings:'wdth' 98,'opsz' 32;
+  letter-spacing:-.034em; line-height:1; text-wrap:balance;
 }
-.mark span{
-  font-family:'Spline Sans Mono',ui-monospace,monospace;
-  font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--mute);
+.dsp-3{
+  font-family:'Bricolage Grotesque','Instrument Sans',sans-serif;
+  font-weight:600; font-variation-settings:'wdth' 100,'opsz' 18;
+  letter-spacing:-.02em; line-height:1.18; text-wrap:balance;
 }
-.mark hr{ flex:1; height:0; border:0; border-top:1px solid var(--rule) }
+.mono{ font-family:'Spline Sans Mono',ui-monospace,SFMono-Regular,monospace }
+.tag{
+  font-family:'Spline Sans Mono',ui-monospace,monospace;
+  font-size:10.5px; font-weight:500; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--dim);
+}
+.lede{ color:var(--ash); text-wrap:pretty }
+.meas{ max-width:60ch }
 
 /* ==========================================================================
-   4 · SUPERFÍCIES
-   Nada de sombra difusa por toda parte: fio de 1px separa, e a chapa preta
-   é o único elemento que se levanta do papel.
+   4 · ESTRUTURA
    ========================================================================== */
-.hair{ border-top:1px solid var(--rule) }
-.hair-b{ border-bottom:1px solid var(--rule) }
-.slab{ background:var(--ink); color:#F2F2F0 }
-.slab .lab{ color:rgba(242,242,240,.5) }
-.slab-row{ border-top:1px solid rgba(255,255,255,.12) }
+.wrap{ width:min(100% - 3rem, var(--wrap)); margin-inline:auto }
+@media (max-width:640px){ .wrap{ width:calc(100% - 2.25rem) } }
+.sec{ padding-block:clamp(5rem,10vw,9rem); position:relative }
+.rule{ height:1px; background:var(--edge) }
 
-.tile{ background:var(--card); border:1px solid var(--rule) }
-.tile-flat{ background:var(--card) }
+/* cabeçalho de seção: número + título + fio, tudo na mesma linha de base */
+.head{ display:flex; align-items:baseline; gap:1.1rem; margin-bottom:clamp(2.5rem,5vw,4rem) }
+.head .n{
+  font-family:'Spline Sans Mono',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.1em; color:var(--dim); flex:none;
+}
+.head .t{ flex:none }
+.head .l{ flex:1; height:1px; background:var(--edge); transform:translateY(-4px) }
 
-/* botões */
+/* ==========================================================================
+   5 · MATERIAL
+   Profundidade de verdade: sombra grande e difusa por baixo, e um fio de luz
+   de 1px na aresta de cima. É esse fio que faz a superfície parecer sólida
+   em vez de um retângulo mais claro.
+   ========================================================================== */
+.panel{
+  position:relative; background:var(--surf); border:1px solid var(--edge);
+  box-shadow:0 1px 0 rgba(242,239,233,.07) inset, 0 40px 80px -40px rgba(0,0,0,.9);
+}
+.panel-2{ background:var(--surf-2) }
+.lift{ transition:transform .55s var(--slow), border-color .55s var(--ease), box-shadow .55s var(--ease) }
+.lift:hover{
+  transform:translateY(-4px); border-color:var(--edge-2);
+  box-shadow:0 1px 0 rgba(242,239,233,.1) inset, 0 56px 100px -40px rgba(0,0,0,1);
+}
+
+/* grão: tira o aspecto de gradiente digital chapado */
+.grain::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:2; opacity:.30;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================================
+   6 · SINAIS
+   ========================================================================== */
+.chip{
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-family:'Spline Sans Mono',monospace; font-size:10px; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase;
+  padding:.34rem .6rem; border:1px solid var(--edge-2); border-radius:2px; color:var(--ash);
+}
+.chip-live{ color:var(--live); border-color:rgba(63,191,127,.32); background:rgba(63,191,127,.07) }
+.chip-halt{ color:var(--halt); border-color:rgba(229,86,91,.32); background:rgba(229,86,91,.07) }
+.pip{ width:5px; height:5px; border-radius:50%; background:currentColor; flex:none }
+.pip-beat{ animation:beat 2.6s ease-in-out infinite }
+@keyframes beat{ 0%,100%{opacity:1} 50%{opacity:.35} }
+
+/* ==========================================================================
+   7 · BOTÕES
+   ========================================================================== */
 .btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  font-weight:600; font-size:15px; letter-spacing:-.01em;
-  padding:.85rem 1.4rem; border-radius:2px; border:1px solid transparent;
-  transition:background .22s var(--ease), color .22s var(--ease), border-color .22s var(--ease), transform .22s var(--ease);
+  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
+  font-weight:600; font-size:15px; letter-spacing:-.01em; padding:1rem 1.6rem;
+  border:1px solid transparent; border-radius:2px; overflow:hidden;
+  transition:transform .4s var(--ease), background .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease);
 }
-.btn-ink{ background:var(--ink); color:#FAFAF9 }
-.btn-ink:hover{ background:#000; transform:translateY(-1px) }
-.btn-line{ background:transparent; color:var(--ink); border-color:var(--rule-b) }
-.btn-line:hover{ border-color:var(--ink); background:var(--card) }
-.btn-onink{ background:#FAFAF9; color:var(--ink) }
-.btn-onink:hover{ background:#fff; transform:translateY(-1px) }
-.btn-ghost-onink{ background:transparent; color:#FAFAF9; border-color:rgba(255,255,255,.28) }
-.btn-ghost-onink:hover{ border-color:#FAFAF9 }
-.btn:active{ transform:translateY(0) }
-
-/* estados de sinal */
-.sig{ display:inline-flex; align-items:center; gap:.45rem;
-  font-family:'Spline Sans Mono',ui-monospace,monospace;
-  font-size:10.5px; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
-  padding:.28rem .5rem; border:1px solid; border-radius:2px }
-.sig-ok{ color:var(--ok); border-color:rgba(31,107,76,.32); background:rgba(31,107,76,.06) }
-.sig-gone{ color:var(--gone); border-color:rgba(156,59,44,.32); background:rgba(156,59,44,.06) }
-.sig-live{ color:#8FE3B8; border-color:rgba(143,227,184,.3); background:rgba(143,227,184,.08) }
-.dot{ width:5px; height:5px; border-radius:50%; background:currentColor }
+.btn:active{ transform:translateY(1px) }
+.btn-bone{ background:var(--bone); color:var(--pitch) }
+.btn-bone:hover{ transform:translateY(-2px); box-shadow:0 20px 44px -20px rgba(242,239,233,.55) }
+.btn-line{ border-color:var(--edge-2); color:var(--bone) }
+.btn-line:hover{ border-color:var(--bone); transform:translateY(-2px) }
+.btn-halt{ border-color:rgba(229,86,91,.35); color:var(--halt) }
+.btn-halt:hover{ border-color:var(--halt); background:rgba(229,86,91,.08) }
+.btn svg{ transition:transform .4s var(--ease) }
+.btn:hover svg{ transform:translateX(3px) }
 
 /* ==========================================================================
-   5 · MOVIMENTO
-   Discreto por decisão: numa folha técnica, o movimento é ruído.
+   8 · MOVIMENTO
+   Entrada por corte de máscara, não por fade: o texto sobe de trás de uma
+   aresta, como cartela de cinema. Fade puro é o que todo mundo faz.
    ========================================================================== */
-@keyframes rise{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
-.js .rise{ animation:rise .7s var(--ease) both }
-.js .rise[data-d="1"]{animation-delay:.05s} .js .rise[data-d="2"]{animation-delay:.1s}
-.js .rise[data-d="3"]{animation-delay:.15s} .js .rise[data-d="4"]{animation-delay:.2s}
-.js .rise[data-d="5"]{animation-delay:.26s}
+@keyframes wipe{ from{ transform:translateY(105%) } to{ transform:translateY(0) } }
+.js .cut{ overflow:hidden; display:block }
+.js .cut > *{ display:block; animation:wipe 1.05s var(--slow) both }
+.js .cut[data-d="1"] > *{ animation-delay:.08s } .js .cut[data-d="2"] > *{ animation-delay:.16s }
+.js .cut[data-d="3"] > *{ animation-delay:.24s } .js .cut[data-d="4"] > *{ animation-delay:.34s }
+.js .cut[data-d="5"] > *{ animation-delay:.44s }
 
-.js .rv{ opacity:0; transform:translateY(16px) }
-.js .rv.in{ opacity:1; transform:none; transition:opacity .7s var(--ease), transform .7s var(--ease) }
-.js .rv[data-d="1"].in{transition-delay:.06s} .js .rv[data-d="2"].in{transition-delay:.12s}
-.js .rv[data-d="3"].in{transition-delay:.18s} .js .rv[data-d="4"].in{transition-delay:.24s}
+@keyframes lift{ from{ opacity:0; transform:translateY(20px) } to{ opacity:1; transform:none } }
+.js .up{ animation:lift .9s var(--slow) both }
+.js .up[data-d="1"]{ animation-delay:.1s } .js .up[data-d="2"]{ animation-delay:.2s }
+.js .up[data-d="3"]{ animation-delay:.3s } .js .up[data-d="4"]{ animation-delay:.42s }
+.js .up[data-d="5"]{ animation-delay:.54s }
 
-.ticker{ display:flex; width:max-content; animation:tick 52s linear infinite }
-@keyframes tick{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
-.fadex{
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-}
-/* ==========================================================================
-   6 · COMPONENTES DE FICHA
-   ========================================================================== */
+.js .rv{ opacity:0; transform:translateY(24px) }
+.js .rv.in{ opacity:1; transform:none; transition:opacity .95s var(--slow), transform .95s var(--slow) }
+.js .rv[data-d="1"].in{ transition-delay:.08s } .js .rv[data-d="2"].in{ transition-delay:.16s }
+.js .rv[data-d="3"].in{ transition-delay:.24s } .js .rv[data-d="4"].in{ transition-delay:.32s }
 
-/* item removido do trajeto */
-.strike{
-  font-size:11.5px; padding:.3rem .55rem; border:1px solid var(--rule);
-  background:var(--card); color:var(--mute);
-  text-decoration:line-through; text-decoration-color:rgba(156,59,44,.55);
-}
-
-/* medidor de lote — mesmo componente, três histórias */
-.meter{ display:block; height:3px; background:var(--wash2); overflow:hidden }
-.meter i{ display:block; height:100%; background:var(--ink) }
-.meter i.low{ background:var(--gone) }
-.meter i.out{
-  background:repeating-linear-gradient(45deg,
-    var(--rule-b) 0 3px, transparent 3px 7px);
-}
+.ticker{ display:flex; width:max-content; animation:slide 60s linear infinite }
+@keyframes slide{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.fadex{ -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+                mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent) }
 
 /* ==========================================================================
-   7 · A COLUNA ENCERRADA (Fable 5.1)
-   Hachura de arquivo + valores riscados + carimbo. Sem borrão e sem cinza
-   morto: a ficha continua legível, e é isso que mantém o desejo de pé.
+   9 · COR SEMÂNTICA E APOIO
    ========================================================================== */
-.gone-col{
-  background-image:repeating-linear-gradient(-45deg,
-    rgba(19,19,21,.035) 0 1px, transparent 1px 7px);
-  background-color:var(--wash);
+.ok{ color:var(--live) } .halt{ color:var(--halt) } .d{ color:var(--dim) }
+.ul{ border-bottom:1px solid var(--edge-2); color:var(--bone) }
+.ul:hover{ border-color:var(--bone) }
+.full{ width:100% }
+.strike,.struck{ text-decoration:line-through; text-decoration-color:rgba(229,86,91,.6); color:var(--dim) }
+.strike{ font-size:11.5px; padding:.3rem .55rem; border:1px solid var(--edge); border-radius:2px }
+
+/* ==========================================================================
+   10 · NAVEGAÇÃO
+   ========================================================================== */
+.nav{ position:fixed; inset:0 0 auto; z-index:60; transition:background .4s var(--ease), border-color .4s var(--ease), backdrop-filter .4s }
+.nav.solid{ background:rgba(6,5,7,.72); border-bottom:1px solid var(--edge); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px) }
+.nav-in{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; height:70px }
+.brand{ display:flex; align-items:baseline; gap:.7rem; min-width:0 }
+.brand-name{ font-size:18px; letter-spacing:-.03em }
+.brand-sub{ white-space:nowrap }
+.nav-links{ display:flex; gap:1.6rem; margin-left:auto }
+.nav-links a{ font-size:14px; color:var(--ash); transition:color .25s var(--ease) }
+.nav-links a:hover{ color:var(--bone) }
+.nav-cta{ padding:.6rem 1.05rem; font-size:13.5px; flex:none }
+@media (max-width:900px){ .nav-links,.brand-sub{ display:none } }
+
+/* ==========================================================================
+   11 · ABERTURA
+   O véu radial existe para o texto ter contraste sobre a arte sem apagá-la.
+   ========================================================================== */
+.hero{ position:relative; overflow:hidden; border-bottom:1px solid var(--edge);
+       padding:clamp(8rem,16vh,11rem) 0 clamp(2.5rem,5vw,3.5rem) }
+.hero-art{ position:absolute; inset:0; width:100%; height:100%; z-index:0 }
+.hero-vig{ position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(125% 95% at 50% 30%, transparent 12%, rgba(6,5,7,.5) 58%, var(--pitch) 92%) }
+.hero-in{ position:relative; z-index:3 }
+.hero-title{ font-size:clamp(3rem,10.5vw,8.4rem); margin-top:1.5rem }
+.hero-title .cut + .cut{ margin-top:-.04em }
+.hero-lede{ max-width:56ch; margin-top:2rem; font-size:clamp(1rem,1.5vw,1.15rem) }
+.hero-lede b{ color:var(--bone); font-weight:600 }
+.hero-cta{ display:flex; flex-wrap:wrap; gap:.75rem; margin-top:2.4rem }
+.strip{ position:relative; z-index:3; display:grid; grid-template-columns:repeat(5,1fr);
+        gap:1px; margin-top:clamp(4rem,9vw,7rem); border-top:1px solid var(--edge) }
+.strip > div{ padding:1.4rem 1.2rem 0 0 }
+.strip dd{ font-size:1.15rem; margin-top:.45rem }
+@media (max-width:860px){
+  .strip{ grid-template-columns:repeat(2,1fr); column-gap:1.5rem }
+  .strip > div:last-child{ grid-column:1 / -1 }
 }
-.gone-val{ color:var(--mute); text-decoration:line-through; text-decoration-color:rgba(156,59,44,.55) }
-.stamp{
-  position:absolute; right:1rem; top:1.1rem; transform:rotate(-5deg);
-  font-family:'Spline Sans Mono',ui-monospace,monospace;
-  font-size:9px; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--gone); border:1px solid rgba(156,59,44,.45); padding:.28rem .5rem;
-  background:rgba(247,247,246,.7); white-space:nowrap;
+@media (max-width:400px){ .hero-cta .btn{ width:100% } }
+
+/* ==========================================================================
+   12 · A CHAMADA
+   ========================================================================== */
+.call{ overflow:hidden }
+.call-bar{ display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+           padding:1rem 1.4rem; border-bottom:1px solid var(--edge) }
+.call-ep{ font-size:12.5px; color:var(--ash) }
+.call-reg{ margin-left:auto }
+.call-body{ display:grid; grid-template-columns:1.06fr .94fr; gap:1px; background:var(--edge) }
+.call-req,.call-vaz{ background:var(--surf); padding:1.6rem 1.4rem; min-width:0 }
+.call-req pre{ margin-top:1rem; font-size:12px; line-height:1.9; color:var(--ash); overflow-x:auto }
+.call-req pre .hl{ color:var(--bone) } .call-req pre .ok{ color:var(--live) } .call-req pre .s{ color:var(--bone) }
+.call-meta{ display:flex; align-items:center; flex-wrap:wrap; gap:.7rem; margin-top:1.4rem; font-size:11.5px; color:var(--dim) }
+.call-meta i{ width:1px; height:11px; background:var(--edge-2) }
+.call-vaz-h{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem }
+.call-vaz-h p{ font-size:11.5px }
+#flow{ width:100%; height:92px; margin-top:1rem }
+.call-note{ margin-top:1.1rem }
+@media (max-width:860px){ .call-body{ grid-template-columns:1fr } .call-reg{ display:none } }
+
+/* ==========================================================================
+   13 · PROVA SOCIAL
+   ========================================================================== */
+.proof{ padding:2.2rem 0; border-block:1px solid var(--edge); background:var(--void) }
+.proof-h{ text-align:center; margin-bottom:1.4rem }
+.proof-track{ overflow:hidden }
+.proof-row{ display:flex; align-items:center; gap:3.5rem; padding-right:3.5rem; flex:none }
+.proof-row span{ font-size:1.05rem; color:var(--dim); white-space:nowrap }
+
+/* ==========================================================================
+   14 · NÚMEROS
+   ========================================================================== */
+.figs{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--edge-2) }
+.figs > div{ padding:2rem 1.6rem 0 0 }
+.figs > div + div{ border-left:1px solid var(--edge); padding-left:1.6rem }
+.figs dd{ font-size:clamp(2rem,3.8vw,3rem); margin-top:.9rem }
+.figs dd em{ font-style:normal; color:var(--dim) }
+.figs p{ margin-top:.7rem; font-size:13px; color:var(--dim) }
+@media (max-width:860px){
+  .figs{ grid-template-columns:repeat(2,1fr) }
+  .figs > div:nth-child(3){ border-left:0; padding-left:0 }
+  .figs > div:nth-child(n+3){ margin-top:1.5rem; border-top:1px solid var(--edge); padding-top:1.5rem }
+}
+@media (max-width:520px){
+  .figs{ grid-template-columns:1fr }
+  .figs > div + div{ border-left:0; padding-left:0; margin-top:1.5rem; border-top:1px solid var(--edge); padding-top:1.5rem }
 }
 
 /* ==========================================================================
-   8 · PASSOS DA OPERAÇÃO
+   15 · COMPOSIÇÃO EM DUAS COLUNAS
    ========================================================================== */
-.step{
-  border-top:1px solid var(--rule); padding:1.6rem 0 1.6rem 3.4rem; position:relative;
-  cursor:default; transition:opacity .35s var(--ease);
+.split{ display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2.5rem,6vw,5rem); align-items:start }
+.split-a{ position:sticky; top:110px }
+.split-a h2{ font-size:clamp(1.7rem,3.2vw,2.6rem) }
+@media (max-width:980px){ .split{ grid-template-columns:1fr } .split-a{ position:static } }
+
+.err{ margin-top:2rem; padding:1.1rem 1.2rem }
+.err p{ font-size:12px; line-height:1.9 }
+
+.errata > div{ display:grid; grid-template-columns:8.5rem 1fr; gap:1.2rem;
+               padding:1.7rem 0; border-top:1px solid var(--edge) }
+.errata > div:last-child{ border-bottom:1px solid var(--edge) }
+.errata dt{ font-size:11px; line-height:1.9 }
+.errata h3{ font-size:1.15rem }
+.errata dd p{ margin-top:.5rem; font-size:14.5px }
+@media (max-width:520px){ .errata > div{ grid-template-columns:5.5rem 1fr; gap:.9rem } }
+
+/* manchete + apoio lado a lado */
+.lead-row{ display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(1.5rem,4vw,3.5rem); align-items:end }
+.lead-row h2{ font-size:clamp(1.8rem,3.6vw,2.9rem) }
+@media (max-width:900px){ .lead-row{ grid-template-columns:1fr; align-items:start } }
+.h2-wide{ font-size:clamp(1.8rem,3.6vw,2.9rem); max-width:22ch }
+
+/* ==========================================================================
+   16 · MECANISMO
+   ========================================================================== */
+.mech{ display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:.9rem; align-items:stretch; margin-top:clamp(2.5rem,5vw,3.5rem) }
+.mech-node{ padding:1.5rem 1.4rem }
+.mech-node .dsp-3{ font-size:1.05rem; margin-top:.6rem }
+.mech-node .lede{ font-size:13.5px; margin-top:.5rem }
+.mech-core{ background:var(--surf-2); border-color:var(--edge-2) }
+.mech-arrow{ display:grid; place-items:center; color:var(--dim); width:48px }
+.mech-arrow svg{ width:48px; height:12px }
+@media (max-width:900px){
+  .mech{ grid-template-columns:1fr }
+  .mech-arrow{ width:auto; transform:rotate(90deg); padding:.3rem 0 }
 }
-.step:last-child{ border-bottom:1px solid var(--rule) }
-.step-n{
-  position:absolute; left:0; top:1.7rem;
-  font-size:11px; font-weight:600; letter-spacing:.1em; color:var(--rule-b);
-  transition:color .35s var(--ease);
+.removed{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem;
+          margin-top:1.8rem; padding-top:1.6rem; border-top:1px solid var(--edge) }
+.removed .tag{ margin-right:.4rem }
+
+/* ==========================================================================
+   17 · MATRIZ
+   A primeira coluna gruda na rolagem horizontal, senão você perde o rótulo
+   da linha justamente quando está comparando.
+   ========================================================================== */
+.matrix-scroll{ overflow-x:auto; margin-top:clamp(2.5rem,5vw,3.5rem) }
+.matrix{ min-width:920px; text-align:left }
+.matrix th,.matrix td{ padding:1.15rem 1.4rem; vertical-align:top; font-size:14.5px }
+.matrix thead th{ vertical-align:bottom; padding-bottom:1.5rem; position:relative }
+.matrix thead tr{ border-bottom:1px solid var(--edge-2) }
+.matrix tbody tr{ border-bottom:1px solid var(--edge) }
+.matrix .c-spec{ width:20% }
+.matrix .stick{ position:sticky; left:0; z-index:2; background:var(--pitch); padding-left:0 }
+.matrix .m-name{ display:block; font-size:1.6rem; margin:.55rem 0 .8rem }
+.matrix .chip{ vertical-align:middle }
+.col-hot{ background:rgba(242,239,233,.038) }
+.col-gone{ color:var(--dim);
+  background-color:rgba(6,5,7,.5);
+  background-image:repeating-linear-gradient(-45deg, rgba(242,239,233,.028) 0 1px, transparent 1px 7px) }
+.col-gone .m-name{ color:var(--ash) }
+.stamp{ position:absolute; right:1rem; top:.3rem; transform:rotate(-5deg);
+  font-family:'Spline Sans Mono',monospace; font-size:8.5px; font-weight:500; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--halt); border:1px solid rgba(229,86,91,.45);
+  padding:.3rem .5rem; background:rgba(6,5,7,.75); white-space:nowrap }
+.bar{ display:block; height:2px; background:rgba(242,239,233,.1); margin-top:.6rem; max-width:150px }
+.bar i{ display:block; height:100%; background:var(--bone) }
+.bar i.low{ background:var(--halt) }
+.bar i.out{ background:repeating-linear-gradient(45deg, var(--dim) 0 3px, transparent 3px 7px) }
+.matrix tfoot td{ padding-top:1.8rem; padding-bottom:0 }
+.cmp{ min-width:680px } .cmp .c-spec{ width:34% }
+.cmp tbody th{ font-weight:500 }
+
+/* ==========================================================================
+   18 · BENEFÍCIOS
+   ========================================================================== */
+.bens{ display:grid; grid-template-columns:repeat(4,1fr); margin-top:clamp(2.5rem,5vw,3.5rem);
+       border-top:1px solid var(--edge-2) }
+.bens > div{ padding:1.8rem 1.5rem 1.8rem 0; border-bottom:1px solid var(--edge) }
+.bens > div + div{ border-left:1px solid var(--edge); padding-left:1.5rem }
+.bens > div:nth-child(4n+1){ border-left:0; padding-left:0 }
+.bens h3{ font-size:1.05rem; margin-top:.7rem }
+.bens .lede{ font-size:13.5px; margin-top:.55rem }
+.bens code{ color:var(--bone); font-size:12.5px }
+@media (max-width:980px){
+  .bens{ grid-template-columns:repeat(2,1fr) }
+  .bens > div:nth-child(4n+1){ border-left:1px solid var(--edge); padding-left:1.5rem }
+  .bens > div:nth-child(2n+1){ border-left:0; padding-left:0 }
 }
-.step::before{
-  content:""; position:absolute; left:0; top:-1px; width:2.2rem; height:1px;
-  background:var(--ink); transform:scaleX(0); transform-origin:left;
-  transition:transform .45s var(--ease);
+@media (max-width:560px){
+  .bens{ grid-template-columns:1fr }
+  .bens > div{ border-left:0!important; padding-left:0!important }
 }
-@media (min-width:1024px){ .step{ opacity:.45 } .step.on{ opacity:1 } }
-.step.on .step-n{ color:var(--ink) }
+
+/* ==========================================================================
+   19 · OPERAÇÃO
+   ========================================================================== */
+.ops{ display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(2rem,5vw,4rem); align-items:start;
+      margin-top:clamp(2.5rem,5vw,3.5rem) }
+.step{ position:relative; padding:1.7rem 0 1.7rem 3.6rem; border-top:1px solid var(--edge);
+       transition:opacity .45s var(--ease) }
+.step:last-child{ border-bottom:1px solid var(--edge) }
+.step-n{ position:absolute; left:0; top:1.85rem; font-size:11px; letter-spacing:.1em;
+         color:var(--dim); transition:color .45s var(--ease) }
+.step::before{ content:""; position:absolute; left:0; top:-1px; width:2.4rem; height:1px;
+               background:var(--bone); transform:scaleX(0); transform-origin:left;
+               transition:transform .5s var(--slow) }
+.step h3{ font-size:1.2rem }
+.step .lede{ margin-top:.6rem; font-size:14.5px; max-width:46ch }
+.ops-panel{ position:sticky; top:110px }
+.ops-frame{ min-height:290px }
+@media (min-width:981px){ .step{ opacity:.42 } .step.on{ opacity:1 } }
+.step.on .step-n{ color:var(--bone) }
 .step.on::before{ transform:scaleX(1) }
+@media (max-width:980px){ .ops{ grid-template-columns:1fr } .ops-panel{ position:static; margin-top:2rem } }
+
+.pane-h{ display:flex; align-items:center; justify-content:space-between;
+         padding:1rem 1.3rem; border-bottom:1px solid var(--edge) }
+.pane-r{ display:flex; align-items:center; justify-content:space-between; gap:1rem;
+         padding:1rem 1.3rem; border-bottom:1px solid var(--edge); font-size:14px }
+.pane-r:last-child{ border-bottom:0 }
+.pane-r.off span:first-child{ color:var(--dim) }
+.pane-b{ padding:1.1rem 1.3rem; border-bottom:1px solid var(--edge) }
+.pane-b p.mono{ font-size:12px; line-height:2; color:var(--ash) }
+.pane-b .big{ font-size:13px; color:var(--bone); margin-top:.5rem; word-break:break-all }
+.pane-b pre{ font-size:12px; line-height:2; color:var(--ash); overflow-x:auto }
+.pane-b pre .ok{ color:var(--live) }
 
 /* ==========================================================================
-   9 · DÚVIDAS
+   20 · PLANOS
    ========================================================================== */
-.faq{ border-bottom:1px solid var(--rule) }
-.faq summary{
-  display:flex; align-items:flex-start; justify-content:space-between; gap:1.5rem;
-  padding:1.3rem 0; cursor:pointer; list-style:none;
-  font-size:16px; font-weight:600; letter-spacing:-.012em; line-height:1.4;
-  transition:color .25s var(--ease);
-}
+.cycle{ display:inline-flex; border:1px solid var(--edge); padding:3px; justify-self:end }
+.cycle button{ padding:.55rem 1rem; font-size:13px; font-weight:500; color:var(--ash);
+               transition:background .25s var(--ease), color .25s var(--ease) }
+.cycle button.on{ background:var(--bone); color:var(--pitch) }
+@media (max-width:900px){ .cycle{ justify-self:start; margin-top:1.5rem } }
+
+.plans{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:clamp(2.5rem,5vw,3.5rem); align-items:stretch }
+.plan{ display:flex; flex-direction:column; padding:2rem 1.8rem }
+.plan-hot{ background:var(--surf-2); border-color:var(--edge-2) }
+.plan-top{ display:flex; align-items:center; justify-content:space-between; gap:1rem }
+.plan-sub{ margin-top:.9rem; font-size:14px; min-height:3.2em }
+.plan-price{ display:flex; align-items:baseline; gap:.4rem; margin-top:1.8rem }
+.plan-price em{ font-style:normal; font-size:14px; color:var(--dim) }
+.plan-price b{ font-size:2.6rem; font-weight:800 }
+.plan-price .sob{ font-size:2rem }
+.plan-note{ margin-top:.5rem }
+.plan-list{ margin-top:1.8rem; padding-top:1.8rem; border-top:1px solid var(--edge); display:grid; gap:.7rem }
+.plan-list li{ display:grid; grid-template-columns:1.8rem 1fr; gap:.3rem; font-size:14.5px; color:var(--ash) }
+.plan-list li span:first-child{ font-size:10.5px; padding-top:.35rem }
+.plan-list b{ color:var(--bone); font-weight:600 }
+.plan-cta{ margin-top:auto }
+.plan-list + .plan-cta{ margin-top:2rem }
+.plan-fine{ text-align:center; margin-top:.9rem }
+@media (max-width:980px){ .plans{ grid-template-columns:1fr } .plan-sub{ min-height:0 } }
+
+/* ==========================================================================
+   21 · LISTA DE ESPERA
+   ========================================================================== */
+.wait-sec{ padding-block:clamp(3rem,6vw,4.5rem) }
+.wait{ display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(1.5rem,4vw,3rem); align-items:center;
+       border-block:1px solid var(--edge-2); padding-block:clamp(2.5rem,5vw,3.5rem) }
+.wait-h{ font-size:clamp(1.4rem,2.6vw,2rem); margin:.7rem 0 .9rem }
+.wait-form{ display:flex; gap:.6rem }
+.wait-form input{ flex:1; min-width:0; background:var(--surf); border:1px solid var(--edge-2);
+  color:var(--bone); padding:.95rem 1rem; font-size:14px; border-radius:2px }
+.wait-form input::placeholder{ color:var(--dim) }
+.wait-form input:focus{ outline:none; border-color:var(--bone) }
+.wait-form .btn{ flex:none }
+@media (max-width:900px){ .wait{ grid-template-columns:1fr } }
+@media (max-width:480px){ .wait-form{ flex-direction:column } .wait-form .btn{ width:100% } }
+
+/* ==========================================================================
+   22 · DÚVIDAS
+   ========================================================================== */
+.faq{ border-bottom:1px solid var(--edge) }
+.faq:first-child{ border-top:1px solid var(--edge-2) }
+.faq summary{ display:flex; align-items:flex-start; justify-content:space-between; gap:1.5rem;
+  padding:1.35rem 0; cursor:pointer; list-style:none; font-size:16px; font-weight:600;
+  letter-spacing:-.012em; line-height:1.45; transition:color .25s var(--ease) }
 .faq summary::-webkit-details-marker{ display:none }
-.faq summary:hover{ color:var(--slate) }
-.faq summary::after{
-  content:"+"; flex:none; font-family:'Spline Sans Mono',ui-monospace,monospace;
-  font-size:15px; line-height:1.3; color:var(--mute); transition:transform .3s var(--ease);
-}
-.faq[open] summary::after{ content:"−"; color:var(--ink) }
-.faq-body{ padding:0 2.5rem 1.4rem 0 }
-.faq-body p{ max-width:62ch; font-size:14.5px; line-height:1.7; color:var(--slate) }
-.faq[open] .faq-body{ animation:faqIn .35s var(--ease) both }
-@keyframes faqIn{ from{opacity:0; transform:translateY(-5px)} to{opacity:1; transform:none} }
+.faq summary:hover{ color:var(--ash) }
+.faq summary::after{ content:"+"; flex:none; font-family:'Spline Sans Mono',monospace;
+                     font-size:15px; color:var(--dim) }
+.faq[open] summary::after{ content:"−"; color:var(--bone) }
+.faq-b{ padding:0 2.5rem 1.4rem 0 }
+.faq-b p{ max-width:62ch; font-size:14.5px; line-height:1.75; color:var(--ash) }
+.faq-b code{ color:var(--bone) }
+.faq[open] .faq-b{ animation:lift .4s var(--slow) both }
 
 /* ==========================================================================
-   10 · MISCELÂNEA
+   23 · FECHAMENTO
    ========================================================================== */
-#cycleMonth, #cycleYear{ color:var(--mute); transition:background .2s var(--ease), color .2s var(--ease) }
-.cyc-on{ background:var(--ink); color:#FAFAF9 !important }
+.close{ position:relative; overflow:hidden; border-top:1px solid var(--edge);
+        padding-block:clamp(6rem,12vw,10rem) }
+.close-in{ position:relative; z-index:3; max-width:62ch }
+.close-timer{ margin-bottom:2rem }
+.close-h{ font-size:clamp(2.4rem,6.5vw,5rem) }
+.close-p{ margin-top:1.8rem; font-size:1.05rem }
+.close .hero-cta{ margin-top:2.4rem }
+.close-guar{ margin-top:2.8rem; padding-top:1.6rem; border-top:1px solid var(--edge);
+             font-size:14px; color:var(--ash); max-width:56ch }
+.close-guar b{ color:var(--bone) }
 
-/* Chrome pinta o autofill de branco por cima do papel */
-input:-webkit-autofill, input:-webkit-autofill:focus{
-  -webkit-text-fill-color:var(--ink);
-  -webkit-box-shadow:0 0 0 40px var(--card) inset;
-}
+/* ==========================================================================
+   24 · RODAPÉ
+   ========================================================================== */
+.foot{ border-top:1px solid var(--edge); padding-block:clamp(3rem,6vw,4.5rem) }
+.foot-grid{ display:grid; grid-template-columns:1.7fr 1fr 1fr 1fr; gap:2rem }
+.foot-about{ margin-top:.9rem; font-size:14px }
+.foot-chip{ margin-top:1.3rem }
+.foot nav ul{ margin-top:1.1rem; display:grid; gap:.6rem }
+.foot nav a{ font-size:14px; color:var(--ash); transition:color .25s var(--ease) }
+.foot nav a:hover{ color:var(--bone) }
+.foot-end{ display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between;
+           margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--edge) }
+.foot-legal{ max-width:64ch; font-size:12px; line-height:1.65; color:var(--dim) }
+@media (max-width:900px){ .foot-grid{ grid-template-columns:1fr 1fr } .foot-grid > div:first-child{ grid-column:1 / -1 } }
 
+/* ==========================================================================
+   25 · ACESSIBILIDADE DE MOVIMENTO
+   ========================================================================== */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important }
   .js .rv{ opacity:1!important; transform:none!important }
+  .js .cut > *{ transform:none!important }
 }
 </style>
-
-<!-- ==========================================================================
-     TAILWIND COMPILADO
-     Antes isto era <script src="cdn.tailwindcss.com">. O Play CDN monta o CSS
-     em tempo de execução por avaliação dinâmica, o que quebra sob política de
-     segurança restritiva — e derruba a página inteira quando o CDN não carrega.
-     Este bloco é a saída do próprio Tailwind para as classes usadas aqui.
-
-     PARA REGERAR depois de mexer em classes utilitárias no HTML, veja o README.
-     ========================================================================== -->
-<style>
-*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:"Schibsted Grotesk", system-ui, -apple-system, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:"Spline Sans Mono", ui-monospace, SFMono-Regular, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0}.fixed{position:fixed}.relative{position:relative}.sticky{position:sticky}.left-0{left:0px}.left-4{left:1rem}.top-0{top:0px}.top-1\/2{top:50%}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.col-span-12{grid-column:span 12 / span 12}.col-span-6{grid-column:span 6 / span 6}.mb-1\.5{margin-bottom:0.375rem}.mb-4{margin-bottom:1rem}.mr-1{margin-right:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-10{margin-top:2.5rem}.mt-12{margin-top:3rem}.mt-16{margin-top:4rem}.mt-2{margin-top:0.5rem}.mt-2\.5{margin-top:0.625rem}.mt-20{margin-top:5rem}.mt-24{margin-top:6rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-7{margin-top:1.75rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-14{height:3.5rem}.min-h-\[300px\]{min-height:300px}.w-full{width:100%}.min-w-\[720px\]{min-width:720px}.min-w-\[880px\]{min-width:880px}.max-w-\[20ch\]{max-width:20ch}.max-w-\[64ch\]{max-width:64ch}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scroll-mt-20{scroll-margin-top:5rem}.grid-cols-\[5\.25rem_1fr\]{grid-template-columns:5.25rem 1fr}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.items-stretch{align-items:stretch}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-10{gap:2.5rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-5{gap:1.25rem}.gap-x-4{column-gap:1rem}.gap-y-0{row-gap:0px}.gap-y-3{row-gap:0.75rem}.gap-y-4{row-gap:1rem}.gap-y-8{row-gap:2rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.scroll-smooth{scroll-behavior:smooth}.whitespace-nowrap{white-space:nowrap}.border{border-width:1px}.border-y{border-top-width:1px;border-bottom-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.\!border-gone\/40{border-color:rgb(156 59 44 / 0.4) !important}.\!border-white\/15{border-color:rgb(255 255 255 / 0.15) !important}.border-ink{--tw-border-opacity:1;border-color:rgb(19 19 21 / var(--tw-border-opacity, 1))}.border-rule{--tw-border-opacity:1;border-color:rgb(227 227 224 / var(--tw-border-opacity, 1))}.border-ruleb{--tw-border-opacity:1;border-color:rgb(200 200 196 / var(--tw-border-opacity, 1))}.border-white\/15{border-color:rgb(255 255 255 / 0.15)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.bg-card{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-paper{--tw-bg-opacity:1;background-color:rgb(247 247 246 / var(--tw-bg-opacity, 1))}.bg-paper\/85{background-color:rgb(247 247 246 / 0.85)}.bg-wash{--tw-bg-opacity:1;background-color:rgb(239 239 237 / var(--tw-bg-opacity, 1))}.p-1{padding:0.25rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-7{padding:1.75rem}.\!px-4{padding-left:1rem !important;padding-right:1rem !important}.\!py-2{padding-top:0.5rem !important;padding-bottom:0.5rem !important}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-0{padding-bottom:0px}.pr-4{padding-right:1rem}.pt-1{padding-top:0.25rem}.pt-16{padding-top:4rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.pt-7{padding-top:1.75rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.align-bottom{vertical-align:bottom}.\!text-\[13\.5px\]{font-size:13.5px !important}.text-\[11px\]{font-size:11px}.text-\[12\.5px\]{font-size:12.5px}.text-\[12px\]{font-size:12px}.text-\[13\.5px\]{font-size:13.5px}.text-\[13px\]{font-size:13px}.text-\[14\.5px\]{font-size:14.5px}.text-\[14px\]{font-size:14px}.text-\[15px\]{font-size:15px}.text-\[16\.5px\]{font-size:16.5px}.text-\[16px\]{font-size:16px}.text-\[17px\]{font-size:17px}.text-\[18px\]{font-size:18px}.text-\[19px\]{font-size:19px}.text-\[26px\]{font-size:26px}.text-\[38px\]{font-size:38px}.text-\[42px\]{font-size:42px}.text-\[clamp\(1\.5rem\2c 2\.6vw\2c 2rem\)\]{font-size:clamp(1.5rem,2.6vw,2rem)}.text-\[clamp\(1\.7rem\2c 2\.8vw\2c 2\.3rem\)\]{font-size:clamp(1.7rem,2.8vw,2.3rem)}.text-\[clamp\(1\.9rem\2c 3\.4vw\2c 2\.8rem\)\]{font-size:clamp(1.9rem,3.4vw,2.8rem)}.text-\[clamp\(1\.9rem\2c 3\.6vw\2c 3rem\)\]{font-size:clamp(1.9rem,3.6vw,3rem)}.text-\[clamp\(2\.2rem\2c 5vw\2c 4rem\)\]{font-size:clamp(2.2rem,5vw,4rem)}.text-\[clamp\(2rem\2c 3\.6vw\2c 2\.9rem\)\]{font-size:clamp(2rem,3.6vw,2.9rem)}.text-\[clamp\(3rem\2c 9vw\2c 7\.5rem\)\]{font-size:clamp(3rem,9vw,7.5rem)}.font-medium{font-weight:500}.font-semibold{font-weight:600}.leading-\[1\.62\]{line-height:1.62}.leading-\[1\.6\]{line-height:1.6}.leading-\[1\.7\]{line-height:1.7}.leading-\[1\.8\]{line-height:1.8}.leading-\[1\.9\]{line-height:1.9}.leading-\[2\]{line-height:2}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.tracking-\[-\.02em\]{letter-spacing:-.02em}.\!text-gone{--tw-text-opacity:1 !important;color:rgb(156 59 44 / var(--tw-text-opacity, 1)) !important}.\!text-ruleb{--tw-text-opacity:1 !important;color:rgb(200 200 196 / var(--tw-text-opacity, 1)) !important}.\!text-white\/40{color:rgb(255 255 255 / 0.4) !important}.\!text-white\/50{color:rgb(255 255 255 / 0.5) !important}.\!text-white\/70{color:rgb(255 255 255 / 0.7) !important}.text-\[\#8FE3B8\]{--tw-text-opacity:1;color:rgb(143 227 184 / var(--tw-text-opacity, 1))}.text-\[\#E8A398\]{--tw-text-opacity:1;color:rgb(232 163 152 / var(--tw-text-opacity, 1))}.text-gone{--tw-text-opacity:1;color:rgb(156 59 44 / var(--tw-text-opacity, 1))}.text-ink{--tw-text-opacity:1;color:rgb(19 19 21 / var(--tw-text-opacity, 1))}.text-mute{--tw-text-opacity:1;color:rgb(147 147 154 / var(--tw-text-opacity, 1))}.text-ok{--tw-text-opacity:1;color:rgb(31 107 76 / var(--tw-text-opacity, 1))}.text-slate{--tw-text-opacity:1;color:rgb(102 102 109 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/35{color:rgb(255 255 255 / 0.35)}.text-white\/40{color:rgb(255 255 255 / 0.4)}.text-white\/45{color:rgb(255 255 255 / 0.45)}.text-white\/55{color:rgb(255 255 255 / 0.55)}.text-white\/60{color:rgb(255 255 255 / 0.6)}.text-white\/70{color:rgb(255 255 255 / 0.7)}.text-white\/80{color:rgb(255 255 255 / 0.8)}.text-white\/90{color:rgb(255 255 255 / 0.9)}.text-white\/95{color:rgb(255 255 255 / 0.95)}.line-through{-webkit-text-decoration-line:line-through;text-decoration-line:line-through}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.placeholder\:text-mute::placeholder{--tw-text-opacity:1;color:rgb(147 147 154 / var(--tw-text-opacity, 1))}.hover\:\!border-gone:hover{--tw-border-opacity:1 !important;border-color:rgb(156 59 44 / var(--tw-border-opacity, 1)) !important}.hover\:text-ink:hover{--tw-text-opacity:1;color:rgb(19 19 21 / var(--tw-text-opacity, 1))}.focus\:border-ink:focus{--tw-border-opacity:1;border-color:rgb(19 19 21 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:col-span-6{grid-column:span 6 / span 6}.sm\:mt-12{margin-top:3rem}.sm\:mt-16{margin-top:4rem}.sm\:mt-28{margin-top:7rem}.sm\:inline{display:inline}.sm\:grid-cols-\[9rem_1fr\]{grid-template-columns:9rem 1fr}.sm\:flex-row{flex-direction:row}.sm\:items-start{align-items:flex-start}.sm\:justify-between{justify-content:space-between}.sm\:gap-14{gap:3.5rem}.sm\:py-24{padding-top:6rem;padding-bottom:6rem}.sm\:pt-24{padding-top:6rem}}@media (min-width: 768px){.md\:flex{display:flex}}@media (min-width: 1024px){.lg\:sticky{position:sticky}.lg\:top-24{top:6rem}.lg\:col-span-2{grid-column:span 2 / span 2}.lg\:col-span-3{grid-column:span 3 / span 3}.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-6{grid-column:span 6 / span 6}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:col-start-10{grid-column-start:10}.lg\:col-start-6{grid-column-start:6}.lg\:col-start-7{grid-column-start:7}.lg\:col-start-8{grid-column-start:8}.lg\:col-start-9{grid-column-start:9}.lg\:mt-0{margin-top:0px}.lg\:justify-end{justify-content:flex-end}.lg\:self-start{align-self:flex-start}.lg\:border-b-0{border-bottom-width:0px}.lg\:border-r{border-right-width:1px}.lg\:px-6{padding-left:1.5rem;padding-right:1.5rem}.lg\:pl-6{padding-left:1.5rem}.lg\:pr-6{padding-right:1.5rem}}@media (min-width: 1280px){.xl\:block{display:block}}
-</style>
 </head>
-
 <body>
+<script>document.documentElement.classList.add('js');</script>
 
 <!-- =========================================================================
-     ÍNDICE FIXO — só em telas largas. A página é um documento; o índice
-     mostra onde você está nele.
+     NAVEGAÇÃO
      ========================================================================= -->
-<nav id="index" class="fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 xl:block" aria-label="Índice da página">
-  <ol class="space-y-3">
-    <li><a href="#catalogo"    data-ix="catalogo"    class="ixlink"><i></i><b>04</b><span>Catálogo</span></a></li>
-    <li><a href="#beneficios"  data-ix="beneficios"  class="ixlink"><i></i><b>05</b><span>Benefícios</span></a></li>
-    <li><a href="#operacao"    data-ix="operacao"    class="ixlink"><i></i><b>06</b><span>Operação</span></a></li>
-    <li><a href="#comparativo" data-ix="comparativo" class="ixlink"><i></i><b>07</b><span>Comparativo</span></a></li>
-    <li><a href="#planos"      data-ix="planos"      class="ixlink"><i></i><b>08</b><span>Planos</span></a></li>
-    <li><a href="#faq"         data-ix="faq"         class="ixlink"><i></i><b>09</b><span>Dúvidas</span></a></li>
-  </ol>
-</nav>
-<style>
-  /* marca compacta: traço + número. O rótulo só entra quando a janela tem
-     folga além do trilho de 1280px — senão ele deitaria sobre o conteúdo. */
-  .ixlink{ display:flex; align-items:center; gap:7px; color:var(--mute);
-           font-family:'Spline Sans Mono',ui-monospace,monospace; font-size:10px;
-           letter-spacing:.1em; transition:color .25s var(--ease) }
-  .ixlink i{ display:block; width:10px; height:1px; background:currentColor;
-             transition:width .3s var(--ease), background .25s var(--ease) }
-  .ixlink b{ font-weight:500 }
-  .ixlink span{ display:none; text-transform:uppercase; white-space:nowrap }
-  .ixlink:hover{ color:var(--ink) }
-  .ixlink.on{ color:var(--ink) }
-  .ixlink.on i{ width:22px; background:var(--ink) }
-  .ixlink.on b{ font-weight:600 }
-  @media (min-width:1560px){ .ixlink span{ display:block } }
-</style>
-
-<!-- =========================================================================
-     CABEÇALHO
-     ========================================================================= -->
-<header id="top" class="sticky top-0 z-50 border-b border-rule bg-paper/85 backdrop-blur-md">
-  <div class="rail flex h-14 items-center justify-between">
-    <a href="#top" class="flex items-baseline gap-2.5">
+<header class="nav" id="top">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">
       <!-- [MARCA] -->
-      <span class="d3 text-[17px] tracking-[-.02em]">UNBOUND</span>
-      <span class="lab hidden sm:inline">provisionamento de capacidade</span>
+      <span class="dsp-3 brand-name">UNBOUND</span>
+      <span class="tag brand-sub">provisionamento de capacidade</span>
     </a>
-
-    <div class="flex items-center gap-5">
-      <nav class="hidden items-center gap-5 md:flex" aria-label="Navegação">
-        <a href="#catalogo"   class="text-[13.5px] text-slate transition hover:text-ink">Catálogo</a>
-        <a href="#operacao"   class="text-[13.5px] text-slate transition hover:text-ink">Operação</a>
-        <a href="#planos"     class="text-[13.5px] text-slate transition hover:text-ink">Planos</a>
-        <a href="#faq"        class="text-[13.5px] text-slate transition hover:text-ink">Dúvidas</a>
-      </nav>
-      <!-- [CTA] -->
-      <a href="#planos" class="btn btn-ink !px-4 !py-2 !text-[13.5px]">Garantir chave</a>
-    </div>
+    <nav class="nav-links" aria-label="Navegação">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#operacao">Operação</a>
+      <a href="#planos">Planos</a>
+      <a href="#faq">Dúvidas</a>
+    </nav>
+    <!-- [CTA] -->
+    <a href="#planos" class="btn btn-bone nav-cta">Garantir chave</a>
   </div>
 </header>
 
 <!-- =========================================================================
-     §00 · ABERTURA
-     Composição assimétrica: manchete nas colunas 1–8, anotação de margem nas
-     10–12, chapa de especificação atravessando 7–12. As guias ficam visíveis
-     porque a página quer ser lida como documento.
+     ABERTURA
+     A arte é um campo de fluxo desenhado em canvas — partículas seguindo
+     correntes, deixando rastro. Nada de imagem externa: o movimento é o
+     próprio argumento do produto, vazão sem barreira.
      ========================================================================= -->
-<section class="relative overflow-hidden pt-16 pb-0 sm:pt-24">
-  <div class="rail relative">
-    <div class="guides" aria-hidden="true">
-      <div class="g12"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<section class="hero grain">
+  <canvas id="field" class="hero-art" aria-hidden="true"></canvas>
+  <div class="hero-vig" aria-hidden="true"></div>
+
+  <div class="wrap hero-in">
+    <p class="tag up" data-d="1">
+      <span class="pip pip-beat" style="display:inline-block;background:var(--live)"></span>
+      &nbsp;Lote 07 aberto — 46 chaves de 150
+    </p>
+
+    <h1 class="dsp hero-title">
+      <span class="cut" data-d="1"><span>Sem limite.</span></span>
+      <span class="cut" data-d="2"><span>Sem cota.</span></span>
+      <span class="cut" data-d="3"><span>Sem fila.</span></span>
+    </h1>
+
+    <p class="lede hero-lede up" data-d="4">
+      Chaves de API para <b>Kimi&nbsp;K3</b>, <b>Opus&nbsp;5</b> e <b>Fable&nbsp;5.1</b> sem rate limit,
+      sem cota de tokens e sem fila de prioridade. Capacidade comprada em volume,
+      repassada a preço fixo por mês.
+    </p>
+
+    <div class="hero-cta up" data-d="5">
+      <a href="#planos" class="btn btn-bone">
+        Garantir minha chave
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5.5 18.5 12 12 18.5"/></svg>
+      </a>
+      <a href="#catalogo" class="btn btn-line">Ver o catálogo</a>
     </div>
+  </div>
 
-    <div class="relative z-10">
-      <div class="mark rise"><b>§00</b><span>Abertura</span><hr></div>
-
-      <div class="g12 mt-8 items-end sm:mt-12">
-        <h1 class="rise d1 col-span-12 text-[clamp(3rem,9vw,7.5rem)] lg:col-span-8" data-d="1">
-          Sem limite.<br>Sem cota.<br>Sem fila.
-        </h1>
-
-        <!-- anotação de margem, no registro de ficha técnica -->
-        <aside class="rise col-span-12 mt-6 border-t border-rule pt-4 lg:col-span-3 lg:col-start-10 lg:mt-0" data-d="2">
-          <p class="lab">Nota</p>
-          <p class="mono mt-2.5 text-[12px] leading-[1.7] text-slate">
-            A UNBOUND provisiona capacidade de IA reservada e a entrega por chave nominal.
-            <span class="text-ink">Lote 07 aberto — 46 chaves de 150.</span>
-          </p>
-        </aside>
-      </div>
-
-      <div class="g12 mt-12 sm:mt-16">
-        <div class="rise col-span-12 lg:col-span-5" data-d="3">
-          <p class="prose text-[17px] leading-[1.62]">
-            Chaves de API para <span class="text-ink">Kimi K3</span>, <span class="text-ink">Opus 5</span>
-            e <span class="text-ink">Fable 5.1</span> sem rate limit, sem cota de tokens e sem fila de
-            prioridade. Capacidade comprada em volume, repassada a preço fixo por mês.
-          </p>
-          <div class="mt-7 flex flex-col gap-2.5 sm:flex-row">
-            <!-- [CTA] -->
-            <a href="#planos" class="btn btn-ink">Garantir minha chave</a>
-            <a href="#catalogo" class="btn btn-line">Ver o catálogo</a>
-          </div>
-          <p class="lab mt-6">Ativação em minutos · sem fidelidade · 7 dias de garantia</p>
-        </div>
-
-        <!-- chapa preta: o único elemento que se levanta do papel -->
-        <div class="rise slab col-span-12 mt-10 lg:col-span-6 lg:col-start-7 lg:mt-0" data-d="4">
-          <div class="flex items-center justify-between px-5 py-3.5">
-            <span class="sig sig-live"><span class="dot"></span>operacional</span>
-            <!-- [ENDPOINT] -->
-            <code class="mono text-[12px] text-white/60">api.unbound.ai/v1</code>
-          </div>
-
-          <dl class="text-[13px]">
-            <div class="slab-row flex items-center justify-between px-5 py-2.5">
-              <dt class="lab">Rate limit</dt><dd class="mono text-white/95">—</dd>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-2.5">
-              <dt class="lab">Cota de tokens</dt><dd class="mono text-white/95">—</dd>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-2.5">
-              <dt class="lab">Fila de prioridade</dt><dd class="mono text-white/95">0</dd>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-2.5">
-              <dt class="lab">Concorrência</dt><dd class="mono text-white/95">sem teto</dd>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-2.5">
-              <dt class="lab">TTFT · p50</dt><dd class="mono text-white/95">148 ms</dd>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-2.5">
-              <dt class="lab">Erros 429 · 30 dias</dt><dd class="mono text-[#8FE3B8]">0,00 %</dd>
-            </div>
-          </dl>
-
-          <div class="slab-row px-5 py-4">
-            <pre class="mono overflow-x-auto text-[11px] leading-[1.8] text-white/70"><span class="text-white/35">$</span> curl https://api.unbound.ai/v1/chat/completions \
-    -H <span class="text-[#8FE3B8]">"Authorization: Bearer sk-unb-••••7f2a"</span> \
-    -d <span class="text-[#8FE3B8]">'{"model":"opus-5","stream":true}'</span></pre>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- régua de instrumentos: fecha o herói com a prova, não com promessa -->
+  <div class="wrap">
+    <dl class="strip up" data-d="5">
+      <div><dt class="tag">Rate limit</dt><dd class="mono">—</dd></div>
+      <div><dt class="tag">Cota de tokens</dt><dd class="mono">—</dd></div>
+      <div><dt class="tag">Fila</dt><dd class="mono">0</dd></div>
+      <div><dt class="tag">TTFT · p50</dt><dd class="mono">148 ms</dd></div>
+      <div><dt class="tag">Erros 429 · 30 d</dt><dd class="mono ok">0,00 %</dd></div>
+    </dl>
   </div>
 </section>
 
 <!-- =========================================================================
-     §01 · NÚMEROS
-     Linha de indicadores com fio, sem caixas: a leitura é de tabela.
-     [NUMERO] todos os valores são exemplos.
+     §01 · A CHAMADA
+     O produto é uma chave. Então a primeira coisa depois do herói é a chave
+     funcionando — requisição real, resposta real, medidor nenhum.
      ========================================================================= -->
-<section class="mt-20 sm:mt-28" aria-label="Indicadores da operação">
-  <div class="rail">
-    <div class="mark rv"><b>§01</b><span>Operação em números</span><hr></div>
-
-    <dl class="g12 mt-8 border-t border-ink">
-      <div class="col-span-6 border-b border-rule py-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:pr-6">
-        <dt class="lab">Tokens processados · mês</dt>
-        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)]">
-          <span data-count="41.7" data-dec="1">41,7</span> <span class="text-mute">bi</span>
-        </dd>
-        <p class="mt-2 text-[13px] text-mute">sem uma única cobrança de excedente</p>
+<section class="sec" aria-label="A chamada">
+  <div class="wrap">
+    <div class="call rv panel">
+      <div class="call-bar">
+        <span class="chip chip-live"><span class="pip"></span>operacional</span>
+        <!-- [ENDPOINT] -->
+        <code class="mono call-ep">api.unbound.ai/v1</code>
+        <span class="tag call-reg">região sa-east-1</span>
       </div>
-      <div class="col-span-6 border-b border-rule py-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:px-6">
-        <dt class="lab">Chaves em produção</dt>
-        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)]">
-          <span data-count="1284">1.284</span><span class="text-mute">+</span>
-        </dd>
-        <p class="mt-2 text-[13px] text-mute">agentes, SaaS e automação contínua</p>
+      <div class="call-body">
+        <div class="call-req">
+          <p class="tag">Requisição</p>
+<pre class="mono"><span class="d">$</span> curl https://<span class="hl">api.unbound.ai</span>/v1/chat/completions \
+    -H <span class="ok">"Authorization: Bearer sk-unb-••••7f2a"</span> \
+    -d <span class="ok">'{</span>
+         <span class="ok">"model"</span>: <span class="s">"opus-5"</span>,
+         <span class="ok">"stream"</span>: <span class="s">true</span>,
+         <span class="ok">"max_tokens"</span>: <span class="s">"unlimited"</span>
+       <span class="ok">}'</span></pre>
+          <div class="call-meta">
+            <span class="chip chip-live">200 ok</span>
+            <span class="mono">ttft 148 ms</span><i></i>
+            <span class="mono">retry 0</span><i></i>
+            <span class="mono">throttle off</span>
+          </div>
+        </div>
+        <div class="call-vaz">
+          <div class="call-vaz-h">
+            <p class="tag">Vazão · últimos 60 s</p>
+            <p class="mono ok" id="rps">— req/s</p>
+          </div>
+          <canvas id="flow" aria-label="Vazão de requisições nos últimos 60 segundos"></canvas>
+          <p class="tag call-note">nenhuma dessas chamadas passou por medidor</p>
+        </div>
       </div>
-      <div class="col-span-6 py-6 lg:col-span-3 lg:border-r lg:px-6">
-        <dt class="lab">Disponibilidade · 90 dias</dt>
-        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)] text-ok">
-          <span data-count="99.98" data-dec="2">99,98</span> %
-        </dd>
-        <p class="mt-2 text-[13px] text-mute">roteamento com failover automático</p>
-      </div>
-      <div class="col-span-6 py-6 lg:col-span-3 lg:pl-6">
-        <dt class="lab">Recusas por limite</dt>
-        <dd class="d2 mt-3 text-[clamp(2rem,3.6vw,2.9rem)]">0</dd>
-        <p class="mt-2 text-[13px] text-mute">é o número que define o produto</p>
-      </div>
-    </dl>
+    </div>
   </div>
 </section>
 
 <!-- =========================================================================
      PROVA SOCIAL · [NUMERO] nomes de exemplo
      ========================================================================= -->
-<section class="mt-16 border-y border-rule bg-wash py-5" aria-label="Quem usa">
-  <p class="lab mb-4 text-center">Em produção em operações que não podem parar</p>
-  <div class="fadex overflow-hidden">
-    <div class="ticker gap-10 px-6 sm:gap-14">
-      <div class="flex shrink-0 items-center gap-10 sm:gap-14">
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Vantek Labs</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Norsul AI</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Cortex Bureau</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Piraquê Digital</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Helion Systems</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Aurelia Group</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Meridiano 27</span>
+<section class="proof" aria-label="Quem usa">
+  <p class="tag proof-h">Em produção em operações que não podem parar</p>
+  <div class="fadex proof-track">
+    <div class="ticker">
+      <div class="proof-row">
+        <span class="dsp-3">Vantek Labs</span><span class="dsp-3">Norsul AI</span>
+        <span class="dsp-3">Cortex Bureau</span><span class="dsp-3">Piraquê Digital</span>
+        <span class="dsp-3">Helion Systems</span><span class="dsp-3">Aurelia Group</span>
+        <span class="dsp-3">Meridiano 27</span>
       </div>
-      <div class="flex shrink-0 items-center gap-10 sm:gap-14" aria-hidden="true">
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Vantek Labs</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Norsul AI</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Cortex Bureau</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Piraquê Digital</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Helion Systems</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Aurelia Group</span>
-        <span class="d3 whitespace-nowrap text-[16px] text-mute">Meridiano 27</span>
+      <div class="proof-row" aria-hidden="true">
+        <span class="dsp-3">Vantek Labs</span><span class="dsp-3">Norsul AI</span>
+        <span class="dsp-3">Cortex Bureau</span><span class="dsp-3">Piraquê Digital</span>
+        <span class="dsp-3">Helion Systems</span><span class="dsp-3">Aurelia Group</span>
+        <span class="dsp-3">Meridiano 27</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     §02 · O PROBLEMA
-     Tabela de erratas: o código de erro é o rótulo da dor. Sem caixas.
+     §02 · NÚMEROS · [NUMERO] todos exemplos
      ========================================================================= -->
-<section class="mt-20 sm:mt-28" aria-labelledby="h-problema">
-  <div class="rail">
-    <div class="mark rv"><b>§02</b><span>O custo do limite</span><hr></div>
+<section class="sec" aria-label="Números da operação">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§02</span><span class="t tag">Operação em números</span><span class="l"></span></div>
+    <dl class="figs">
+      <div class="rv">
+        <dt class="tag">Tokens processados · mês</dt>
+        <dd class="dsp-2"><span data-count="41.7" data-dec="1">41,7</span> <em>bi</em></dd>
+        <p>sem uma única cobrança de excedente</p>
+      </div>
+      <div class="rv" data-d="1">
+        <dt class="tag">Chaves em produção</dt>
+        <dd class="dsp-2"><span data-count="1284">1.284</span><em>+</em></dd>
+        <p>agentes, SaaS e automação contínua</p>
+      </div>
+      <div class="rv" data-d="2">
+        <dt class="tag">Disponibilidade · 90 dias</dt>
+        <dd class="dsp-2 ok"><span data-count="99.98" data-dec="2">99,98</span> %</dd>
+        <p>roteamento com failover automático</p>
+      </div>
+      <div class="rv" data-d="3">
+        <dt class="tag">Recusas por limite</dt>
+        <dd class="dsp-2">0</dd>
+        <p>é o número que define o produto</p>
+      </div>
+    </dl>
+  </div>
+</section>
 
-    <div class="g12 mt-8">
-      <div class="col-span-12 lg:col-span-5 lg:sticky lg:top-24 lg:self-start">
-        <h2 id="h-problema" class="rv d2 text-[clamp(1.9rem,3.4vw,2.8rem)]">
-          Você não tem um problema de modelo. Tem um problema de <span class="text-gone">teto</span>.
-        </h2>
-        <p class="rv prose measure mt-5 text-[16px]" data-d="1">
+<!-- =========================================================================
+     §03 · O PROBLEMA
+     Tabela de erratas: o código de erro é o rótulo da dor.
+     ========================================================================= -->
+<section class="sec" aria-labelledby="h-prob">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§03</span><span class="t tag">O custo do limite</span><span class="l"></span></div>
+
+    <div class="split">
+      <div class="split-a">
+        <h2 id="h-prob" class="dsp-2 rv">Você não tem um problema de modelo. Tem um problema de <span class="halt">teto</span>.</h2>
+        <p class="lede meas rv" data-d="1" style="margin-top:1.4rem">
           Toda API tradicional foi desenhada para racionar. O provedor protege a infraestrutura
           dele — e o gargalo aparece no seu produto, na frente do seu cliente.
         </p>
-        <div class="rv mt-7 border border-rule bg-card p-4" data-d="2">
-          <p class="mono text-[12px] leading-[1.9]">
-            <span class="text-mute">HTTP/1.1</span> <span class="text-gone">429</span> Too Many Requests<br>
-            <span class="text-mute">retry-after:</span> 37<br>
-            <span class="text-mute">// seu usuário está vendo isso agora</span>
+        <div class="err rv panel" data-d="2">
+          <p class="mono">
+            <span class="d">HTTP/1.1</span> <span class="halt">429</span> Too Many Requests<br>
+            <span class="d">retry-after:</span> 37<br>
+            <span class="d">// seu usuário está vendo isso agora</span>
           </p>
         </div>
       </div>
 
-      <div class="col-span-12 mt-10 lg:col-span-6 lg:col-start-7 lg:mt-0">
-        <dl class="border-t border-ink">
-          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
-            <dt class="mono text-[11px] leading-[1.9] text-gone">429<br><span class="text-mute">too_many_requests</span></dt>
-            <dd><h3 class="d3 text-[18px]">Seu pico de demanda vira erro</h3>
-              <p class="prose mt-1.5 text-[14.5px]">O dia em que a campanha funciona é o dia em que a API te derruba. Quem vê a falha é o seu cliente.</p></dd>
-          </div>
-          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
-            <dt class="mono text-[11px] leading-[1.9] text-gone">402<br><span class="text-mute">quota_exceeded</span></dt>
-            <dd><h3 class="d3 text-[18px]">A cota acaba no dia 18. O mês, não.</h3>
-              <p class="prose mt-1.5 text-[14.5px]">Você passa a segunda metade do mês administrando escassez — ou paga excedente a preço de emergência.</p></dd>
-          </div>
-          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
-            <dt class="mono text-[11px] leading-[1.9] text-gone">529<br><span class="text-mute">overloaded_error</span></dt>
-            <dd><h3 class="d3 text-[18px]">Na fila, você é sempre o último</h3>
-              <p class="prose mt-1.5 text-[14.5px]">Prioridade se compra em contrato de milhões. No pico, quem não comprou espera — e a espera vira o seu tempo de resposta.</p></dd>
-          </div>
-          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
-            <dt class="mono text-[11px] leading-[1.9] text-gone">tpm<br><span class="text-mute">silent_throttle</span></dt>
-            <dd><h3 class="d3 text-[18px]">Throttling que ninguém avisa</h3>
-              <p class="prose mt-1.5 text-[14.5px]">Não vem erro, vem lentidão. O agente que rodava em 2 minutos passa a rodar em 11, e você perde uma semana caçando bug no seu código.</p></dd>
-          </div>
-          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
-            <dt class="mono text-[11px] leading-[1.9] text-gone">billing<br><span class="text-mute">variable_cost</span></dt>
-            <dd><h3 class="d3 text-[18px]">Fatura que você não consegue prever</h3>
-              <p class="prose mt-1.5 text-[14.5px]">Precificar produto em cima de custo variável por token é apostar. Um loop mal fechado numa madrugada custa mais que o servidor no ano.</p></dd>
-          </div>
-          <div class="rv grid grid-cols-[5.25rem_1fr] gap-x-4 border-b border-rule py-5 sm:grid-cols-[9rem_1fr]">
-            <dt class="mono text-[11px] leading-[1.9] text-gone">roadmap<br><span class="text-mute">blocked</span></dt>
-            <dd><h3 class="d3 text-[18px]">As melhores ideias morrem no orçamento</h3>
-              <p class="prose mt-1.5 text-[14.5px]">Reprocessar toda a base? Cem variações? Deixar o agente pensar de verdade? Com limite, tudo vira "depois" — e "depois" é onde o concorrente te alcança.</p></dd>
-          </div>
-        </dl>
-      </div>
+      <dl class="errata split-b">
+        <div class="rv">
+          <dt class="mono"><span class="halt">429</span><br><span class="d">too_many_requests</span></dt>
+          <dd><h3 class="dsp-3">Seu pico de demanda vira erro</h3>
+            <p class="lede">O dia em que a campanha funciona é o dia em que a API te derruba. Quem vê a falha é o seu cliente.</p></dd>
+        </div>
+        <div class="rv">
+          <dt class="mono"><span class="halt">402</span><br><span class="d">quota_exceeded</span></dt>
+          <dd><h3 class="dsp-3">A cota acaba no dia 18. O mês, não.</h3>
+            <p class="lede">Você passa a segunda metade do mês administrando escassez — ou paga excedente a preço de emergência.</p></dd>
+        </div>
+        <div class="rv">
+          <dt class="mono"><span class="halt">529</span><br><span class="d">overloaded_error</span></dt>
+          <dd><h3 class="dsp-3">Na fila, você é sempre o último</h3>
+            <p class="lede">Prioridade se compra em contrato de milhões. No pico, quem não comprou espera — e a espera vira o seu tempo de resposta.</p></dd>
+        </div>
+        <div class="rv">
+          <dt class="mono"><span class="halt">tpm</span><br><span class="d">silent_throttle</span></dt>
+          <dd><h3 class="dsp-3">Throttling que ninguém avisa</h3>
+            <p class="lede">Não vem erro, vem lentidão. O agente que rodava em 2 minutos passa a rodar em 11, e você perde uma semana caçando bug no seu código.</p></dd>
+        </div>
+        <div class="rv">
+          <dt class="mono"><span class="halt">billing</span><br><span class="d">variable_cost</span></dt>
+          <dd><h3 class="dsp-3">Fatura que você não consegue prever</h3>
+            <p class="lede">Precificar produto em cima de custo variável por token é apostar. Um loop mal fechado numa madrugada custa mais que o servidor no ano.</p></dd>
+        </div>
+        <div class="rv">
+          <dt class="mono"><span class="halt">roadmap</span><br><span class="d">blocked</span></dt>
+          <dd><h3 class="dsp-3">As melhores ideias morrem no orçamento</h3>
+            <p class="lede">Reprocessar toda a base? Cem variações? Deixar o agente pensar de verdade? Com limite, tudo vira "depois" — e "depois" é onde o concorrente te alcança.</p></dd>
+        </div>
+      </dl>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     §03 · A SOLUÇÃO — o mecanismo, e o que sai do caminho
+     §04 · A SOLUÇÃO — o mecanismo, e o que sai do caminho
      ========================================================================= -->
-<section class="mt-20 sm:mt-28" aria-labelledby="h-solucao">
-  <div class="rail">
-    <div class="mark rv"><b>§03</b><span>A virada</span><hr></div>
+<section class="sec" aria-labelledby="h-sol">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§04</span><span class="t tag">A virada</span><span class="l"></span></div>
 
-    <div class="g12 mt-8 items-end">
-      <h2 id="h-solucao" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
-        Nós compramos a capacidade. Você usa sem contar.
-      </h2>
-      <p class="rv prose col-span-12 mt-4 text-[16px] lg:col-span-4 lg:col-start-9 lg:mt-0" data-d="1">
+    <div class="lead-row">
+      <h2 id="h-sol" class="dsp-2 rv">Nós compramos a capacidade. Você usa sem contar.</h2>
+      <p class="lede rv" data-d="1">
         A camada que media, enfileira e corta você não existe no caminho. Não é otimização —
         é a remoção de um componente.
       </p>
     </div>
 
-    <div class="rv mt-10 border-t border-ink pt-8" data-d="2">
-      <div class="g12 items-stretch gap-y-3">
-        <div class="col-span-12 border border-rule bg-card p-5 lg:col-span-4">
-          <p class="lab">Origem</p>
-          <p class="d3 mt-2 text-[17px]">Sua aplicação</p>
-          <p class="prose mt-1.5 text-[14px]">Agentes, SaaS, jobs em lote — tudo na mesma chave.</p>
-        </div>
-        <div class="slab col-span-12 p-5 lg:col-span-4">
-          <p class="lab">Camada UNBOUND</p>
-          <p class="d3 mt-2 text-[17px] text-white">Capacidade reservada</p>
-          <p class="mt-1.5 text-[14px] text-white/55">Pool próprio, roteamento e failover. Sem medidor no meio.</p>
-        </div>
-        <div class="col-span-12 border border-rule bg-card p-5 lg:col-span-4">
-          <p class="lab">Destino</p>
-          <p class="d3 mt-2 text-[17px]">Kimi K3 · Opus 5 · Fable 5.1</p>
-          <p class="prose mt-1.5 text-[14px]">Os mesmos modelos. Sem a coleira.</p>
-        </div>
+    <div class="mech rv" data-d="2">
+      <div class="mech-node panel">
+        <p class="tag">Origem</p>
+        <p class="dsp-3">Sua aplicação</p>
+        <p class="lede">Agentes, SaaS, jobs em lote — tudo na mesma chave.</p>
       </div>
+      <div class="mech-arrow" aria-hidden="true">
+        <svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M1 6h40M36 1.5 41.5 6 36 10.5"/></svg>
+      </div>
+      <div class="mech-node mech-core panel">
+        <p class="tag">Camada UNBOUND</p>
+        <p class="dsp-3">Capacidade reservada</p>
+        <p class="lede">Pool próprio, roteamento e failover. Sem medidor no meio.</p>
+      </div>
+      <div class="mech-arrow" aria-hidden="true">
+        <svg viewBox="0 0 48 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M1 6h40M36 1.5 41.5 6 36 10.5"/></svg>
+      </div>
+      <div class="mech-node panel">
+        <p class="tag">Destino</p>
+        <p class="dsp-3">Kimi K3 · Opus 5 · Fable 5.1</p>
+        <p class="lede">Os mesmos modelos. Sem a coleira.</p>
+      </div>
+    </div>
 
-      <div class="mt-6 flex flex-wrap items-center gap-2 border-t border-rule pt-6">
-        <span class="lab mr-1">Removido do trajeto</span>
-        <span class="mono strike">rate limiter</span>
-        <span class="mono strike">quota check</span>
-        <span class="mono strike">priority queue</span>
-        <span class="mono strike">tpm throttle</span>
-        <span class="mono strike">overage billing</span>
-      </div>
+    <div class="removed rv" data-d="3">
+      <span class="tag">Removido do trajeto</span>
+      <span class="mono strike">rate limiter</span>
+      <span class="mono strike">quota check</span>
+      <span class="mono strike">priority queue</span>
+      <span class="mono strike">tpm throttle</span>
+      <span class="mono strike">overage billing</span>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     §04 · CATÁLOGO
-     Matriz de especificação, não três cards: comparar linha a linha é como
-     se compra infraestrutura. A coluna do Fable 5.1 fica hachurada, com os
-     valores riscados e o carimbo de encerrado — legível e ainda desejável.
-     Primeira coluna gruda na rolagem horizontal, para o rótulo nunca sumir.
+     §05 · CATÁLOGO
+     Matriz de especificação: comparar linha a linha é como se compra
+     infraestrutura. A coluna do Fable 5.1 fica escurecida e hachurada, com
+     os valores riscados e o carimbo — legível inteira, e ainda desejável.
      ========================================================================= -->
-<section id="catalogo" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-catalogo">
-  <div class="rail">
-    <div class="mark rv"><b>§04</b><span>Catálogo · lote 07</span><hr></div>
+<section class="sec" id="catalogo" aria-labelledby="h-cat">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§05</span><span class="t tag">Catálogo · lote 07</span><span class="l"></span></div>
 
-    <div class="g12 mt-8 items-end">
-      <h2 id="h-catalogo" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
-        Três modelos. Um único regime de uso.
-      </h2>
-      <p class="rv prose col-span-12 mt-4 text-[16px] lg:col-span-4 lg:col-start-9 lg:mt-0" data-d="1">
+    <div class="lead-row">
+      <h2 id="h-cat" class="dsp-2 rv">Três modelos. Um único regime de uso.</h2>
+      <p class="lede rv" data-d="1">
         Cada chave é nominal e liberada por lote. Quando a capacidade reservada de um modelo
         acaba, ele sai do ar — não fatiamos o que já foi vendido.
       </p>
     </div>
 
-    <div class="rv mt-10 overflow-x-auto" data-d="2">
-      <table class="w-full min-w-[880px] border-collapse text-left">
-        <caption class="sr-only">Especificação e disponibilidade dos três modelos</caption>
-        <colgroup><col style="width:22%"><col style="width:26%"><col style="width:26%"><col style="width:26%"></colgroup>
-
+    <div class="matrix-scroll rv" data-d="2">
+      <table class="matrix">
+        <caption class="sr">Especificação e disponibilidade dos três modelos</caption>
+        <colgroup><col class="c-spec"><col><col><col></colgroup>
         <thead>
-          <tr class="border-y border-ink align-bottom">
-            <th scope="col" class="sticky left-0 z-10 bg-paper py-5 pr-4">
-              <span class="lab">Especificação</span>
+          <tr>
+            <th scope="col" class="stick"><span class="tag">Especificação</span></th>
+            <th scope="col">
+              <span class="tag">Alta vazão</span>
+              <span class="dsp-2 m-name">Kimi K3</span>
+              <span class="chip chip-live"><span class="pip"></span>disponível</span>
             </th>
-            <th scope="col" class="px-5 py-5">
-              <span class="lab">Alta vazão</span>
-              <span class="d2 mt-1.5 block text-[26px]">Kimi K3</span>
-              <span class="sig sig-ok mt-3"><span class="dot"></span>disponível</span>
+            <th scope="col" class="col-hot">
+              <span class="tag">Topo de linha</span>
+              <span class="dsp-2 m-name">Opus 5</span>
+              <span class="chip chip-live"><span class="pip"></span>disponível</span>
             </th>
-            <th scope="col" class="bg-wash px-5 py-5">
-              <span class="lab">Topo de linha</span>
-              <span class="d2 mt-1.5 block text-[26px]">Opus 5</span>
-              <span class="sig sig-ok mt-3"><span class="dot"></span>disponível</span>
-            </th>
-            <th scope="col" class="gone-col relative px-5 py-5">
-              <span class="lab">Edição narrativa</span>
-              <span class="d2 mt-1.5 block text-[26px] text-slate">Fable 5.1</span>
-              <span class="sig sig-gone mt-3">esgotado</span>
+            <th scope="col" class="col-gone">
+              <span class="tag">Edição narrativa</span>
+              <span class="dsp-2 m-name">Fable 5.1</span>
+              <span class="chip chip-halt">esgotado</span>
               <span class="stamp" aria-hidden="true">lote 06 encerrado</span>
             </th>
           </tr>
         </thead>
-
-        <tbody class="text-[14.5px]">
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Posicionamento</span></th>
-            <td class="px-5 py-4">Volume bruto e contexto longo</td>
-            <td class="bg-wash px-5 py-4">Raciocínio de topo, sem racionamento</td>
-            <td class="gone-col px-5 py-4 text-slate">Voz, ritmo e continuidade longa</td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Melhor para</span></th>
-            <td class="px-5 py-4">Lote, RAG, agentes</td>
-            <td class="bg-wash px-5 py-4">Código, análise, agentes longos</td>
-            <td class="gone-col px-5 py-4 text-slate">Narrativa, roteiro, marca</td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Requisições</span></th>
-            <td class="mono px-5 py-4 text-ok">ilimitadas</td>
-            <td class="mono bg-wash px-5 py-4 text-ok">ilimitadas</td>
-            <td class="gone-col px-5 py-4"><span class="gone-val mono">ilimitadas</span></td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Tokens</span></th>
-            <td class="mono px-5 py-4 text-ok">ilimitados</td>
-            <td class="mono bg-wash px-5 py-4 text-ok">ilimitados</td>
-            <td class="gone-col px-5 py-4"><span class="gone-val mono">ilimitados</span></td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Concorrência</span></th>
-            <td class="mono px-5 py-4">sem teto</td>
-            <td class="mono bg-wash px-5 py-4">sem teto</td>
-            <td class="gone-col px-5 py-4"><span class="gone-val mono">sem teto</span></td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Prioridade de rota</span></th>
-            <td class="mono px-5 py-4">alta</td>
-            <td class="mono bg-wash px-5 py-4">máxima</td>
-            <td class="gone-col px-5 py-4"><span class="gone-val mono">máxima</span></td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Chaves no lote</span></th>
-            <td class="px-5 py-4">
-              <span class="mono tnum"><b class="font-semibold">37</b> <span class="text-mute">de 100</span></span>
-              <span class="meter mt-2"><i style="width:37%"></i></span>
-            </td>
-            <td class="bg-wash px-5 py-4">
-              <span class="mono tnum"><b class="font-semibold text-gone">9</b> <span class="text-mute">de 50</span></span>
-              <span class="meter mt-2"><i class="low" style="width:18%"></i></span>
-            </td>
-            <td class="gone-col px-5 py-4">
-              <span class="mono tnum text-mute"><b class="font-semibold text-gone">0</b> de 80</span>
-              <span class="meter mt-2"><i class="out" style="width:100%"></i></span>
-            </td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Ritmo do lote</span></th>
-            <td class="px-5 py-4 text-[13.5px] text-slate">cerca de 6 chaves por dia</td>
-            <td class="bg-wash px-5 py-4 text-[13.5px] text-gone">fecha antes do fim da semana</td>
-            <td class="gone-col px-5 py-4 text-[13.5px] text-slate">esgotou em 40 h · 312 na espera</td>
-          </tr>
-          <tr class="border-b border-rule">
-            <th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Ativação</span></th>
-            <td class="px-5 py-4">em minutos</td>
-            <td class="bg-wash px-5 py-4">em minutos</td>
-            <td class="gone-col px-5 py-4 text-slate">reabertura sem data</td>
-          </tr>
+        <tbody>
+          <tr><th scope="row" class="stick"><span class="tag">Posicionamento</span></th>
+            <td>Volume bruto e contexto longo</td>
+            <td class="col-hot">Raciocínio de topo, sem racionamento</td>
+            <td class="col-gone">Voz, ritmo e continuidade longa</td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Melhor para</span></th>
+            <td>Lote, RAG, agentes</td>
+            <td class="col-hot">Código, análise, agentes longos</td>
+            <td class="col-gone">Narrativa, roteiro, marca</td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Requisições</span></th>
+            <td class="mono ok">ilimitadas</td>
+            <td class="col-hot mono ok">ilimitadas</td>
+            <td class="col-gone"><span class="mono struck">ilimitadas</span></td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Tokens</span></th>
+            <td class="mono ok">ilimitados</td>
+            <td class="col-hot mono ok">ilimitados</td>
+            <td class="col-gone"><span class="mono struck">ilimitados</span></td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Concorrência</span></th>
+            <td class="mono">sem teto</td>
+            <td class="col-hot mono">sem teto</td>
+            <td class="col-gone"><span class="mono struck">sem teto</span></td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Prioridade de rota</span></th>
+            <td class="mono">alta</td>
+            <td class="col-hot mono">máxima</td>
+            <td class="col-gone"><span class="mono struck">máxima</span></td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Chaves no lote</span></th>
+            <td><span class="mono"><b>37</b> <span class="d">de 100</span></span><span class="bar"><i style="width:37%"></i></span></td>
+            <td class="col-hot"><span class="mono"><b class="halt">9</b> <span class="d">de 50</span></span><span class="bar"><i class="low" style="width:18%"></i></span></td>
+            <td class="col-gone"><span class="mono d"><b class="halt">0</b> de 80</span><span class="bar"><i class="out" style="width:100%"></i></span></td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Ritmo do lote</span></th>
+            <td class="d">cerca de 6 chaves por dia</td>
+            <td class="col-hot halt">fecha antes do fim da semana</td>
+            <td class="col-gone d">esgotou em 40 h · 312 na espera</td></tr>
+          <tr><th scope="row" class="stick"><span class="tag">Ativação</span></th>
+            <td>em minutos</td>
+            <td class="col-hot">em minutos</td>
+            <td class="col-gone d">reabertura sem data</td></tr>
         </tbody>
-
         <tfoot>
           <tr>
-            <td class="sticky left-0 z-10 bg-paper py-6 pr-4"></td>
+            <td class="stick"></td>
             <!-- [CTA] -->
-            <td class="px-5 py-6"><a href="#planos" class="btn btn-line w-full">Garantir Kimi K3</a></td>
-            <td class="bg-wash px-5 py-6"><a href="#planos" class="btn btn-ink w-full">Garantir Opus 5</a></td>
-            <td class="gone-col px-5 py-6"><a href="#espera" class="btn btn-line w-full !border-gone/40 !text-gone hover:!border-gone">Entrar na lista de espera</a></td>
+            <td><a href="#planos" class="btn btn-line full">Garantir Kimi K3</a></td>
+            <td class="col-hot"><a href="#planos" class="btn btn-bone full">Garantir Opus 5</a></td>
+            <td class="col-gone"><a href="#espera" class="btn btn-halt full">Entrar na lista de espera</a></td>
           </tr>
         </tfoot>
       </table>
     </div>
 
-    <p class="rv mt-5 text-[13px] text-mute" data-d="3">
-      O lote é limitado pela capacidade que conseguimos reservar. É por isso que o Fable 5.1 está fora —
-      e por isso que não vendemos o que não conseguimos entregar.
+    <p class="tag rv" data-d="3" style="margin-top:1.6rem">
+      O lote é limitado pela capacidade que conseguimos reservar. É por isso que o Fable 5.1 está fora.
     </p>
   </div>
 </section>
 
 <!-- =========================================================================
-     §05 · BENEFÍCIOS
-     Cada item entra como chave de especificação, não como card com ícone.
+     §06 · BENEFÍCIOS — grade com fio, cada item como chave de especificação
      ========================================================================= -->
-<section id="beneficios" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-beneficios">
-  <div class="rail">
-    <div class="mark rv"><b>§05</b><span>O que vem com a chave</span><hr></div>
+<section class="sec" id="beneficios" aria-labelledby="h-ben">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§06</span><span class="t tag">O que vem com a chave</span><span class="l"></span></div>
+    <h2 id="h-ben" class="dsp-2 rv h2-wide">Tudo que uma API deveria ser antes de alguém inventar cota.</h2>
 
-    <h2 id="h-beneficios" class="rv d2 mt-8 max-w-[20ch] text-[clamp(1.9rem,3.6vw,3rem)]">
-      Tudo que uma API deveria ser antes de alguém inventar cota.
-    </h2>
-
-    <div class="rv g12 mt-10 gap-y-0 border-t border-ink" data-d="1">
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-r lg:pr-6">
-        <p class="lab">Limite</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Zero rate limit</h3>
-        <p class="prose mt-2 text-[14px]">Nenhuma chamada sua volta com 429. Não existe política de vazão na sua chave.</p>
-      </div>
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-r lg:px-6">
-        <p class="lab">Cota</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Tokens sem contador</h3>
-        <p class="prose mt-2 text-[14px]">Entrada e saída liberadas. Ninguém desliga sua operação no dia 18 do mês.</p>
-      </div>
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-r lg:px-6">
-        <p class="lab">Paralelismo</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Concorrência aberta</h3>
-        <p class="prose mt-2 text-[14px]">Centenas de chamadas simultâneas. O paralelismo é seu, não nosso.</p>
-      </div>
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:pl-6">
-        <p class="lab">Custo</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Fatura que não surpreende</h3>
-        <p class="prose mt-2 text-[14px]">Valor fixo mensal. O dia 31 custa o mesmo que o dia 1, use o quanto usar.</p>
-      </div>
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:pr-6">
-        <p class="lab">Integração</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Cai no seu código atual</h3>
-        <p class="prose mt-2 text-[14px]">Padrão de mercado: troque a <code class="mono text-ink">base_url</code> e a chave. Acabou.</p>
-      </div>
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:px-6">
-        <p class="lab">Ativação</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Pronto em minutos</h3>
-        <p class="prose mt-2 text-[14px]">Sem formulário de vendas, sem call de descoberta, sem fila de aprovação.</p>
-      </div>
-      <div class="col-span-12 border-b border-rule py-6 sm:col-span-6 lg:col-span-3 lg:border-b-0 lg:border-r lg:px-6">
-        <p class="lab">Resiliência</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Failover automático</h3>
-        <p class="prose mt-2 text-[14px]">Roteamento redundante entre pools. Uma rota cai, a chamada segue por outra.</p>
-      </div>
-      <div class="col-span-12 py-6 sm:col-span-6 lg:col-span-3 lg:pl-6">
-        <p class="lab">Suporte</p>
-        <h3 class="d3 mt-2.5 text-[17px]">Linha direta com engenharia</h3>
-        <p class="prose mt-2 text-[14px]">Canal privado com quem opera a infra. Sem robô de atendimento no meio.</p>
-      </div>
+    <div class="bens rv" data-d="1">
+      <div><p class="tag">Limite</p><h3 class="dsp-3">Zero rate limit</h3><p class="lede">Nenhuma chamada sua volta com 429. Não existe política de vazão na sua chave.</p></div>
+      <div><p class="tag">Cota</p><h3 class="dsp-3">Tokens sem contador</h3><p class="lede">Entrada e saída liberadas. Ninguém desliga sua operação no dia 18 do mês.</p></div>
+      <div><p class="tag">Paralelismo</p><h3 class="dsp-3">Concorrência aberta</h3><p class="lede">Centenas de chamadas simultâneas. O paralelismo é seu, não nosso.</p></div>
+      <div><p class="tag">Custo</p><h3 class="dsp-3">Fatura que não surpreende</h3><p class="lede">Valor fixo mensal. O dia 31 custa o mesmo que o dia 1, use o quanto usar.</p></div>
+      <div><p class="tag">Integração</p><h3 class="dsp-3">Cai no seu código atual</h3><p class="lede">Padrão de mercado: troque a <code class="mono">base_url</code> e a chave. Acabou.</p></div>
+      <div><p class="tag">Ativação</p><h3 class="dsp-3">Pronto em minutos</h3><p class="lede">Sem formulário de vendas, sem call de descoberta, sem fila de aprovação.</p></div>
+      <div><p class="tag">Resiliência</p><h3 class="dsp-3">Failover automático</h3><p class="lede">Roteamento redundante entre pools. Uma rota cai, a chamada segue por outra.</p></div>
+      <div><p class="tag">Suporte</p><h3 class="dsp-3">Linha direta com engenharia</h3><p class="lede">Canal privado com quem opera a infra. Sem robô de atendimento no meio.</p></div>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     §06 · OPERAÇÃO
+     §07 · OPERAÇÃO
      Painel fixo que troca conforme o passo entra em tela: o leitor vê o
-     artefato de cada etapa em vez de ler quatro parágrafos sobre eles.
+     artefato de cada etapa em vez de ler quatro parágrafos sobre elas.
      ========================================================================= -->
-<section id="operacao" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-operacao">
-  <div class="rail">
-    <div class="mark rv"><b>§06</b><span>Do pagamento à primeira chamada</span><hr></div>
+<section class="sec" id="operacao" aria-labelledby="h-op">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§07</span><span class="t tag">Do pagamento à primeira chamada</span><span class="l"></span></div>
+    <h2 id="h-op" class="dsp-2 rv h2-wide">Quatro passos. Nenhum deles é uma reunião.</h2>
 
-    <div class="g12 mt-8 items-end">
-      <h2 id="h-operacao" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
-        Quatro passos. Nenhum deles é uma reunião.
-      </h2>
-    </div>
-
-    <div class="g12 mt-12">
-      <ol class="col-span-12 lg:col-span-5">
+    <div class="ops">
+      <ol class="ops-steps">
         <li class="step" data-step="1">
-          <p class="mono step-n">01</p>
-          <h3 class="d3 text-[19px]">Escolha o modelo e o lote</h3>
-          <p class="prose mt-2 text-[15px]">Kimi K3 ou Opus 5, conforme o trabalho. Você vê quantas chaves restam antes de pagar — o número da tabela é o número real.</p>
+          <span class="mono step-n">01</span>
+          <h3 class="dsp-3">Escolha o modelo e o lote</h3>
+          <p class="lede">Kimi K3 ou Opus 5, conforme o trabalho. Você vê quantas chaves restam antes de pagar — o número da tabela é o número real.</p>
         </li>
         <li class="step" data-step="2">
-          <p class="mono step-n">02</p>
-          <h3 class="d3 text-[19px]">Pague e verifique</h3>
-          <p class="prose mt-2 text-[15px]">Checkout direto, sem proposta comercial. A verificação existe porque a chave é nominal e não pode ser repassada.</p>
+          <span class="mono step-n">02</span>
+          <h3 class="dsp-3">Pague e verifique</h3>
+          <p class="lede">Checkout direto, sem proposta comercial. A verificação existe porque a chave é nominal e não pode ser repassada.</p>
         </li>
         <li class="step" data-step="3">
-          <p class="mono step-n">03</p>
-          <h3 class="d3 text-[19px]">Receba chave e endpoint</h3>
-          <p class="prose mt-2 text-[15px]">Chegam em minutos, junto com o painel de uso e o canal de suporte. Nada de período de provisionamento.</p>
+          <span class="mono step-n">03</span>
+          <h3 class="dsp-3">Receba chave e endpoint</h3>
+          <p class="lede">Chegam em minutos, junto com o painel de uso e o canal de suporte. Nada de período de provisionamento.</p>
         </li>
         <li class="step" data-step="4">
-          <p class="mono step-n">04</p>
-          <h3 class="d3 text-[19px]">Troque duas linhas e escale</h3>
-          <p class="prose mt-2 text-[15px]">Sem SDK novo, sem refatoração. A partir daqui o limite é a sua ambição, não o seu plano.</p>
+          <span class="mono step-n">04</span>
+          <h3 class="dsp-3">Troque duas linhas e escale</h3>
+          <p class="lede">Sem SDK novo, sem refatoração. A partir daqui o limite é a sua ambição, não o seu plano.</p>
         </li>
       </ol>
 
-      <div class="col-span-12 mt-8 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:sticky lg:top-24 lg:self-start">
-        <div class="slab min-h-[300px]" id="panels">
-
-          <div class="panel" data-panel="1">
-            <div class="flex items-center justify-between px-5 py-3.5">
-              <span class="lab">Lote 07 · disponível</span><span class="mono text-[11px] text-white/45">1 / 4</span>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-3.5">
-              <span class="text-[14px] text-white/90">Kimi K3</span>
-              <span class="mono text-[13px] text-white/60">37 <span class="text-white/35">de 100</span></span>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-3.5">
-              <span class="text-[14px] text-white/90">Opus 5</span>
-              <span class="mono text-[13px] text-[#E8A398]">9 <span class="text-white/35">de 50</span></span>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-3.5">
-              <span class="text-[14px] text-white/40 line-through">Fable 5.1</span>
-              <span class="mono text-[13px] text-white/35">esgotado</span>
-            </div>
+      <div class="ops-panel">
+        <div class="panel ops-frame">
+          <div class="pane" data-panel="1">
+            <div class="pane-h"><span class="tag">Lote 07 · disponível</span><span class="mono d">1 / 4</span></div>
+            <div class="pane-r"><span>Kimi K3</span><span class="mono d">37 de 100</span></div>
+            <div class="pane-r"><span>Opus 5</span><span class="mono halt">9 de 50</span></div>
+            <div class="pane-r off"><span class="struck">Fable 5.1</span><span class="mono d">esgotado</span></div>
           </div>
-
-          <div class="panel" data-panel="2" hidden>
-            <div class="flex items-center justify-between px-5 py-3.5">
-              <span class="lab">Confirmação</span><span class="mono text-[11px] text-white/45">2 / 4</span>
-            </div>
-            <div class="slab-row px-5 py-4">
-              <p class="mono text-[12px] leading-[2] text-white/70">
-                <span class="text-white/40">plano</span>        Escala · mensal<br>
-                <span class="text-white/40">modelos</span>      Kimi K3, Opus 5<br>
-                <span class="text-white/40">chaves</span>       5 nominais<br>
-                <span class="text-white/40">recorrência</span>  sem fidelidade<br>
-                <span class="text-white/40">garantia</span>     <span class="text-[#8FE3B8]">7 dias</span>
-              </p>
-            </div>
-            <div class="slab-row px-5 py-3.5">
-              <span class="mono text-[12px] text-white/45">verificação concluída · 00:41</span>
-            </div>
+          <div class="pane" data-panel="2" hidden>
+            <div class="pane-h"><span class="tag">Confirmação</span><span class="mono d">2 / 4</span></div>
+            <div class="pane-b"><p class="mono">
+              <span class="d">plano</span>        Escala · mensal<br>
+              <span class="d">modelos</span>      Kimi K3, Opus 5<br>
+              <span class="d">chaves</span>       5 nominais<br>
+              <span class="d">recorrência</span>  sem fidelidade<br>
+              <span class="d">garantia</span>     <span class="ok">7 dias</span>
+            </p></div>
+            <div class="pane-r"><span class="mono d">verificação concluída · 00:41</span></div>
           </div>
-
-          <div class="panel" data-panel="3" hidden>
-            <div class="flex items-center justify-between px-5 py-3.5">
-              <span class="lab">Credenciais</span><span class="mono text-[11px] text-white/45">3 / 4</span>
-            </div>
-            <div class="slab-row px-5 py-4">
-              <p class="lab mb-1.5">Chave</p>
-              <p class="mono text-[13px] text-white/90">sk-unb-live-7f2a••••••••••••••••3c91</p>
-            </div>
-            <div class="slab-row px-5 py-4">
-              <p class="lab mb-1.5">Endpoint</p>
-              <p class="mono text-[13px] text-white/90">https://api.unbound.ai/v1</p>
-            </div>
-            <div class="slab-row flex items-center justify-between px-5 py-3.5">
-              <span class="lab">Estado</span>
-              <span class="sig sig-live"><span class="dot"></span>ativa</span>
-            </div>
+          <div class="pane" data-panel="3" hidden>
+            <div class="pane-h"><span class="tag">Credenciais</span><span class="mono d">3 / 4</span></div>
+            <div class="pane-b"><p class="tag">Chave</p><p class="mono big">sk-unb-live-7f2a••••••••••••3c91</p></div>
+            <div class="pane-b"><p class="tag">Endpoint</p><p class="mono big">https://api.unbound.ai/v1</p></div>
+            <div class="pane-r"><span class="tag">Estado</span><span class="chip chip-live"><span class="pip"></span>ativa</span></div>
           </div>
-
-          <div class="panel" data-panel="4" hidden>
-            <div class="flex items-center justify-between px-5 py-3.5">
-              <span class="lab">client.py</span><span class="mono text-[11px] text-white/45">4 / 4</span>
-            </div>
-            <div class="slab-row px-5 py-4">
-<pre class="mono overflow-x-auto text-[12px] leading-[2] text-white/80">client = OpenAI(
-    base_url = <span class="text-[#8FE3B8]">"https://api.unbound.ai/v1"</span>,
-    api_key  = <span class="text-[#8FE3B8]">"sk-unb-live-..."</span>
+          <div class="pane" data-panel="4" hidden>
+            <div class="pane-h"><span class="tag">client.py</span><span class="mono d">4 / 4</span></div>
+            <div class="pane-b">
+<pre class="mono">client = OpenAI(
+    base_url = <span class="ok">"https://api.unbound.ai/v1"</span>,
+    api_key  = <span class="ok">"sk-unb-live-..."</span>
 )</pre>
             </div>
-            <div class="slab-row px-5 py-3.5">
-              <span class="mono text-[12px] text-white/45">nenhuma outra alteração necessária</span>
-            </div>
+            <div class="pane-r"><span class="mono d">nenhuma outra alteração necessária</span></div>
           </div>
         </div>
       </div>
@@ -934,38 +1023,31 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
 </section>
 
 <!-- =========================================================================
-     §07 · COMPARATIVO
+     §08 · COMPARATIVO
      ========================================================================= -->
-<section id="comparativo" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-comparativo">
-  <div class="rail">
-    <div class="mark rv"><b>§07</b><span>Lado a lado</span><hr></div>
+<section class="sec" id="comparativo" aria-labelledby="h-cmp">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§08</span><span class="t tag">Lado a lado</span><span class="l"></span></div>
+    <h2 id="h-cmp" class="dsp-2 rv h2-wide">A diferença não é de preço. É de permissão.</h2>
 
-    <div class="g12 mt-8 items-end">
-      <h2 id="h-comparativo" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-7">
-        A diferença não é de preço. É de permissão.
-      </h2>
-    </div>
-
-    <div class="rv mt-10 overflow-x-auto" data-d="1">
-      <table class="w-full min-w-[720px] border-collapse text-left">
-        <caption class="sr-only">Comparação entre API tradicional e UNBOUND</caption>
-        <colgroup><col style="width:34%"><col style="width:33%"><col style="width:33%"></colgroup>
-        <thead>
-          <tr class="border-y border-ink">
-            <th scope="col" class="sticky left-0 z-10 bg-paper py-4 pr-4"><span class="lab">Critério</span></th>
-            <th scope="col" class="px-5 py-4"><span class="lab">API tradicional</span></th>
-            <th scope="col" class="bg-wash px-5 py-4"><span class="d3 text-[15px]">UNBOUND</span></th>
-          </tr>
-        </thead>
-        <tbody class="text-[14.5px]">
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Requisições por minuto</th><td class="px-5 py-4 text-slate">Teto rígido por tier</td><td class="bg-wash px-5 py-4 font-medium">Sem teto</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Cota de tokens</th><td class="px-5 py-4 text-slate">Mensal, acaba antes do mês</td><td class="bg-wash px-5 py-4 font-medium">Não existe</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Comportamento no pico</th><td class="px-5 py-4 text-slate">Fila, throttle ou 429</td><td class="bg-wash px-5 py-4 font-medium">Passa direto</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Custo do mês</th><td class="px-5 py-4 text-slate">Variável por token</td><td class="bg-wash px-5 py-4 font-medium">Fixo, definido antes</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Agente rodando 24/7</th><td class="px-5 py-4 text-slate">Inviável ou caríssimo</td><td class="bg-wash px-5 py-4 font-medium">É o caso de uso padrão</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Aumento de limite</th><td class="px-5 py-4 text-slate">Formulário e espera de dias</td><td class="bg-wash px-5 py-4 font-medium">Não se aplica</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Suporte</th><td class="px-5 py-4 text-slate">Ticket, SLA de dias</td><td class="bg-wash px-5 py-4 font-medium">Canal privado com engenharia</td></tr>
-          <tr class="border-b border-rule"><th scope="row" class="sticky left-0 z-10 bg-paper py-4 pr-4 font-medium">Surpresa na fatura</th><td class="px-5 py-4 text-slate">Regra da casa</td><td class="bg-wash px-5 py-4 font-medium">Impossível por construção</td></tr>
+    <div class="matrix-scroll rv" data-d="1">
+      <table class="matrix cmp">
+        <caption class="sr">Comparação entre API tradicional e UNBOUND</caption>
+        <colgroup><col class="c-spec"><col><col></colgroup>
+        <thead><tr>
+          <th scope="col" class="stick"><span class="tag">Critério</span></th>
+          <th scope="col"><span class="tag">API tradicional</span></th>
+          <th scope="col" class="col-hot"><span class="dsp-3">UNBOUND</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><th scope="row" class="stick">Requisições por minuto</th><td class="d">Teto rígido por tier</td><td class="col-hot">Sem teto</td></tr>
+          <tr><th scope="row" class="stick">Cota de tokens</th><td class="d">Mensal, acaba antes do mês</td><td class="col-hot">Não existe</td></tr>
+          <tr><th scope="row" class="stick">Comportamento no pico</th><td class="d">Fila, throttle ou 429</td><td class="col-hot">Passa direto</td></tr>
+          <tr><th scope="row" class="stick">Custo do mês</th><td class="d">Variável por token</td><td class="col-hot">Fixo, definido antes</td></tr>
+          <tr><th scope="row" class="stick">Agente rodando 24/7</th><td class="d">Inviável ou caríssimo</td><td class="col-hot">É o caso de uso padrão</td></tr>
+          <tr><th scope="row" class="stick">Aumento de limite</th><td class="d">Formulário e espera de dias</td><td class="col-hot">Não se aplica</td></tr>
+          <tr><th scope="row" class="stick">Suporte</th><td class="d">Ticket, SLA de dias</td><td class="col-hot">Canal privado com engenharia</td></tr>
+          <tr><th scope="row" class="stick">Surpresa na fatura</th><td class="d">Regra da casa</td><td class="col-hot">Impossível por construção</td></tr>
         </tbody>
       </table>
     </div>
@@ -973,288 +1055,261 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
 </section>
 
 <!-- =========================================================================
-     §08 · PLANOS
-     [PRECO] valores de exemplo. O ciclo anual cobra 10 meses.
-     O plano do meio é a chapa preta — a ênfase da página inteira é a tinta.
+     §09 · PLANOS · [PRECO] valores de exemplo, anual cobra 10 meses
      ========================================================================= -->
-<section id="planos" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-planos">
-  <div class="rail">
-    <div class="mark rv"><b>§08</b><span>Planos</span><hr></div>
+<section class="sec" id="planos" aria-labelledby="h-pl">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§09</span><span class="t tag">Planos</span><span class="l"></span></div>
 
-    <div class="g12 mt-8 items-end">
-      <h2 id="h-planos" class="rv d2 col-span-12 text-[clamp(1.9rem,3.6vw,3rem)] lg:col-span-6">
-        Um preço. Todo o resto é seu.
-      </h2>
-      <div class="rv col-span-12 mt-6 flex lg:col-span-4 lg:col-start-9 lg:mt-0 lg:justify-end" data-d="1">
-        <div class="inline-flex border border-rule bg-card p-1" role="group" aria-label="Ciclo de cobrança">
-          <button id="cycleMonth" class="px-4 py-2 text-[13px] font-medium" aria-pressed="true">Mensal</button>
-          <button id="cycleYear"  class="px-4 py-2 text-[13px] font-medium" aria-pressed="false">Anual <span class="text-ok">−2 meses</span></button>
-        </div>
+    <div class="lead-row">
+      <h2 id="h-pl" class="dsp-2 rv">Um preço. Todo o resto é seu.</h2>
+      <div class="cycle rv" data-d="1" role="group" aria-label="Ciclo de cobrança">
+        <button id="cycM" aria-pressed="true">Mensal</button>
+        <button id="cycY" aria-pressed="false">Anual <span class="ok">−2 meses</span></button>
       </div>
     </div>
 
-    <div class="rv g12 mt-10 items-stretch gap-y-4" data-d="2">
-
-      <!-- OPERADOR -->
-      <article class="col-span-12 flex flex-col border border-rule bg-card p-7 lg:col-span-4">
-        <p class="lab">Operador</p>
-        <p class="prose mt-3 text-[14.5px]">Para quem tem um produto rodando e cansou de administrar cota.</p>
-        <p class="mt-8 flex items-baseline gap-1.5">
-          <span class="text-[15px] text-mute">R$</span>
-          <span class="d1 text-[42px]" data-price data-month="1.497" data-year="1.247">1.497</span>
-          <span class="text-[14px] text-mute">/mês</span>
-        </p>
-        <p class="mt-1.5 text-[12.5px] text-mute" data-note>cobrado mensalmente</p>
-        <ul class="mt-7 space-y-2.5 border-t border-rule pt-7 text-[14.5px]">
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">01</span><span><b class="font-semibold">1 chave</b> nominal, uso ilimitado</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">02</span><span>1 modelo à sua escolha</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">03</span><span>Concorrência alta</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">04</span><span>Painel de uso em tempo real</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">05</span><span>Suporte por e-mail em até 24 h</span></li>
+    <div class="plans rv" data-d="2">
+      <article class="plan panel lift">
+        <p class="tag">Operador</p>
+        <p class="lede plan-sub">Para quem tem um produto rodando e cansou de administrar cota.</p>
+        <p class="plan-price"><em>R$</em><b class="dsp-2" data-price data-month="1.497" data-year="1.247">1.497</b><em>/mês</em></p>
+        <p class="tag plan-note" data-note>cobrado mensalmente</p>
+        <ul class="plan-list">
+          <li><span class="mono d">01</span><span><b>1 chave</b> nominal, uso ilimitado</span></li>
+          <li><span class="mono d">02</span><span>1 modelo à sua escolha</span></li>
+          <li><span class="mono d">03</span><span>Concorrência alta</span></li>
+          <li><span class="mono d">04</span><span>Painel de uso em tempo real</span></li>
+          <li><span class="mono d">05</span><span>Suporte por e-mail em até 24 h</span></li>
         </ul>
-        <div class="mt-auto pt-8"><a href="#espera" class="btn btn-line w-full">Assinar Operador</a></div>
+        <a href="#espera" class="btn btn-line full plan-cta">Assinar Operador</a>
       </article>
 
-      <!-- ESCALA -->
-      <article class="slab col-span-12 flex flex-col p-7 lg:col-span-4">
-        <div class="flex items-center justify-between">
-          <p class="lab">Escala</p>
-          <span class="sig sig-live">mais assinado</span>
-        </div>
-        <p class="mt-3 text-[14.5px] text-white/60">Para times que rodam agente, produto e experimento ao mesmo tempo.</p>
-        <p class="mt-8 flex items-baseline gap-1.5">
-          <span class="text-[15px] text-white/45">R$</span>
-          <span class="d1 text-[42px] text-white" data-price data-month="3.997" data-year="3.331">3.997</span>
-          <span class="text-[14px] text-white/45">/mês</span>
-        </p>
-        <p class="mt-1.5 text-[12.5px] text-white/45" data-note>cobrado mensalmente</p>
-        <ul class="mt-7 space-y-2.5 border-t border-white/15 pt-7 text-[14.5px] text-white/90">
-          <li class="flex gap-3"><span class="lab pt-1">01</span><span><b class="font-semibold text-white">5 chaves</b> nominais, uso ilimitado</span></li>
-          <li class="flex gap-3"><span class="lab pt-1">02</span><span><b class="font-semibold text-white">Todos</b> os modelos disponíveis</span></li>
-          <li class="flex gap-3"><span class="lab pt-1">03</span><span>Concorrência máxima e prioridade de rota</span></li>
-          <li class="flex gap-3"><span class="lab pt-1">04</span><span>Onboarding técnico de 45 min</span></li>
-          <li class="flex gap-3"><span class="lab pt-1">05</span><span>Canal privado com engenharia</span></li>
-          <li class="flex gap-3"><span class="lab pt-1">06</span><span>Reserva garantida no próximo lote</span></li>
+      <article class="plan plan-hot panel lift">
+        <div class="plan-top"><p class="tag">Escala</p><span class="chip chip-live">mais assinado</span></div>
+        <p class="lede plan-sub">Para times que rodam agente, produto e experimento ao mesmo tempo.</p>
+        <p class="plan-price"><em>R$</em><b class="dsp-2" data-price data-month="3.997" data-year="3.331">3.997</b><em>/mês</em></p>
+        <p class="tag plan-note" data-note>cobrado mensalmente</p>
+        <ul class="plan-list">
+          <li><span class="mono d">01</span><span><b>5 chaves</b> nominais, uso ilimitado</span></li>
+          <li><span class="mono d">02</span><span><b>Todos</b> os modelos disponíveis</span></li>
+          <li><span class="mono d">03</span><span>Concorrência máxima e prioridade de rota</span></li>
+          <li><span class="mono d">04</span><span>Onboarding técnico de 45 min</span></li>
+          <li><span class="mono d">05</span><span>Canal privado com engenharia</span></li>
+          <li><span class="mono d">06</span><span>Reserva garantida no próximo lote</span></li>
         </ul>
-        <div class="mt-auto pt-8">
-          <a href="#espera" class="btn btn-onink w-full">Assinar Escala</a>
-          <p class="mt-3 text-center text-[12px] text-white/45">7 dias de garantia · cancela quando quiser</p>
-        </div>
+        <a href="#espera" class="btn btn-bone full plan-cta">Assinar Escala</a>
+        <p class="tag plan-fine">7 dias de garantia · cancela quando quiser</p>
       </article>
 
-      <!-- SOBERANO -->
-      <article class="col-span-12 flex flex-col border border-rule bg-card p-7 lg:col-span-4">
-        <p class="lab">Soberano</p>
-        <p class="prose mt-3 text-[14.5px]">Para operações onde a IA não é uma feature — é o produto.</p>
-        <p class="mt-8"><span class="d1 text-[38px] leading-none">Sob medida</span></p>
-        <p class="mt-2.5 text-[12.5px] text-mute">contrato anual · faturamento PJ</p>
-        <ul class="mt-7 space-y-2.5 border-t border-rule pt-7 text-[14.5px]">
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">01</span><span><b class="font-semibold">Chaves ilimitadas</b> para o time inteiro</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">02</span><span>Capacidade dedicada, isolada da fila comum</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">03</span><span>SLA contratual de 99,99 %</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">04</span><span>Engenheiro de plantão nomeado</span></li>
-          <li class="flex gap-3"><span class="lab !text-ruleb pt-1">05</span><span>Prioridade de compra em lançamentos</span></li>
+      <article class="plan panel lift">
+        <p class="tag">Soberano</p>
+        <p class="lede plan-sub">Para operações onde a IA não é uma feature — é o produto.</p>
+        <p class="plan-price"><b class="dsp-2 sob">Sob medida</b></p>
+        <p class="tag plan-note">contrato anual · faturamento PJ</p>
+        <ul class="plan-list">
+          <li><span class="mono d">01</span><span><b>Chaves ilimitadas</b> para o time inteiro</span></li>
+          <li><span class="mono d">02</span><span>Capacidade dedicada, isolada da fila comum</span></li>
+          <li><span class="mono d">03</span><span>SLA contratual de 99,99 %</span></li>
+          <li><span class="mono d">04</span><span>Engenheiro de plantão nomeado</span></li>
+          <li><span class="mono d">05</span><span>Prioridade de compra em lançamentos</span></li>
         </ul>
-        <div class="mt-auto pt-8"><a href="#espera" class="btn btn-line w-full">Falar com a engenharia</a></div>
+        <a href="#espera" class="btn btn-line full plan-cta">Falar com a engenharia</a>
       </article>
     </div>
 
-    <p class="rv mt-6 text-[13px] text-mute" data-d="3">
+    <p class="tag rv" data-d="3" style="margin-top:1.8rem">
       Uso ilimitado sujeito à política de uso justo: sem revenda da chave, sem compartilhamento fora da conta.
     </p>
   </div>
 </section>
 
 <!-- =========================================================================
-     LISTA DE ESPERA
-     [CTA] Sem backend, o envio abre o cliente de e-mail. Troque por fetch()
-     para o seu endpoint quando tiver um.
+     LISTA DE ESPERA — [CTA] sem backend, abre o cliente de e-mail
      ========================================================================= -->
-<section id="espera" class="mt-20 scroll-mt-20" aria-labelledby="h-espera">
-  <div class="rail">
-    <div class="g12 items-center border-y border-ink py-10">
-      <div class="col-span-12 lg:col-span-6">
-        <p class="lab">Reserva e lista de espera</p>
-        <h2 id="h-espera" class="d2 mt-3 text-[clamp(1.5rem,2.6vw,2rem)]">
-          Deixe seu e-mail e entre na frente da fila.
-        </h2>
-        <p class="prose measure mt-3 text-[15px]">
-          Avisamos primeiro quando o Fable 5.1 reabrir e quando as últimas chaves de Opus 5 forem
-          liberadas. Sem newsletter — só abertura de lote.
-        </p>
+<section id="espera" class="sec wait-sec" aria-labelledby="h-esp">
+  <div class="wrap">
+    <div class="wait rv">
+      <div>
+        <p class="tag">Reserva e lista de espera</p>
+        <h2 id="h-esp" class="dsp-2 wait-h">Deixe seu e-mail e entre na frente da fila.</h2>
+        <p class="lede meas">Avisamos primeiro quando o Fable 5.1 reabrir e quando as últimas chaves de Opus 5 forem liberadas. Sem newsletter — só abertura de lote.</p>
       </div>
-      <form id="waitForm" class="col-span-12 mt-6 flex flex-col gap-2.5 sm:flex-row lg:col-span-5 lg:col-start-8 lg:mt-0">
-        <label for="email" class="sr-only">Seu melhor e-mail</label>
-        <input id="email" name="email" type="email" required autocomplete="email" placeholder="voce@suaempresa.com"
-               class="mono w-full border border-ruleb bg-card px-4 py-3 text-[14px] placeholder:text-mute focus:border-ink focus:outline-none">
-        <button type="submit" class="btn btn-ink shrink-0">Entrar na lista</button>
+      <form id="waitForm" class="wait-form">
+        <label for="email" class="sr">Seu melhor e-mail</label>
+        <input id="email" type="email" required autocomplete="email" placeholder="voce@suaempresa.com" class="mono">
+        <button type="submit" class="btn btn-bone">Entrar na lista</button>
       </form>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     §09 · DÚVIDAS
+     §10 · DÚVIDAS
      ========================================================================= -->
-<section id="faq" class="mt-20 scroll-mt-20 sm:mt-28" aria-labelledby="h-faq">
-  <div class="rail">
-    <div class="mark rv"><b>§09</b><span>Antes de você perguntar</span><hr></div>
+<section class="sec" id="faq" aria-labelledby="h-faq">
+  <div class="wrap">
+    <div class="head rv"><span class="n">§10</span><span class="t tag">Antes de você perguntar</span><span class="l"></span></div>
 
-    <div class="g12 mt-8">
-      <div class="col-span-12 lg:col-span-4 lg:sticky lg:top-24 lg:self-start">
-        <h2 id="h-faq" class="rv d2 text-[clamp(1.7rem,2.8vw,2.3rem)]">
-          As dúvidas que todo mundo tem — respondidas sem rodeio.
-        </h2>
-        <p class="rv prose mt-4 text-[15px]" data-d="1">
+    <div class="split">
+      <div class="split-a">
+        <h2 id="h-faq" class="dsp-2 rv">As dúvidas que todo mundo tem — respondidas sem rodeio.</h2>
+        <p class="lede rv" data-d="1" style="margin-top:1.2rem">
           Ficou algo de fora? Fale direto com quem opera a infraestrutura.
-          <a href="#espera" class="border-b border-ink text-ink">Manda o e-mail</a>.
+          <a href="#espera" class="ul">Manda o e-mail</a>.
         </p>
       </div>
 
-      <div class="rv col-span-12 mt-8 border-t border-ink lg:col-span-7 lg:col-start-6 lg:mt-0" data-d="1">
-        <details class="faq" open>
-          <summary>Ilimitado é ilimitado mesmo, ou tem letra miúda?</summary>
-          <div class="faq-body"><p>É ilimitado no que importa: não há teto de requisições por minuto, não há cota de tokens e não há corte no fim do mês. A única regra é a política de uso justo — a chave é nominal, não pode ser revendida nem compartilhada fora da sua conta. Quebrou isso, a chave é revogada. Fora isso, use até cansar.</p></div>
-        </details>
-        <details class="faq">
-          <summary>Como vocês conseguem oferecer isso?</summary>
-          <div class="faq-body"><p>Comprando capacidade em volume e operando a camada de roteamento por conta própria. Nosso custo é de capacidade reservada, não de token avulso — por isso conseguimos cobrar fixo de você. É o mesmo motivo pelo qual vendemos por lote: quando a capacidade acaba, o modelo sai do ar até a próxima rodada.</p></div>
-        </details>
-        <details class="faq">
-          <summary>Funciona com o código que eu já tenho?</summary>
-          <div class="faq-body"><p>Sim. O endpoint segue o padrão de mercado usado pela maioria dos SDKs. Na prática você troca a <code class="mono text-ink">base_url</code> e a chave, e o resto continua igual — streaming, function calling e tudo mais que você já usa.</p></div>
-        </details>
-        <details class="faq">
-          <summary>E se eu precisar de mais paralelismo?</summary>
-          <div class="faq-body"><p>Dispare. A concorrência do plano Escala é a máxima que a nossa infraestrutura entrega, e o Soberano roda em capacidade isolada da fila comum. Se você tem um pico previsto — uma migração, um reprocessamento de base — avise no canal e reservamos rota extra sem custo.</p></div>
-        </details>
-        <details class="faq">
-          <summary>Quando o Fable 5.1 volta?</summary>
-          <div class="faq-body"><p>Quando conseguirmos reservar capacidade nova, e não antes. O lote 06 foi de 80 chaves e esgotou em 40 horas. Não abrimos overbooking nem fatiamos a capacidade de quem já comprou — preferimos deixar esgotado a entregar uma chave pior. Quem está na lista de espera é avisado primeiro.</p></div>
-        </details>
-        <details class="faq">
-          <summary>Posso revender ou dividir a chave?</summary>
-          <div class="faq-body"><p>Não. Cada chave é nominal e vinculada à sua conta. Revenda, compartilhamento ou proxy aberto para terceiros encerram o acesso sem reembolso. É essa regra que mantém a capacidade disponível para quem comprou.</p></div>
-        </details>
-        <details class="faq">
-          <summary>Tem fidelidade ou multa?</summary>
-          <div class="faq-body"><p>Nenhuma no plano mensal: você cancela quando quiser e o acesso vai até o fim do ciclo pago. O anual tem desconto de dois meses porque é um compromisso maior — e o Soberano é contrato, com escopo definido em conjunto.</p></div>
-        </details>
-        <details class="faq">
-          <summary>Vocês olham ou treinam com os meus dados?</summary>
-          <div class="faq-body"><p>Não treinamos nada com o seu tráfego. Guardamos apenas metadados de faturamento e diagnóstico — volume, latência, código de status — nunca o conteúdo das mensagens. <span class="text-mute">[Confirme esta política com a sua operação antes de publicar.]</span></p></div>
-        </details>
-        <details class="faq">
-          <summary>E se não for o que eu esperava?</summary>
-          <div class="faq-body"><p>Você tem 7 dias para testar em carga real. Se a chave não entregar o que está escrito nesta página, devolvemos o valor integral — sem formulário de retenção e sem ligação de "última oferta".</p></div>
-        </details>
+      <div class="split-b rv" data-d="1">
+        <details class="faq" open><summary>Ilimitado é ilimitado mesmo, ou tem letra miúda?</summary><div class="faq-b"><p>É ilimitado no que importa: não há teto de requisições por minuto, não há cota de tokens e não há corte no fim do mês. A única regra é a política de uso justo — a chave é nominal, não pode ser revendida nem compartilhada fora da sua conta. Quebrou isso, a chave é revogada. Fora isso, use até cansar.</p></div></details>
+        <details class="faq"><summary>Como vocês conseguem oferecer isso?</summary><div class="faq-b"><p>Comprando capacidade em volume e operando a camada de roteamento por conta própria. Nosso custo é de capacidade reservada, não de token avulso — por isso conseguimos cobrar fixo de você. É o mesmo motivo pelo qual vendemos por lote: quando a capacidade acaba, o modelo sai do ar até a próxima rodada.</p></div></details>
+        <details class="faq"><summary>Funciona com o código que eu já tenho?</summary><div class="faq-b"><p>Sim. O endpoint segue o padrão de mercado usado pela maioria dos SDKs. Na prática você troca a <code class="mono">base_url</code> e a chave, e o resto continua igual — streaming, function calling e tudo mais que você já usa.</p></div></details>
+        <details class="faq"><summary>E se eu precisar de mais paralelismo?</summary><div class="faq-b"><p>Dispare. A concorrência do plano Escala é a máxima que a nossa infraestrutura entrega, e o Soberano roda em capacidade isolada da fila comum. Se você tem um pico previsto — uma migração, um reprocessamento de base — avise no canal e reservamos rota extra sem custo.</p></div></details>
+        <details class="faq"><summary>Quando o Fable 5.1 volta?</summary><div class="faq-b"><p>Quando conseguirmos reservar capacidade nova, e não antes. O lote 06 foi de 80 chaves e esgotou em 40 horas. Não abrimos overbooking nem fatiamos a capacidade de quem já comprou — preferimos deixar esgotado a entregar uma chave pior. Quem está na lista de espera é avisado primeiro.</p></div></details>
+        <details class="faq"><summary>Posso revender ou dividir a chave?</summary><div class="faq-b"><p>Não. Cada chave é nominal e vinculada à sua conta. Revenda, compartilhamento ou proxy aberto para terceiros encerram o acesso sem reembolso. É essa regra que mantém a capacidade disponível para quem comprou.</p></div></details>
+        <details class="faq"><summary>Tem fidelidade ou multa?</summary><div class="faq-b"><p>Nenhuma no plano mensal: você cancela quando quiser e o acesso vai até o fim do ciclo pago. O anual tem desconto de dois meses porque é um compromisso maior — e o Soberano é contrato, com escopo definido em conjunto.</p></div></details>
+        <details class="faq"><summary>Vocês olham ou treinam com os meus dados?</summary><div class="faq-b"><p>Não treinamos nada com o seu tráfego. Guardamos apenas metadados de faturamento e diagnóstico — volume, latência, código de status — nunca o conteúdo das mensagens. <span class="d">[Confirme esta política com a sua operação antes de publicar.]</span></p></div></details>
+        <details class="faq"><summary>E se não for o que eu esperava?</summary><div class="faq-b"><p>Você tem 7 dias para testar em carga real. Se a chave não entregar o que está escrito nesta página, devolvemos o valor integral — sem formulário de retenção e sem ligação de "última oferta".</p></div></details>
       </div>
     </div>
   </div>
 </section>
 
 <!-- =========================================================================
-     §10 · FECHAMENTO — chapa preta de sangria total
+     §11 · FECHAMENTO
      ========================================================================= -->
-<section class="slab mt-24 py-20 sm:py-24" aria-labelledby="h-final">
-  <div class="rail">
-    <div class="g12 items-end">
-      <div class="col-span-12 lg:col-span-7">
-        <div class="mark"><b class="!text-white/70">§10</b><span class="!text-white/40">Fechamento</span><hr class="!border-white/15"></div>
-        <div class="mt-7 inline-flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
-          <span class="dot text-[#E8A398]"></span>
-          <span class="lab !text-white/50">Lote 07 encerra em</span>
-          <span class="mono text-[13px] text-white" id="countdown">—</span>
-        </div>
-        <h2 id="h-final" class="d1 mt-6 text-[clamp(2.2rem,5vw,4rem)] text-white">
-          O acesso é limitado.<br>O uso, nunca.
-        </h2>
-        <p class="measure mt-6 text-[16.5px] leading-[1.6] text-white/60">
-          Enquanto o seu concorrente decide quantas chamadas cabem no orçamento do mês, você já
-          rodou dez mil. É essa a vantagem — e ela tem prazo, porque a capacidade tem.
-        </p>
-        <div class="mt-8 flex flex-col gap-2.5 sm:flex-row">
-          <a href="#planos" class="btn btn-onink">Garantir minha chave</a>
-          <a href="#espera" class="btn btn-ghost-onink">Falar com a engenharia</a>
-        </div>
-      </div>
-
-      <aside class="col-span-12 mt-10 border-t border-white/15 pt-6 lg:col-span-4 lg:col-start-9 lg:mt-0">
-        <p class="lab">Garantia</p>
-        <p class="mt-3 text-[15px] leading-[1.6] text-white/80">
-          <b class="font-semibold text-white">7 dias, incondicional.</b> Teste em carga real. Se não
-          entregar o que está escrito nesta página, devolvemos tudo — sem formulário de retenção.
-        </p>
-      </aside>
+<section class="sec close grain" aria-labelledby="h-fim">
+  <canvas id="field2" class="hero-art" aria-hidden="true"></canvas>
+  <div class="hero-vig" aria-hidden="true"></div>
+  <div class="wrap close-in">
+    <div class="chip chip-halt close-timer">
+      <span class="pip pip-beat"></span> Lote 07 encerra em
+      <span class="mono" id="countdown">—</span>
     </div>
+    <h2 id="h-fim" class="dsp close-h">
+      <span class="cut"><span>O acesso é limitado.</span></span>
+      <span class="cut" data-d="1"><span>O uso, nunca.</span></span>
+    </h2>
+    <p class="lede meas close-p">
+      Enquanto o seu concorrente decide quantas chamadas cabem no orçamento do mês, você já
+      rodou dez mil. É essa a vantagem — e ela tem prazo, porque a capacidade tem.
+    </p>
+    <div class="hero-cta">
+      <a href="#planos" class="btn btn-bone">Garantir minha chave
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5.5 18.5 12 12 18.5"/></svg>
+      </a>
+      <a href="#espera" class="btn btn-line">Falar com a engenharia</a>
+    </div>
+    <p class="close-guar"><b>7 dias de garantia incondicional.</b> Teste em carga real. Se não entregar o que está escrito nesta página, devolvemos tudo — sem formulário de retenção.</p>
   </div>
 </section>
 
 <!-- =========================================================================
      RODAPÉ
      ========================================================================= -->
-<footer class="border-t border-rule">
-  <div class="rail py-12">
-    <div class="g12 gap-y-8">
-      <div class="col-span-12 lg:col-span-5">
-        <p class="d3 text-[17px]">UNBOUND</p>
-        <p class="prose measure mt-3 text-[14px]">
-          Capacidade de IA reservada, entregue por chave nominal. Sem cota, sem fila, sem alguém
-          decidindo quanto você pode usar hoje.
-        </p>
-        <p class="sig sig-ok mt-5"><span class="dot"></span>todos os sistemas operando</p>
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="dsp-3">UNBOUND</p>
+        <p class="lede meas foot-about">Capacidade de IA reservada, entregue por chave nominal. Sem cota, sem fila, sem alguém decidindo quanto você pode usar hoje.</p>
+        <span class="chip chip-live foot-chip"><span class="pip"></span>todos os sistemas operando</span>
       </div>
-      <nav class="col-span-6 lg:col-span-2 lg:col-start-7" aria-label="Produto">
-        <p class="lab">Produto</p>
-        <ul class="mt-4 space-y-2 text-[14px]">
-          <li><a href="#catalogo" class="text-slate transition hover:text-ink">Catálogo</a></li>
-          <li><a href="#beneficios" class="text-slate transition hover:text-ink">Benefícios</a></li>
-          <li><a href="#comparativo" class="text-slate transition hover:text-ink">Comparativo</a></li>
-          <li><a href="#planos" class="text-slate transition hover:text-ink">Planos</a></li>
-        </ul>
-      </nav>
-      <nav class="col-span-6 lg:col-span-2" aria-label="Suporte">
-        <p class="lab">Suporte</p>
-        <ul class="mt-4 space-y-2 text-[14px]">
-          <li><a href="#faq" class="text-slate transition hover:text-ink">Dúvidas</a></li>
-          <li><a href="#espera" class="text-slate transition hover:text-ink">Lista de espera</a></li>
-          <li><a href="#operacao" class="text-slate transition hover:text-ink">Operação</a></li>
-          <li><a href="#top" class="text-slate transition hover:text-ink">Status</a></li>
-        </ul>
-      </nav>
-      <nav class="col-span-12 lg:col-span-2" aria-label="Legal">
-        <p class="lab">Legal</p>
-        <ul class="mt-4 space-y-2 text-[14px]">
-          <li><a href="#" class="text-slate transition hover:text-ink">Termos de uso</a></li>
-          <li><a href="#" class="text-slate transition hover:text-ink">Privacidade</a></li>
-          <li><a href="#" class="text-slate transition hover:text-ink">Uso justo</a></li>
-        </ul>
-      </nav>
+      <nav aria-label="Produto"><p class="tag">Produto</p><ul>
+        <li><a href="#catalogo">Catálogo</a></li><li><a href="#beneficios">Benefícios</a></li>
+        <li><a href="#comparativo">Comparativo</a></li><li><a href="#planos">Planos</a></li></ul></nav>
+      <nav aria-label="Suporte"><p class="tag">Suporte</p><ul>
+        <li><a href="#faq">Dúvidas</a></li><li><a href="#espera">Lista de espera</a></li>
+        <li><a href="#operacao">Operação</a></li><li><a href="#top">Status</a></li></ul></nav>
+      <nav aria-label="Legal"><p class="tag">Legal</p><ul>
+        <li><a href="#">Termos de uso</a></li><li><a href="#">Privacidade</a></li>
+        <li><a href="#">Uso justo</a></li></ul></nav>
     </div>
-
-    <div class="mt-12 flex flex-col gap-3 border-t border-rule pt-6 sm:flex-row sm:items-start sm:justify-between">
-      <p class="text-[12.5px] text-mute">© <span id="year">2026</span> UNBOUND. Todos os direitos reservados.</p>
-      <p class="max-w-[64ch] text-[12px] leading-relaxed text-mute">
-        <!-- [MARCA] Mantenha este aviso: deixa claro que você provisiona acesso e não representa as marcas. -->
-        A UNBOUND é um serviço independente de provisionamento de acesso. Os nomes dos modelos citados
-        pertencem aos seus respectivos detentores e são usados apenas para identificar o que é oferecido.
-      </p>
+    <div class="foot-end">
+      <p class="tag">© <span id="year">2026</span> UNBOUND</p>
+      <!-- [MARCA] Mantenha este aviso: separa você dos detentores das marcas. -->
+      <p class="foot-legal">A UNBOUND é um serviço independente de provisionamento de acesso. Os nomes dos modelos citados pertencem aos seus respectivos detentores e são usados apenas para identificar o que é oferecido.</p>
     </div>
   </div>
 </footer>
 
-<!-- =========================================================================
-     COMPORTAMENTO
-     ========================================================================= -->
 <script>
 (function () {
   'use strict';
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var hasIO  = 'IntersectionObserver' in window;
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ---- 1 · entrada das seções ------------------------------------------- */
-  var rvs = document.querySelectorAll('.rv');
-  function showAll(){ rvs.forEach(function(el){ el.classList.add('in'); }); }
+  /* ---- 1 · campo de fluxo -------------------------------------------------
+     Partículas seguindo correntes, deixando rastro. O rastro é feito
+     escurecendo o quadro anterior um pouco a cada frame em vez de apagá-lo:
+     é o que cria a sensação de luz acumulada em vez de pontinhos soltos. */
+  function field(cv){
+    if (!cv || !cv.getContext) return;
+    var g = cv.getContext('2d'), W = 0, H = 0, dpr = 1, ps = [], t = 0, run = false, ready = false;
+
+    function size(){
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      W = cv.clientWidth; H = cv.clientHeight;
+      if (!W || !H) return;
+      cv.width = W * dpr; cv.height = H * dpr;
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.fillStyle = '#060507'; g.fillRect(0, 0, W, H);
+      seed();
+      if (ready) warm(280);          // redimensionar limpa o quadro; recompõe
+    }
+    function seed(){
+      var n = Math.min(Math.round(W * H / 900), 1300);
+      ps = [];
+      for (var i = 0; i < n; i++) ps.push(spawn());
+    }
+    function spawn(){
+      return { x: Math.random() * W, y: Math.random() * H,
+               v: .5 + Math.random() * 2.1, a: .07 + Math.random() * .2,
+               life: 90 + Math.random() * 320 };
+    }
+    // corrente suave por senos sobrepostos — barato e sem descontinuidade
+    function angle(x, y){
+      return (Math.sin(x * .0016 + t) + Math.cos(y * .0021 - t * .7)
+            + Math.sin((x + y) * .0009 + t * 1.25)) * 1.45;
+    }
+    function step(){
+      g.globalCompositeOperation = 'source-over';
+      g.fillStyle = 'rgba(6,5,7,.012)';
+      g.fillRect(0, 0, W, H);
+
+      g.globalCompositeOperation = 'lighter';
+      g.lineWidth = 1;
+      for (var i = 0; i < ps.length; i++) {
+        var p = ps[i], an = angle(p.x, p.y);
+        var nx = p.x + Math.cos(an) * p.v, ny = p.y + Math.sin(an) * p.v;
+        g.strokeStyle = 'rgba(242,239,233,' + p.a + ')';
+        g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(nx, ny); g.stroke();
+        p.x = nx; p.y = ny; p.life--;
+        if (p.life < 0 || p.x < -40 || p.x > W + 40 || p.y < -40 || p.y > H + 40) ps[i] = spawn();
+      }
+      t += .0022;
+    }
+    function warm(n){ for (var k = 0; k < n; k++) step(); }
+    function loop(){
+      if (document.hidden) { run = false; return; }
+      step(); requestAnimationFrame(loop);
+    }
+    size();
+    warm(280); ready = true;         // já nasce composto, não se forma depois
+    if (!reduce) { run = true; loop(); }
+
+    addEventListener('resize', size, { passive: true });
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden && !reduce && !run) { run = true; loop(); }
+    });
+  }
+  field($('#field')); field($('#field2'));
+
+  /* ---- 2 · entrada das seções -------------------------------------------- */
+  var rvs = $$('.rv');
+  function showAll(){ rvs.forEach(function (e) { e.classList.add('in'); }); }
   if (hasIO && !reduce) {
     var any = false;
     var io = new IntersectionObserver(function (es) {
@@ -1262,58 +1317,33 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
         if (e.isIntersecting) { e.target.classList.add('in'); any = true; io.unobserve(e.target); }
       });
     }, { rootMargin: '0px 0px -10% 0px', threshold: .06 });
-    rvs.forEach(function (el) { io.observe(el); });
-    // só entra em ação se o observer não marcou nada
-    setTimeout(function(){ if (!any) showAll(); }, 2500);
-  } else { showAll(); }
+    rvs.forEach(function (e) { io.observe(e); });
+    // rede de segurança: só age se o observer não marcou nada
+    setTimeout(function () { if (!any) showAll(); }, 2500);
+  } else showAll();
 
-  /* ---- 2 · contadores ---------------------------------------------------- */
-  function fmt(v, d){ return v.toLocaleString('pt-BR', { minimumFractionDigits:d, maximumFractionDigits:d }); }
+  /* ---- 3 · contadores ----------------------------------------------------- */
   function count(el){
-    var target = parseFloat(el.dataset.count), d = parseInt(el.dataset.dec || '0', 10);
-    var t0 = performance.now(), dur = 1100;
-    (function frame(now){
-      var p = Math.min((now - t0) / dur, 1);
-      el.textContent = fmt(target * (1 - Math.pow(1 - p, 3)), d);
-      if (p < 1) requestAnimationFrame(frame);
+    var to = parseFloat(el.dataset.count), d = parseInt(el.dataset.dec || '0', 10), t0 = performance.now();
+    (function f(now){
+      var p = Math.min((now - t0) / 1200, 1);
+      el.textContent = (to * (1 - Math.pow(1 - p, 3)))
+        .toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+      if (p < 1) requestAnimationFrame(f);
     })(performance.now());
   }
-  var counters = document.querySelectorAll('[data-count]');
   if (hasIO && !reduce) {
     var cio = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { count(e.target); cio.unobserve(e.target); } });
     }, { threshold: .5 });
-    counters.forEach(function (el) { cio.observe(el); });
+    $$('[data-count]').forEach(function (e) { cio.observe(e); });
   }
 
-  /* ---- 3 · índice fixo acompanha a leitura ------------------------------- */
-  var links = document.querySelectorAll('.ixlink');
-  if (hasIO && links.length) {
-    var byId = {};
-    links.forEach(function (a) { byId[a.dataset.ix] = a; });
-    var sio = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        var a = byId[e.target.id];
-        if (!a) return;
-        if (e.isIntersecting) {
-          links.forEach(function (l) { l.classList.remove('on'); });
-          a.classList.add('on');
-        }
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    Object.keys(byId).forEach(function (id) {
-      var s = document.getElementById(id); if (s) sio.observe(s);
-    });
-  }
-
-  /* ---- 4 · painel que segue o passo -------------------------------------- */
-  // O painel é fixo e o conteúdo troca: o leitor vê o artefato de cada etapa
-  // em vez de ler quatro parágrafos sobre elas.
-  var steps  = document.querySelectorAll('.step');
-  var panels = document.querySelectorAll('.panel');
+  /* ---- 4 · painel que segue o passo --------------------------------------- */
+  var steps = $$('.step'), panes = $$('.pane');
   function activate(n){
     steps.forEach(function (s) { s.classList.toggle('on', s.dataset.step === n); });
-    panels.forEach(function (p) { p.hidden = (p.dataset.panel !== n); });
+    panes.forEach(function (p) { p.hidden = p.dataset.panel !== n; });
   }
   if (steps.length) {
     activate('1');
@@ -1323,34 +1353,64 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
       }, { rootMargin: '-45% 0px -45% 0px' });
       steps.forEach(function (s) { pio.observe(s); });
     }
-    // no toque, tocar no passo também troca o painel
-    steps.forEach(function (s) {
-      s.addEventListener('click', function () { activate(s.dataset.step); });
-    });
+    steps.forEach(function (s) { s.addEventListener('click', function () { activate(s.dataset.step); }); });
   }
 
-  /* ---- 5 · ciclo de cobrança --------------------------------------------- */
-  var bM = document.getElementById('cycleMonth'), bY = document.getElementById('cycleYear');
-  function setCycle(yearly){
-    document.querySelectorAll('[data-price]').forEach(function (el) {
-      el.textContent = yearly ? el.dataset.year : el.dataset.month;
-    });
-    document.querySelectorAll('[data-note]').forEach(function (el) {
-      el.textContent = yearly ? 'cobrado anualmente · 10 meses pelo preço de 12' : 'cobrado mensalmente';
-    });
-    bM.classList.toggle('cyc-on', !yearly);
-    bY.classList.toggle('cyc-on', yearly);
-    bM.setAttribute('aria-pressed', String(!yearly));
-    bY.setAttribute('aria-pressed', String(yearly));
+  /* ---- 5 · vazão ---------------------------------------------------------- */
+  var tp = $('#flow'), rps = $('#rps');
+  if (tp && tp.getContext) {
+    var c = tp.getContext('2d'), pts = [], TW = 0, TH = 0, ph = 0;
+    for (var i = 0; i < 64; i++) pts.push(48 + Math.random() * 22);
+    function sz(){
+      var r = Math.min(devicePixelRatio || 1, 2);
+      TW = tp.clientWidth; TH = tp.clientHeight;
+      tp.width = TW * r; tp.height = TH * r; c.setTransform(r, 0, 0, r, 0, 0);
+    }
+    function draw(){
+      c.clearRect(0, 0, TW, TH);
+      var max = Math.max.apply(null, pts) * 1.2, st = TW / (pts.length - 1);
+      var y = function (v) { return TH - (v / max) * (TH - 10) - 5; };
+      c.strokeStyle = 'rgba(242,239,233,.07)'; c.lineWidth = 1;
+      for (var k = 1; k <= 2; k++) { var gy = TH / 3 * k; c.beginPath(); c.moveTo(0, gy); c.lineTo(TW, gy); c.stroke(); }
+      var gr = c.createLinearGradient(0, 0, 0, TH);
+      gr.addColorStop(0, 'rgba(242,239,233,.16)'); gr.addColorStop(1, 'rgba(242,239,233,0)');
+      c.beginPath(); c.moveTo(0, TH);
+      pts.forEach(function (v, i) { c.lineTo(i * st, y(v)); });
+      c.lineTo(TW, TH); c.closePath(); c.fillStyle = gr; c.fill();
+      c.beginPath();
+      pts.forEach(function (v, i) { i ? c.lineTo(i * st, y(v)) : c.moveTo(0, y(v)); });
+      c.strokeStyle = '#F2EFE9'; c.lineWidth = 1.4; c.stroke();
+      c.beginPath(); c.arc(TW - 3.5, y(pts[pts.length - 1]), 3, 0, 6.284);
+      c.fillStyle = '#3FBF7F'; c.fill();
+    }
+    function tickFlow(){
+      ph += .06;
+      pts.push(Math.max(18, 54 + Math.sin(ph) * 12 + Math.sin(ph * 2.7) * 5 + (Math.random() - .5) * 15));
+      pts.shift();
+      if (rps) rps.textContent = Math.round(pts[pts.length - 1] * 21).toLocaleString('pt-BR') + ' req/s';
+      draw();
+    }
+    sz(); tickFlow();
+    addEventListener('resize', function () { sz(); draw(); }, { passive: true });
+    if (!reduce) setInterval(function () { if (!document.hidden) tickFlow(); }, 900);
   }
-  bM.addEventListener('click', function(){ setCycle(false); });
-  bY.addEventListener('click', function(){ setCycle(true); });
-  setCycle(false);
 
-  /* ---- 6 · contagem regressiva do lote ----------------------------------- */
-  // [PRAZO] data real de encerramento. Se passar, avança uma semana.
-  var FECHA = new Date('2026-09-14T23:59:00-03:00');
-  var out = document.getElementById('countdown');
+  /* ---- 6 · ciclo de cobrança ---------------------------------------------- */
+  var bM = $('#cycM'), bY = $('#cycY');
+  function cycle(yearly){
+    $$('[data-price]').forEach(function (e) { e.textContent = yearly ? e.dataset.year : e.dataset.month; });
+    $$('[data-note]').forEach(function (e) {
+      e.textContent = yearly ? 'cobrado anualmente · 10 meses pelo preço de 12' : 'cobrado mensalmente';
+    });
+    bM.classList.toggle('on', !yearly); bY.classList.toggle('on', yearly);
+    bM.setAttribute('aria-pressed', String(!yearly)); bY.setAttribute('aria-pressed', String(yearly));
+  }
+  bM.addEventListener('click', function () { cycle(false); });
+  bY.addEventListener('click', function () { cycle(true); });
+  cycle(false);
+
+  /* ---- 7 · contagem regressiva · [PRAZO] ---------------------------------- */
+  var FECHA = new Date('2026-09-14T23:59:00-03:00'), out = $('#countdown');
   function tick(){
     var now = Date.now();
     while (FECHA.getTime() < now) FECHA = new Date(FECHA.getTime() + 7 * 864e5);
@@ -1360,21 +1420,20 @@ input:-webkit-autofill, input:-webkit-autofill:focus{
   }
   tick(); setInterval(tick, 1000);
 
-  /* ---- 7 · lista de espera ----------------------------------------------- */
-  // [CTA] Sem backend, abre o cliente de e-mail. Troque por fetch() no seu endpoint.
-  document.getElementById('waitForm').addEventListener('submit', function (ev) {
+  /* ---- 8 · lista de espera · [CTA] ---------------------------------------- */
+  $('#waitForm').addEventListener('submit', function (ev) {
     ev.preventDefault();
-    var mail = document.getElementById('email').value.trim();
-    if (!mail) return;
-    window.location.href = 'mailto:contato@unbound.ai'
-      + '?subject=' + encodeURIComponent('Lista de espera — acesso ilimitado')
-      + '&body=' + encodeURIComponent('Quero ser avisado na abertura do próximo lote.\n\nE-mail: ' + mail);
+    var m = $('#email').value.trim(); if (!m) return;
+    location.href = 'mailto:contato@unbound.ai?subject='
+      + encodeURIComponent('Lista de espera — acesso ilimitado')
+      + '&body=' + encodeURIComponent('Quero ser avisado na abertura do próximo lote.\n\nE-mail: ' + m);
   });
 
-  /* ---- 8 · ano ------------------------------------------------------------ */
-  document.getElementById('year').textContent = new Date().getFullYear();
+  /* ---- 9 · navegação e ano ------------------------------------------------ */
+  var nav = $('.nav');
+  addEventListener('scroll', function () { nav.classList.toggle('solid', scrollY > 24); }, { passive: true });
+  $('#year').textContent = new Date().getFullYear();
 })();
 </script>
-
 </body>
 </html>
