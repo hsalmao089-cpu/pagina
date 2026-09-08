@@ -20,15 +20,37 @@ de 12 colunas com as guias visíveis, tabelas no lugar de cards decorativos.
 ## Stack
 
 - HTML único, sem etapa de build
-- Tailwind via CDN com tema estendido no próprio arquivo
+- **Tailwind compilado e embutido no arquivo** — nenhum script externo
 - Sem bibliotecas de JS: índice que acompanha a leitura, painel que troca
   conforme o passo entra em tela, contadores, acordeão nativo `<details>`,
   contagem regressiva e alternância de ciclo são código próprio
 
-> A página depende do CDN do Tailwind em tempo de execução. Se o CDN estiver
-> bloqueado na rede do visitante, o layout cai. Para eliminar isso, gere um CSS
-> compilado do Tailwind e troque o `<script src="https://cdn.tailwindcss.com">`
-> por um `<link rel="stylesheet">`.
+O único recurso externo é a fonte (Google Fonts), e ela tem pilha de fallback.
+A página renderiza corretamente mesmo sem rede.
+
+### Por que o CSS está embutido
+
+Antes o arquivo carregava `<script src="https://cdn.tailwindcss.com">`. Esse
+Play CDN monta o CSS em tempo de execução por avaliação dinâmica — o que falha
+sob política de segurança restritiva (`Content-Security-Policy` sem
+`unsafe-eval`) e derruba **a página inteira** quando o CDN não carrega: sem
+Preflight, links voltam a ficar azuis sublinhados, listas ganham marcadores e
+nenhuma classe utilitária aplica.
+
+### Como regerar o CSS
+
+Só é necessário se você **adicionar ou trocar classes utilitárias do Tailwind**
+no HTML. Editar texto, cores dos tokens em `:root` ou o CSS próprio não exige
+nada disso.
+
+```bash
+npx tailwindcss@3 -i entrada.css -o saida.css --content index.html --minify
+```
+
+com `entrada.css` contendo `@tailwind base; @tailwind components; @tailwind utilities;`
+e o tema estendido em `tailwind.config.js` (as cores estão listadas no topo do
+`index.html`). Depois, substitua o conteúdo do `<style>` marcado como
+`TAILWIND COMPILADO`.
 
 ## O que trocar antes de publicar
 
