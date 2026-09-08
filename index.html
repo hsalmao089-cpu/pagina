@@ -443,12 +443,12 @@ input:-webkit-autofill:focus{
         <span class="tele !text-chalk/80">Acesso ilimitado</span>
         <span class="h-3 w-px bg-white/15"></span>
         <!-- [NUMERO] vagas do lote -->
-        <span class="tele !text-ion-soft">Lote 07 · 46 chaves</span>
+        <span class="tele !text-ion-soft"><span class="hidden sm:inline">Lote 07 · </span>46 chaves</span>
       </div>
     </div>
 
     <!-- manchete -->
-    <h1 class="rise display mx-auto mt-7 max-w-[24ch] text-center text-[clamp(2.35rem,7.4vw,5.6rem)] text-white" data-d="2">
+    <h1 class="rise display mx-auto mt-7 max-w-[24ch] text-center text-[clamp(1.9rem,7.2vw,5.6rem)] text-white" data-d="2">
       <span class="block">Pare de contar tokens.</span>
       <span class="ink-grad block">Comece a dominar.</span>
     </h1>
@@ -498,9 +498,9 @@ input:-webkit-autofill:focus{
         <div class="relative z-[3] grid gap-px bg-white/[.06] md:grid-cols-[1.08fr_.92fr]">
 
           <!-- requisição -->
-          <div class="bg-panel/90 p-5 sm:p-7">
+          <div class="min-w-0 bg-panel/90 p-5 sm:p-7">
             <p class="tele mb-4">Requisição</p>
-<pre class="num overflow-x-auto text-[12.5px] leading-[1.85] text-chalk/85"><span class="text-mute">$</span> curl https://<span class="text-ion-soft">api.unbound.ai</span>/v1/chat/completions \
+<pre class="num overflow-x-auto text-[11px] leading-[1.85] text-chalk/85 sm:text-[12.5px]"><span class="text-mute">$</span> curl https://<span class="text-ion-soft">api.unbound.ai</span>/v1/chat/completions \
   -H <span class="text-live">"Authorization: Bearer sk-unb-••••••7f2a"</span> \
   -d <span class="text-live">'{</span>
        <span class="text-live">"model"</span>: <span class="text-arc-soft">"opus-5"</span>,
@@ -519,7 +519,7 @@ input:-webkit-autofill:focus{
           </div>
 
           <!-- instrumentos -->
-          <div class="bg-panel/90 p-5 sm:p-7">
+          <div class="min-w-0 bg-panel/90 p-5 sm:p-7">
             <div class="mb-4 flex items-baseline justify-between">
               <p class="tele">Vazão · últimos 60&nbsp;s</p>
               <p class="num text-[11.5px] text-live" id="rps">— req/s</p>
@@ -529,19 +529,19 @@ input:-webkit-autofill:focus{
             <!-- leituras -->
             <dl class="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/[.06]">
               <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px]">Rate limit</dt>
+                <dt class="tele !text-[10px] shrink-0 pt-px">Rate limit</dt>
                 <dd class="display-sm mt-1.5 text-[22px] text-white">Nenhum</dd>
               </div>
               <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px]">Erros 429</dt>
+                <dt class="tele !text-[10px] shrink-0 pt-px">Erros 429</dt>
                 <dd class="num mt-1.5 text-[22px] font-medium text-live">0,00%</dd>
               </div>
               <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px]">Fila</dt>
+                <dt class="tele !text-[10px] shrink-0 pt-px">Fila</dt>
                 <dd class="num mt-1.5 text-[22px] font-medium text-white">0</dd>
               </div>
               <div class="bg-panel-2 px-4 py-3.5">
-                <dt class="tele !text-[10px]">Cota restante</dt>
+                <dt class="tele !text-[10px] shrink-0 pt-px">Cota restante</dt>
                 <dd class="mt-1.5 text-[22px] leading-[1.1] text-ion-soft">∞</dd>
               </div>
             </dl>
@@ -634,11 +634,11 @@ input:-webkit-autofill:focus{
      ========================================================================= -->
 <section class="relative py-20 sm:py-28" aria-labelledby="h-problema">
   <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:gap-20">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
 
       <div class="lg:sticky lg:top-28 lg:self-start">
         <p class="reveal tele !text-halt">O custo do limite</p>
-        <h2 id="h-problema" class="reveal display-sm mt-4 text-[clamp(2rem,4.6vw,3.1rem)] text-white" data-d="1">
+        <h2 id="h-problema" class="reveal display-sm mt-4 text-[clamp(1.85rem,3.5vw,2.7rem)] text-white" data-d="1">
           Você não tem um problema de modelo.<br class="hidden sm:block">
           Tem um problema de <span class="text-halt">teto</span>.
         </h2>
@@ -722,7 +722,7 @@ input:-webkit-autofill:focus{
   <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
     <div class="mx-auto max-w-[900px] text-center">
       <p class="reveal tele !text-ion-soft">A virada</p>
-      <h2 id="h-solucao" class="reveal display mt-4 text-[clamp(2.2rem,5.6vw,3.9rem)] text-white" data-d="1">
+      <h2 id="h-solucao" class="reveal display mt-4 text-[clamp(1.95rem,5.2vw,3.6rem)] text-white" data-d="1">
         Nós compramos a capacidade.<br>
         <span class="ink-grad">Você usa sem contar.</span>
       </h2>
@@ -798,7 +798,7 @@ input:-webkit-autofill:focus{
   <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
     <div class="mx-auto max-w-[900px] text-center">
       <p class="reveal tele !text-ion-soft">Catálogo · Lote 07</p>
-      <h2 id="h-modelos" class="reveal display mt-4 text-[clamp(2.2rem,5.4vw,3.7rem)] text-white" data-d="1">
+      <h2 id="h-modelos" class="reveal display mt-4 text-[clamp(1.95rem,5vw,3.5rem)] text-white" data-d="1">
         Três modelos.<br>Um único regime: <span class="ink-grad">sem limite.</span>
       </h2>
       <p class="reveal lede mx-auto mt-5 max-w-[60ch] text-[16.5px] leading-relaxed" data-d="2">
@@ -828,17 +828,17 @@ input:-webkit-autofill:focus{
           </p>
 
           <dl class="mt-6 space-y-px overflow-hidden rounded-xl bg-white/[.06] text-[13.5px]">
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Melhor para</dt><dd class="text-chalk/90">Lote, RAG, agentes</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Melhor para</dt><dd class="text-chalk/90">Lote, RAG, agentes</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Requisições</dt><dd class="num text-live">ilimitadas</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Requisições</dt><dd class="num text-live">ilimitadas</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Tokens</dt><dd class="num text-live">ilimitados</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Tokens</dt><dd class="num text-live">ilimitados</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Concorrência</dt><dd class="text-ion-soft">sem teto</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Concorrência</dt><dd class="text-ion-soft">sem teto</dd>
             </div>
           </dl>
 
@@ -849,11 +849,13 @@ input:-webkit-autofill:focus{
               <span class="num text-[12px] text-chalk/75"><b class="font-medium text-white">37</b> de 100</span>
             </div>
             <div class="meter mt-2"><span class="meter-fill" style="width:37%"></span></div>
+            <p class="mt-2 text-[12px] text-mute">Ritmo atual: cerca de 6 chaves por dia.</p>
           </div>
 
           <div class="mt-auto pt-7">
             <!-- [CTA] -->
             <a href="#planos" class="btn btn-line w-full px-5 py-3.5 text-[14.5px]">Garantir Kimi K3</a>
+            <p class="mt-3 text-center text-[12px] text-mute">Chave liberada em minutos.</p>
           </div>
         </div>
       </article>
@@ -882,17 +884,17 @@ input:-webkit-autofill:focus{
           </p>
 
           <dl class="mt-6 space-y-px overflow-hidden rounded-xl bg-white/[.08] text-[13.5px]">
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Melhor para</dt><dd class="text-chalk/90">Código, análise, agentes longos</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Melhor para</dt><dd class="text-right text-chalk/90">Código, análise, agentes longos</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Requisições</dt><dd class="num text-live">ilimitadas</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Requisições</dt><dd class="num text-live">ilimitadas</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Tokens</dt><dd class="num text-live">ilimitados</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Tokens</dt><dd class="num text-live">ilimitados</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Prioridade</dt><dd class="text-ion-soft">máxima, sempre</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Prioridade</dt><dd class="text-ion-soft">máxima, sempre</dd>
             </div>
           </dl>
 
@@ -907,6 +909,7 @@ input:-webkit-autofill:focus{
 
           <div class="mt-auto pt-7">
             <a href="#planos" class="btn btn-key w-full px-5 py-3.5 text-[14.5px]">Garantir Opus 5</a>
+            <p class="mt-3 text-center text-[12px] text-mute">Chave liberada em minutos.</p>
           </div>
         </div>
       </article>
@@ -925,7 +928,7 @@ input:-webkit-autofill:focus{
           </div>
         </div>
 
-        <div class="sold-content relative z-[3] flex flex-1 flex-col">
+        <div class="sold-content relative z-[3] flex flex-col">
           <header>
             <p class="tele">Edição narrativa</p>
             <h3 class="display-sm mt-2 text-[30px] text-white">Fable 5.1</h3>
@@ -937,17 +940,17 @@ input:-webkit-autofill:focus{
           </p>
 
           <dl class="mt-6 space-y-px overflow-hidden rounded-xl bg-white/[.05] text-[13.5px]">
-            <div class="flex items-center justify-between bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Melhor para</dt><dd class="text-chalk/70">Narrativa, roteiro, marca</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Melhor para</dt><dd class="text-chalk/70">Narrativa, roteiro, marca</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Lote 06</dt><dd class="num text-chalk/70">80 de 80 vendidas</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Lote 06</dt><dd class="num text-chalk/70">80 de 80 vendidas</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Tempo até esgotar</dt><dd class="num text-chalk/70">40 h</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Tempo até esgotar</dt><dd class="num text-chalk/70">40 h</dd>
             </div>
-            <div class="flex items-center justify-between bg-panel-2/80 px-4 py-2.5">
-              <dt class="tele !text-[10px]">Próximo lote</dt><dd class="text-halt/90">sem data</dd>
+            <div class="flex items-start justify-between gap-4 bg-panel-2/80 px-4 py-2.5">
+              <dt class="tele !text-[10px] shrink-0 pt-px">Na lista de espera</dt><dd class="num text-chalk/70">312 pessoas</dd>
             </div>
           </dl>
 
@@ -957,6 +960,7 @@ input:-webkit-autofill:focus{
               <span class="num text-[12px] text-chalk/60"><b class="font-medium text-halt">0</b> de 80</span>
             </div>
             <div class="meter mt-2"><span class="meter-fill meter-out" style="width:100%"></span></div>
+            <p class="mt-2 text-[12px] text-halt/80">Lote encerrado. Reabertura sem data.</p>
           </div>
         </div>
 
@@ -965,9 +969,7 @@ input:-webkit-autofill:focus{
           <a href="#espera" class="btn btn-line w-full border-halt/25 bg-halt/[.06] px-5 py-3.5 text-[14.5px] hover:border-halt/45 hover:bg-halt/10">
             Entrar na lista de espera
           </a>
-          <p class="mt-3 text-center text-[12px] text-mute">
-            <span class="num text-chalk/80">312</span> pessoas aguardando · avisamos por e-mail na reabertura
-          </p>
+          <p class="mt-3 text-center text-[12px] text-mute">Avisamos por e-mail na reabertura.</p>
         </div>
       </article>
     </div>
@@ -988,10 +990,10 @@ input:-webkit-autofill:focus{
      ========================================================================= -->
 <section id="beneficios" class="relative py-20 sm:py-28" aria-labelledby="h-beneficios">
   <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="max-w-[680px]">
+    <div class="max-w-[880px]">
       <p class="reveal tele !text-ion-soft">O que vem com a chave</p>
-      <h2 id="h-beneficios" class="reveal display-sm mt-4 text-[clamp(2rem,4.6vw,3.1rem)] text-white" data-d="1">
-        Tudo que uma API deveria ser<br class="hidden sm:block"> antes de alguém inventar cota.
+      <h2 id="h-beneficios" class="reveal display-sm mt-4 text-[clamp(1.85rem,3.7vw,2.8rem)] text-white" data-d="1">
+        Tudo que uma API deveria ser antes de alguém inventar cota.
       </h2>
     </div>
 
@@ -1056,10 +1058,11 @@ input:-webkit-autofill:focus{
   <div class="halo drift-a left-[8%] top-[4rem] h-[22rem] w-[30rem] bg-ion/[.14]" aria-hidden="true"></div>
 
   <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
-    <div class="max-w-[660px]">
+    <div class="max-w-[840px]">
       <p class="reveal tele !text-ion-soft">Do pagamento à primeira chamada</p>
-      <h2 id="h-como" class="reveal display-sm mt-4 text-[clamp(2rem,4.6vw,3.1rem)] text-white" data-d="1">
-        Quatro passos. <span class="text-mute">Nenhum deles é uma reunião.</span>
+      <h2 id="h-como" class="reveal display-sm mt-4 text-[clamp(1.85rem,3.7vw,2.8rem)] text-white" data-d="1">
+        <span class="block">Quatro passos.</span>
+        <span class="block text-mute">Nenhum deles é uma reunião.</span>
       </h2>
     </div>
 
@@ -1105,7 +1108,7 @@ input:-webkit-autofill:focus{
         <span class="h-2.5 w-2.5 rounded-full bg-live/50"></span>
         <span class="tele ml-2">client.py</span>
       </div>
-<pre class="num overflow-x-auto px-5 py-5 text-[12.5px] leading-[1.95] text-chalk/85">client = OpenAI(
+<pre class="num overflow-x-auto px-5 py-5 text-[11px] leading-[1.95] text-chalk/85 sm:text-[12.5px]">client = OpenAI(
     base_url = <span class="text-live">"https://api.unbound.ai/v1"</span>,   <span class="text-mute"># [ENDPOINT]</span>
     api_key  = <span class="text-live">"sk-unb-..."</span>
 )                                        <span class="text-mute"># pronto. sem mais nada.</span></pre>
@@ -1122,7 +1125,7 @@ input:-webkit-autofill:focus{
   <div class="mx-auto max-w-rail px-5 sm:px-8">
     <div class="mx-auto max-w-[780px] text-center">
       <p class="reveal tele !text-ion-soft">Lado a lado</p>
-      <h2 id="h-comparativo" class="reveal display-sm mt-4 text-[clamp(2rem,4.6vw,3.1rem)] text-white" data-d="1">
+      <h2 id="h-comparativo" class="reveal display-sm mt-4 text-[clamp(1.85rem,4vw,2.9rem)] text-white" data-d="1">
         A diferença não é de preço.<br>É de <span class="ink-grad">permissão.</span>
       </h2>
     </div>
@@ -1134,7 +1137,7 @@ input:-webkit-autofill:focus{
           <tr class="bg-panel">
             <th scope="col" class="tele w-[38%] px-5 py-4 font-normal sm:px-6">Critério</th>
             <th scope="col" class="px-5 py-4 text-[13.5px] font-semibold text-mute sm:px-6">API tradicional</th>
-            <th scope="col" class="relative px-5 py-4 sm:px-6">
+            <th scope="col" class="relative bg-ion/[.09] px-5 py-4 sm:px-6">
               <span class="display-sm text-[15px] text-white">UNBOUND</span>
               <span class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ion to-transparent"></span>
             </th>
@@ -1144,42 +1147,42 @@ input:-webkit-autofill:focus{
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Requisições por minuto</th>
             <td class="px-5 py-4 text-mute sm:px-6">Teto rígido por tier</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Sem teto</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Sem teto</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Cota de tokens</th>
             <td class="px-5 py-4 text-mute sm:px-6">Mensal, acaba antes do mês</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Não existe</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Não existe</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Comportamento no pico</th>
             <td class="px-5 py-4 text-mute sm:px-6">Fila, throttle ou 429</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Passa direto</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Passa direto</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Custo do mês</th>
             <td class="px-5 py-4 text-mute sm:px-6">Variável por token</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Fixo, definido antes</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Fixo, definido antes</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Agente rodando 24/7</th>
             <td class="px-5 py-4 text-mute sm:px-6">Inviável ou caríssimo</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">É o caso de uso padrão</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">É o caso de uso padrão</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Aumento de limite</th>
             <td class="px-5 py-4 text-mute sm:px-6">Formulário e espera de dias</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Não se aplica</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Não se aplica</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Suporte</th>
             <td class="px-5 py-4 text-mute sm:px-6">Ticket, SLA de dias</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Canal privado com engenharia</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Canal privado com engenharia</td>
           </tr>
           <tr class="bg-void/60">
             <th scope="row" class="px-5 py-4 font-medium text-chalk/90 sm:px-6">Surpresa na fatura</th>
             <td class="px-5 py-4 text-mute sm:px-6">Regra da casa</td>
-            <td class="bg-ion/[.05] px-5 py-4 font-medium text-white sm:px-6">Impossível por construção</td>
+            <td class="bg-ion/[.09] px-5 py-4 font-medium text-white sm:px-6">Impossível por construção</td>
           </tr>
         </tbody>
       </table>
@@ -1198,7 +1201,7 @@ input:-webkit-autofill:focus{
   <div class="relative z-10 mx-auto max-w-rail px-5 sm:px-8">
     <div class="mx-auto max-w-[840px] text-center">
       <p class="reveal tele !text-ion-soft">Planos</p>
-      <h2 id="h-planos" class="reveal display mt-4 text-[clamp(2.2rem,5.2vw,3.6rem)] text-white" data-d="1">
+      <h2 id="h-planos" class="reveal display mt-4 text-[clamp(1.95rem,4.9vw,3.4rem)] text-white" data-d="1">
         Um preço. <span class="ink-grad">Todo o resto é seu.</span>
       </h2>
       <p class="reveal lede mx-auto mt-5 max-w-[56ch] text-[16.5px] leading-relaxed" data-d="2">
@@ -1349,10 +1352,10 @@ input:-webkit-autofill:focus{
      ========================================================================= -->
 <section id="faq" class="relative py-20 sm:py-28" aria-labelledby="h-faq">
   <div class="mx-auto max-w-rail px-5 sm:px-8">
-    <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-20">
+    <div class="grid gap-12 lg:grid-cols-[.95fr_1.05fr] lg:gap-16">
       <div class="lg:sticky lg:top-28 lg:self-start">
         <p class="reveal tele !text-ion-soft">Antes de você perguntar</p>
-        <h2 id="h-faq" class="reveal display-sm mt-4 text-[clamp(2rem,4.4vw,2.9rem)] text-white" data-d="1">
+        <h2 id="h-faq" class="reveal display-sm mt-4 text-[clamp(1.8rem,3.1vw,2.4rem)] text-white" data-d="1">
           As dúvidas que todo mundo tem — respondidas sem rodeio.
         </h2>
         <p class="reveal lede mt-5 max-w-[40ch] text-[15px] leading-relaxed" data-d="2">
@@ -1468,7 +1471,7 @@ input:-webkit-autofill:focus{
           <span class="num text-[13px] font-medium text-white" id="countdown">—</span>
         </div>
 
-        <h2 id="h-final" class="display text-[clamp(2.2rem,5.6vw,3.8rem)] text-white">
+        <h2 id="h-final" class="display text-[clamp(1.95rem,5.2vw,3.6rem)] text-white">
           O acesso é limitado.<br><span class="ink-grad">O uso, nunca.</span>
         </h2>
 
@@ -1607,14 +1610,17 @@ input:-webkit-autofill:focus{
   var revealables = document.querySelectorAll('.reveal');
   function showAll() { revealables.forEach(function (el) { el.classList.add('in'); }); }
   if ('IntersectionObserver' in window && !reduce) {
+    var anyRevealed = false;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        if (e.isIntersecting) { e.target.classList.add('in'); anyRevealed = true; io.unobserve(e.target); }
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
     revealables.forEach(function (el) { io.observe(el); });
-    // trava de segurança: nada fica invisível se o observer falhar
-    setTimeout(showAll, 3500);
+    // Rede de segurança: só entra em ação se o observer não marcou nada.
+    // Um destravamento cego revelaria a página toda enquanto o leitor ainda
+    // está no herói, matando a animação de quem lê devagar.
+    setTimeout(function () { if (!anyRevealed) showAll(); }, 2500);
   } else {
     showAll();
   }
@@ -1724,7 +1730,7 @@ input:-webkit-autofill:focus{
   /* ---- 10. fundo: fluxo de pacotes --------------------------------------- */
   var flux = document.getElementById('flux');
   if (flux && flux.getContext) {
-    var fx = flux.getContext('2d'), streaks = [], W = 0, H = 0, dpr = 1;
+    var fx = flux.getContext('2d'), streaks = [], W = 0, H = 0, dpr = 1, running = false;
     function sizeFlux() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = flux.clientWidth; H = flux.clientHeight;
@@ -1758,12 +1764,13 @@ input:-webkit-autofill:focus{
         s.x += s.v;
         if (s.x - s.len > W) { s.x = -Math.random() * 120; s.y = Math.random() * H; }
       }
-      if (!reduce && !document.hidden) requestAnimationFrame(drawFlux);
+      if (!reduce && !document.hidden) { requestAnimationFrame(drawFlux); } else { running = false; }
     }
-    sizeFlux(); seed(); drawFlux();
+    sizeFlux(); seed(); running = true; drawFlux();
     window.addEventListener('resize', function () { sizeFlux(); seed(); });
     document.addEventListener('visibilitychange', function () {
-      if (!document.hidden && !reduce) requestAnimationFrame(drawFlux);
+      // sem a trava, voltar para a aba iniciava um segundo laço sobre o primeiro
+      if (!document.hidden && !reduce && !running) { running = true; requestAnimationFrame(drawFlux); }
     });
   }
 
@@ -1808,7 +1815,7 @@ input:-webkit-autofill:focus{
 
       // ponta destacada
       var last = pts[pts.length - 1];
-      ctx.beginPath(); ctx.arc(TW - 1, y(last), 2.8, 0, Math.PI * 2);
+      ctx.beginPath(); ctx.arc(TW - 3.5, y(last), 2.8, 0, Math.PI * 2);
       ctx.fillStyle = '#3DDC97'; ctx.fill();
     }
     function stepTp() {
