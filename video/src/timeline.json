@@ -1,0 +1,20 @@
+{
+  "fps": 30,
+  "bpm": 120,
+  "duracao": 990,
+  "cenas": {
+    "gancho":     { "de": 0,   "dur": 90 },
+    "custo":      { "de": 90,  "dur": 150 },
+    "virada":     { "de": 240, "dur": 60 },
+    "revelacao":  { "de": 300, "dur": 120 },
+    "demo":       { "de": 420, "dur": 180 },
+    "compat":     { "de": 600, "dur": 150 },
+    "beneficios": { "de": 750, "dur": 120 },
+    "oferta":     { "de": 870, "dur": 120 }
+  },
+  "marcas": {
+    "erro": 45,
+    "drop": 300,
+    "golpeFinal": 960
+  }
+}

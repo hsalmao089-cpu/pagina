@@ -1,0 +1,21 @@
+{
+  "gancho": {
+    "antes": [
+      "Quanto custa",
+      "esperar 5 horas?"
+    ],
+    "depois": [
+      "Seu deploy",
+      "parado."
+    ],
+    "pasta": "~/loja-api",
+    "pedido": "refatore o checkout e rode os testes",
+    "passos": [
+      "Lendo 48 arquivos",
+      "Editando checkout/pagamento.ts",
+      "Rodando 212 testes"
+    ],
+    "erro": "Limite de uso atingido.",
+    "volta": "Seu acesso volta em 4h 59min."
+  }
+}

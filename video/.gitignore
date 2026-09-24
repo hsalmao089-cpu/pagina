@@ -1,0 +1,4 @@
+node_modules/
+out/
+# gerado por `npm run audio` a partir de scripts/gerar-audio.mjs
+public/audio/

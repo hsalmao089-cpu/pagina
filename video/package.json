@@ -1,0 +1,31 @@
+{
+  "name": "unbound-video-claude-code",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Vídeo de 33 s para Instagram Reels — API Claude Code com uso ilimitado. Feito em Remotion.",
+  "type": "module",
+  "scripts": {
+    "audio": "node scripts/gerar-audio.mjs",
+    "dev": "npm run audio && remotion studio",
+    "render": "npm run audio && remotion render Reels out/reels-claude-code.mp4",
+    "render:sem-trilha": "npm run audio && remotion render Reels out/reels-claude-code-sem-trilha.mp4 --props='{\"trilha\":0}'",
+    "capa": "remotion still Reels out/capa.jpg --frame=360 --image-format=jpeg --jpeg-quality=92",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource-variable/instrument-sans": "5.3.0",
+    "@fontsource-variable/spline-sans-mono": "5.3.0",
+    "@remotion/cli": "4.0.527",
+    "@remotion/fonts": "4.0.527",
+    "@remotion/zod-types": "4.0.527",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "remotion": "4.0.527",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.12",
+    "typescript": "5.9.2"
+  }
+}
