@@ -8,15 +8,17 @@ import {useCorpo} from '../componentes/useCorpo';
 import type {Roteiro} from '../roteiro';
 import {c, CENAS, dsp, f, grad, MARCAS, prog, tag} from '../tema';
 
-/* 0:29–0:33 · OFERTA E CHAMADA
-   A cena mais quente do vídeo. Escassez verdadeira (o lote), a frase de
-   fechamento, o botão — que um dedo aperta no golpe final da trilha, soltando
-   confete — e a garantia. O último quadro é um cartaz completo: se o vídeo
-   pausar ou voltar ao início, a oferta inteira está na tela. */
+/* ==========================================================================
+   ATO 4 · OFERTA
+   A barra volta uma última vez — e agora é a única que acaba: a do lote.
+   "O acesso é limitado. O uso, nunca." Um dedo aperta o botão no golpe final
+   da trilha, o confete sobe, e o quadro final fica parado como um cartaz.
+   ========================================================================== */
 
 const GOLPE = MARCAS.golpeFinal - CENAS.oferta.de;
 const TOCA = GOLPE - 2;
-const BOTAO = {x: 80, y: 915};
+const BOTAO = {x: 80, y: 870};
+const BARRA_LOTE = {y: 404, w: 880, h: 60};
 const CORES_CONFETE = ['#FFFFFF', '#FFC83D', '#2EE59D', '#22D3EE', '#A855F7', '#FF3D9A'];
 
 export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
@@ -30,14 +32,14 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 
 	const pMarca = prog(frame, 0, 16);
 	const lote = frame < 4 ? 0 : mola(frame, 4, fps, 200);
-	const barra = prog(frame, 10, 30);
-	const botao = frame < 20 ? 0 : mola(frame, 20, fps, 170);
-	const pRodape = prog(frame, 30, 18);
+	const barra = prog(frame, 8, 26);
+	const botao = frame < 26 ? 0 : mola(frame, 26, fps, 170);
+	const pRodape = prog(frame, 36, 18);
 	// o botão afunda no toque e salta no golpe final
 	const salto = frame >= GOLPE ? Math.sin(Math.min(1, (frame - GOLPE) / 10) * Math.PI) : 0;
 	const escalaBotao = frame >= TOCA && frame < GOLPE ? 0.95 : 1 + 0.07 * salto;
-	// brilho que atravessa o botão, a cada ~1,3 s
-	const brilho = ((frame - 24) % 40) / 40;
+	// brilho que atravessa o botão
+	const brilho = ((frame - 30) % 40) / 40;
 
 	return (
 		<AbsoluteFill>
@@ -46,7 +48,7 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 				style={{
 					position: 'absolute',
 					left: 80,
-					top: 270,
+					top: 262,
 					display: 'flex',
 					alignItems: 'baseline',
 					gap: 20,
@@ -57,10 +59,10 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 				<span
 					style={{
 						fontFamily: f.display,
-						fontWeight: 700,
-						fontSize: 48,
-						letterSpacing: '-0.02em',
-						fontVariationSettings: "'wdth' 100, 'opsz' 24",
+						fontWeight: 800,
+						fontSize: 52,
+						letterSpacing: '0.01em',
+						fontVariationSettings: "'wdth' 100, 'opsz' 48",
 						color: c.branco,
 					}}
 				>
@@ -69,67 +71,80 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 				<span style={{...tag, fontSize: 19, color: c.nevoa}}>provisionamento de capacidade</span>
 			</div>
 
-			{/* lote: a única escassez do vídeo, e ela é real */}
+			{/* a barra, uma última vez: agora a única que acaba é a do lote */}
 			<div
 				style={{
 					position: 'absolute',
 					left: 80,
-					top: 372,
-					width: 880,
+					top: 344,
+					width: BARRA_LOTE.w,
 					opacity: Math.min(1, lote * 1.5),
 					transformOrigin: 'left center',
-					transform: `scale(${interpolate(lote, [0, 1], [0.6, 1])})`,
+					transform: `scale(${interpolate(lote, [0, 1], [0.8, 1])})`,
 				}}
 			>
 				<div
 					style={{
-						display: 'inline-flex',
+						...tag,
+						fontSize: 23,
+						color: c.branco,
+						display: 'flex',
 						alignItems: 'center',
 						gap: 14,
-						padding: '12px 24px',
-						borderRadius: 999,
-						background: 'rgba(255,255,255,.96)',
-						boxShadow: '0 20px 50px -20px rgba(60,0,40,.6)',
-						fontFamily: f.mono,
-						fontWeight: 700,
-						fontSize: 22,
-						letterSpacing: '0.12em',
-						textTransform: 'uppercase',
-						color: c.tinta,
 					}}
 				>
-					<Pip color="#10B981" size={14} glow={0.8 + 0.4 * Math.sin(frame / 4)} />
-					{o.lote} — {o.restantes} chaves de {o.total}
+					<Pip color={c.verde} size={13} glow={0.8 + 0.4 * Math.sin(frame / 4)} />
+					{o.lote} · {o.restantes} de {o.total} chaves disponíveis
 				</div>
 				<div
 					style={{
-						marginTop: 22,
-						height: 16,
+						position: 'absolute',
+						top: BARRA_LOTE.y - 344,
+						width: BARRA_LOTE.w,
+						height: BARRA_LOTE.h,
 						display: 'flex',
-						gap: 5,
+						gap: 6,
+						padding: 6,
 						borderRadius: 999,
-						overflow: 'hidden',
-						background: 'rgba(255,255,255,.2)',
+						background: 'rgba(30,5,40,.35)',
+						border: '2px solid rgba(255,255,255,.3)',
 					}}
 				>
-					<div style={{width: `${vendidas * 100 * barra}%`, borderRadius: 999, background: 'rgba(255,255,255,.75)'}} />
+					<div
+						style={{
+							width: `${vendidas * 100 * barra}%`,
+							borderRadius: 999,
+							background: 'rgba(255,255,255,.8)',
+							display: 'flex',
+							alignItems: 'center',
+							paddingLeft: 20,
+							fontFamily: f.mono,
+							fontWeight: 700,
+							fontSize: 20,
+							color: c.tinta,
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+						}}
+					>
+						{barra > 0.6 ? `${o.total - o.restantes} vendidas` : ''}
+					</div>
 					<div
 						style={{
 							flex: 1,
 							borderRadius: 999,
 							background: c.verde,
 							opacity: barra,
-							boxShadow: '0 0 24px rgba(46,229,157,.9)',
+							boxShadow: '0 0 30px rgba(46,229,157,.9)',
 						}}
 					/>
 				</div>
 			</div>
 
 			<div style={{...dsp, position: 'absolute', left: 80, top: 540, width: 940}}>
-				<Cut at={10} dur={20} style={{fontSize: corpo1, color: c.nevoa, letterSpacing: '-0.04em'}}>
+				<Cut at={14} dur={20} style={{fontSize: corpo1, color: c.nevoa, letterSpacing: '-0.04em'}}>
 					{o.titulo[0]}
 				</Cut>
-				<Cut at={16} dur={20} style={{fontSize: corpo2, marginTop: 12}}>
+				<Cut at={20} dur={20} style={{fontSize: corpo2, marginTop: 12}}>
 					{o.titulo[1]}
 				</Cut>
 			</div>
@@ -177,7 +192,7 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 					>
 						<Arrow size={46} color={c.branco} stroke={2.6} />
 					</span>
-					{frame > 24 ? (
+					{frame > 30 ? (
 						<span
 							style={{
 								position: 'absolute',
@@ -217,7 +232,7 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 				style={{
 					position: 'absolute',
 					left: 80,
-					top: 1195,
+					top: 1150,
 					width: 880,
 					opacity: pRodape,
 					transform: `translateY(${(1 - pRodape) * 20}px)`,
@@ -257,12 +272,12 @@ export const Oferta: React.FC<{r: Roteiro; dur: number}> = ({r}) => {
 			<Toque chega={TOCA - 22} toca={TOCA} x={BOTAO.x + 580} y={BOTAO.y + 72} />
 			<Confete at={GOLPE} x={BOTAO.x + 580} y={BOTAO.y + 72} cores={CORES_CONFETE} n={130} semente={960} />
 
-			<Som efeito="impacto-leve" at={0} volume={0.6} />
+			<Som efeito="impacto-leve" at={0} volume={0.3} />
 			<Som efeito="pop" at={4} volume={0.45} />
-			<Som efeito="pop" at={20} volume={0.5} />
+			<Som efeito="pop" at={26} volume={0.5} />
 			<Som efeito="toque" at={TOCA} volume={0.7} />
-			<Som efeito="sucesso" at={GOLPE} volume={0.6} />
-			<Som efeito="brilho" at={GOLPE} volume={0.5} />
+			<Som efeito="sucesso" at={GOLPE} volume={0.5} />
+			<Som efeito="brilho" at={GOLPE} volume={0.35} />
 		</AbsoluteFill>
 	);
 };

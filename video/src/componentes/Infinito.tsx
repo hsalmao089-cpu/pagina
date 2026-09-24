@@ -4,10 +4,15 @@ import {FPS} from '../tema';
 
 /* ==========================================================================
    ∞ DE PARTÍCULAS
-   Uma fita de partículas correndo sobre a lemniscata de Bernoulli. Nasce como
-   um cometa saindo do cruzamento e se espalha até fechar o laço: de um ponto
-   ao infinito. A cor corre pelo laço no degradê da marca, e o degradê também
-   gira com o tempo — a fita parece iridescente. Tudo é função do quadro.
+   Uma fita de partículas correndo sobre a lemniscata de Bernoulli.
+
+   Dois jeitos de nascer:
+   - cometa: sai do cruzamento como um ponto e se espalha até fechar o laço;
+   - linha: começa achatada — é a barra de uso — e se abre em ∞. Com a
+     lemniscata achatada (abertura 0) as partículas correm ida e volta sobre
+     um segmento reto; a mesma curva, abrindo, vira o infinito.
+   A cor corre pelo laço no degradê da marca e também gira com o tempo.
+   Tudo é função do quadro.
    ========================================================================== */
 
 const CORES = ['#FFC83D', '#FF7A1A', '#FF3D9A', '#C084FC', '#818CF8', '#22D3EE'];
@@ -21,6 +26,12 @@ type Props = {
 	altura: number;
 	n?: number;
 	brilho?: number;
+	modo?: 'cometa' | 'linha';
+	/** Só no modo linha: 0 = barra reta, 1 = ∞ aberto. */
+	abertura?: number;
+	/** 0 = tudo na cor base, 1 = degradê iridescente. */
+	mistura?: number;
+	corBase?: string;
 	style?: React.CSSProperties;
 };
 
@@ -37,8 +48,20 @@ const gerador = (semente: number) => {
 	};
 };
 
+const rgb = (hex: string) => {
+	const v = parseInt(hex.slice(1), 16);
+	return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+};
+const misturaCor = (a: string, b: string, t: number) => {
+	const x = rgb(a);
+	const y = rgb(b);
+	return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * t)).join(',')})`;
+};
+
 const TRILHA = 18;
 const DT = 1 / 60;
+const abreCometa = (t: number) =>
+	interpolate(t, [0, 1.1], [0, 1], {extrapolateRight: 'clamp', easing: Easing.bezier(0.16, 1, 0.3, 1)});
 
 export const Infinito: React.FC<Props> = ({
 	nasce = 0,
@@ -47,6 +70,10 @@ export const Infinito: React.FC<Props> = ({
 	altura,
 	n = 1100,
 	brilho = 1,
+	modo = 'cometa',
+	abertura = 1,
+	mistura = 1,
+	corBase = '#FF2D55',
 	style,
 }) => {
 	const frame = useCurrentFrame();
@@ -77,11 +104,10 @@ export const Infinito: React.FC<Props> = ({
 		const tau = (frame - nasce) / FPS;
 		if (tau < 0 || brilho <= 0.001) return;
 
-		// o laço se abre como mola amortecida: rápido no começo, assentando no fim
-		const abre = interpolate(tau, [0, 1.1], [0, 1], {
-			extrapolateRight: 'clamp',
-			easing: Easing.bezier(0.16, 1, 0.3, 1),
-		});
+		const linha = modo === 'linha';
+		const ay = linha ? abertura : 1;
+		const abre = linha ? 1 : abreCometa(tau);
+		const espessura = linha ? 0.25 + 0.75 * abertura : 1;
 		const cx = largura / 2;
 		const cy = altura / 2;
 
@@ -90,14 +116,14 @@ export const Infinito: React.FC<Props> = ({
 			const cs = Math.cos(s);
 			const den = 1 + sn * sn;
 			const x = (A * cs) / den;
-			const y = (A * sn * cs) / den;
+			const y = (ay * A * sn * cs) / den;
 			// normal pela derivada numérica
 			const e = 0.002;
 			const sn2 = Math.sin(s + e);
 			const cs2 = Math.cos(s + e);
 			const den2 = 1 + sn2 * sn2;
 			const tx = (A * cs2) / den2 - x;
-			const ty = (A * sn2 * cs2) / den2 - y;
+			const ty = (ay * A * sn2 * cs2) / den2 - y;
 			const len = Math.hypot(tx, ty) || 1;
 			return [cx + x - (ty / len) * d, cy + y + (tx / len) * d];
 		};
@@ -116,13 +142,12 @@ export const Infinito: React.FC<Props> = ({
 
 		// a cor de cada partícula depende de onde ela está no laço agora
 		const giro = tau * 0.9;
-		const tom = (p: Particula) => {
-			const ab = abre;
-			const s = Math.PI / 2 + p.s0 * ab + p.w * tau;
-			const u = (((s + giro) / (Math.PI * 2)) % 1 + 1) % 1;
+		const tons = ps.map((p) => {
+			const s = Math.PI / 2 + p.s0 * abre + p.w * tau;
+			const u = ((((s + giro) / (Math.PI * 2)) % 1) + 1) % 1;
 			return Math.floor(u * CORES.length) % CORES.length;
-		};
-		const tons = ps.map(tom);
+		});
+		const paleta = CORES.map((cor) => misturaCor(corBase, cor, mistura));
 
 		// quatro faixas de idade (rastro velho → cabeça) × três classes de brilho × seis cores
 		const cortes = [0, 5, 10, 14, TRILHA];
@@ -133,8 +158,8 @@ export const Infinito: React.FC<Props> = ({
 			for (const faixaA of [0.35, 0.7, 1]) {
 				b.globalAlpha = Math.min(1, faixaA * peso * 0.75 * brilho);
 				b.lineWidth = 1.6 + faixaA * 1.4;
-				for (let ci = 0; ci < CORES.length; ci++) {
-					b.strokeStyle = CORES[ci];
+				for (let ci = 0; ci < paleta.length; ci++) {
+					b.strokeStyle = paleta[ci];
 					b.beginPath();
 					for (let pi = 0; pi < ps.length; pi++) {
 						const p = ps[pi];
@@ -142,12 +167,9 @@ export const Infinito: React.FC<Props> = ({
 						if (classe !== faixaA || tons[pi] !== ci) continue;
 						for (let k = k0; k <= k1; k++) {
 							const t = Math.max(0, tau - k * DT);
-							const ab = interpolate(t, [0, 1.1], [0, 1], {
-								extrapolateRight: 'clamp',
-								easing: Easing.bezier(0.16, 1, 0.3, 1),
-							});
+							const ab = linha ? 1 : abreCometa(t);
 							const s = Math.PI / 2 + p.s0 * ab + p.w * t;
-							const d = p.d * ab * (1 + 0.35 * Math.sin(2.1 * t + p.fase));
+							const d = p.d * ab * espessura * (1 + 0.35 * Math.sin(2.1 * t + p.fase));
 							const [x, y] = ponto(s, d);
 							if (k === k0) b.moveTo(x, y);
 							else b.lineTo(x, y);
@@ -171,11 +193,13 @@ export const Infinito: React.FC<Props> = ({
 		g.globalAlpha = 1;
 		g.drawImage(buf.current, 0, 0);
 
-		// clarão no cruzamento no instante em que o laço nasce
-		const clarao = interpolate(tau, [0, 0.05, 0.6], [0, 1, 0], {
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		});
+		// clarão no cruzamento no instante em que o laço nasce (só no cometa)
+		const clarao = linha
+			? 0
+			: interpolate(tau, [0, 0.05, 0.6], [0, 1, 0], {
+					extrapolateLeft: 'clamp',
+					extrapolateRight: 'clamp',
+				});
 		if (clarao > 0.001) {
 			const r = 40 + (1 - clarao) * 220 * abre;
 			const gr = g.createRadialGradient(cx, cy, 0, cx, cy, r);
@@ -186,7 +210,7 @@ export const Infinito: React.FC<Props> = ({
 			g.fillRect(cx - r, cy - r, r * 2, r * 2);
 		}
 		g.globalCompositeOperation = 'source-over';
-	}, [frame, nasce, A, largura, altura, ps, brilho]);
+	}, [frame, nasce, A, largura, altura, ps, brilho, modo, abertura, mistura, corBase]);
 
 	return <canvas ref={ref} width={largura} height={altura} style={{width: largura, height: altura, ...style}} />;
 };

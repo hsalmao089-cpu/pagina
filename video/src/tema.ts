@@ -31,12 +31,14 @@ export const c = {
 	azul: '#3B82F6',
 	verde: '#2EE59D',
 	vermelho: '#FF2D55',
+	/** fita de interdição */
+	fita: '#FFD60A',
+	fitaTexto: '#161000',
 } as const;
 
 export const grad = {
 	/** amarelo → laranja → rosa → roxo: o degradê da marca. */
 	marca: 'linear-gradient(100deg, #FFC83D 0%, #FF7A1A 28%, #FF3D9A 62%, #A855F7 100%)',
-	frio: 'linear-gradient(100deg, #22D3EE 0%, #3B82F6 50%, #A855F7 100%)',
 	sucesso: 'linear-gradient(100deg, #2EE59D 0%, #22D3EE 100%)',
 	alerta: 'linear-gradient(100deg, #FFC83D 0%, #FF7A1A 45%, #FF2D55 100%)',
 	/** para texto sobre branco: sem o amarelo, que sumiria. */

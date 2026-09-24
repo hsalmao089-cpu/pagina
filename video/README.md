@@ -1,4 +1,4 @@
-# Vídeo — Reels “Claude Code ilimitado”
+# Vídeo — Reels “Claude Code sem limite”
 
 Reels de 33 s (1080×1920, 30 fps) para a mesma oferta da página: API para
 Claude Code com uso ilimitado, em qualquer CLI ou IDE. Feito em
@@ -8,23 +8,32 @@ números e marca mudam sem abrir editor de vídeo.
 O roteiro completo (cena a cena, locução, legenda do post, variações de gancho e
 os próximos vídeos da série) está em **[ROTEIRO.md](ROTEIRO.md)**.
 
+## A ideia
+
+O vídeo inteiro é a história de uma **barra de uso**: ela enche até 100% e
+acaba com o agente no meio da tarefa; três fitas de interdição (5 horas,
+semanal, fatura em dólar) amarram o terminal; duas linhas coladas e um Enter
+rasgam as fitas no drop da música; a barra, solta, se abre em ∞; nove agentes
+rodam em paralelo com o medidor em ∞; a mesma janela troca de IDE no ritmo; e
+no fim a única barra que acaba é a do lote. O raciocínio completo está no
+[ROTEIRO.md](ROTEIRO.md).
+
 ## Direção
 
 Vibrante, feita para disputar atenção no feed. A tipografia é a da página
 (Bricolage Grotesque, Instrument Sans, Spline Sans Mono), com a mesma entrada de
-manchete por corte de máscara; a cor é de campanha:
+manchete por corte de máscara; a cor é de campanha e conta a história:
 
-- **Fundo aurora** — manchas de luz derivando sobre uma base saturada, com
-  bokeh subindo. Cada trecho tem sua paleta (violeta e azul no trabalho,
-  vermelho no alerta, o degradê da marca na revelação, quente na oferta) e,
-  no groove, o fundo respira junto com o bumbo.
-- **Degradê da marca** — amarelo → laranja → rosa → roxo, no ∞, nas
-  transições e nos selos.
-- **Destaque** — a palavra que importa entra num marcador (vermelho no
-  limite, amarelo em “não.” e “contar.”, branco em “ilimitado.”).
-- **Sinais** — verde continua querendo dizer “funciona”; vermelho, “travou”.
-- **Energia** — molas com sobra, carimbo, confete, raios, varreduras
-  coloridas entre as cenas e um dedo que aperta o botão no golpe final.
+- **Fundo aurora** — manchas de luz sobre uma base saturada, com bokeh. Frio
+  enquanto o trabalho flui, vermelho no limite, escuro na soltura, o degradê
+  da marca no ∞, a cor de cada IDE na troca, quente na oferta. No groove, o
+  fundo respira com o bumbo.
+- **Amarelo de interdição** — só nas fitas e nas dores riscadas.
+- **Destaque** — em cada cena, a frase que importa entra num marcador.
+- **Sinais** — verde é “funciona”; vermelho, “travou”.
+- **Continuidade** — as cenas se sobrepõem e passam uma para a outra por
+  transformação (a barra vira ∞, o ∞ vira a grade, um painel vira o editor),
+  não por corte.
 
 ## Rodar
 
@@ -68,8 +77,10 @@ Ligue `guias: true` no Studio para ver o que a interface do Reels cobre
 
 Nada é sample: a trilha (120 bpm, lá menor) e os efeitos são sintetizados pelo
 script, com semente fixa — rodar de novo gera os mesmos arquivos. A trilha é
-montada sobre a linha do tempo do vídeo: groove leve, **tape stop** no quadro do
-erro, drone de tensão, subida, **drop** no quadro 300 e golpe final em 0:32.
+montada sobre a linha do tempo do vídeo: groove leve, **tape stop** quando a
+barra chega a 100%, batimento sob as fitas, subida enquanto as duas linhas são
+digitadas, **drop no Enter** (0:11) e golpe final em 0:31, com o acorde
+segurando o cartaz até o fim.
 Cada efeito é posicionado dentro da própria cena, ao lado da animação que ele
 acompanha.
 
@@ -84,8 +95,8 @@ src/
   timeline.json     quadros de cada cena, lido também pelo gerador de áudio
   tema.ts           tokens, fontes e curvas de animação
   Video.tsx         monta as cenas, o campo de fundo, grão, vinheta e trilha
-  cenas/            Gancho, Custo, Virada, Revelacao, Demo, Compat, Beneficios, Oferta
-  componentes/      Aurora, Terminal, Infinito, Efeitos, Cut, Glitch, Som, Ui…
+  cenas/            Limite (ato 1 inteiro), Revelacao, Agentes, Editores, Confianca, Oferta
+  componentes/      Aurora, Fita, Infinito, Terminal, Efeitos, Cut, Glitch, Som, Ui…
 scripts/
   gerar-audio.mjs   síntese da trilha e dos efeitos
 variacoes/          JSONs de gancho alternativo para teste A/B
@@ -95,5 +106,5 @@ entrega/            MP4 final (com e sem trilha) e a capa, prontos para subir
 ## Antes de publicar
 
 Os números vêm da página e são exemplos de layout lá também (lote, chaves
-restantes, 0,00 % de erro 429, garantia). Confira a lista em
+restantes, preço fixo, garantia). Confira a lista em
 [ROTEIRO.md](ROTEIRO.md#antes-de-publicar--confira).

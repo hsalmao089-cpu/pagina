@@ -1,124 +1,118 @@
-# Roteiro — Reels “Claude Code ilimitado” (33 s)
+# Roteiro — Reels “Claude Code sem limite” (33 s)
 
-**Produto:** API para Claude Code com uso ilimitado, que funciona em qualquer CLI ou IDE.
-**Marca:** UNBOUND (a mesma da página de vendas deste repositório — troque em `src/roteiro.ts`).
-**Formato:** Reels 9:16 · 1080×1920 · 30 fps · 33 s · trilha a 120 bpm.
-**Objetivo:** conversão — clique no link da bio (ou comentário com palavra-chave).
+## Brief
 
-## A ideia em uma linha
+| | |
+|---|---|
+| **Produto** | API para Claude Code com uso ilimitado, que funciona em qualquer CLI ou IDE |
+| **Marca** | UNBOUND (troque em `src/roteiro.ts`) |
+| **Objetivo** | conversão: clique no link da bio ou comentário com a palavra-chave |
+| **Público** | dev brasileiro que já usa Claude Code — no plano da assinatura ou na API paga em dólar |
+| **Formato** | Reels 9:16 · 1080×1920 · 30 fps · 33 s · trilha própria a 120 bpm |
 
-Todo dev que usa Claude Code já viu o trabalho parar no meio por limite de uso.
-O vídeo começa exatamente nesse instante, transforma a dor em três golpes secos e
-vira a chave com uma pergunta: *e se o limite não existisse?* A resposta é o ∞ —
-e daí em diante é prova, compatibilidade, benefício e oferta.
+## O insight
 
-Estrutura: **gancho → dor → virada → revelação → prova → abrangência → benefício → oferta.**
-O fundo muda de cor com a história: violeta e azul enquanto o trabalho flui,
-vermelho quando trava, violeta escuro na pergunta, o degradê inteiro da marca na
-revelação e o quente da oferta no fim. Verde continua sendo “funciona” e
-vermelho, “travou”. Da demo em diante, cada corte é escondido por uma varredura
-colorida que cruza a tela junto com um whoosh.
+Para quem vive no Claude Code, o limite não é um número na documentação — é uma
+**barra de uso** que vai enchendo enquanto o agente trabalha e sempre acaba no pior
+momento: no meio do refactor, na véspera da entrega. Todo mundo que usa conhece essa
+barra. E ela tem três formas: a janela de 5 horas, o limite semanal e, para quem foge
+dos dois pela API, a fatura em dólar.
+
+## A ideia: a barra
+
+O vídeo inteiro é a história de uma barra.
+
+1. Ela enche até 100% e **acaba** — com o agente no meio da tarefa.
+2. Cada forma do limite vira uma **fita de interdição** que amarra o terminal:
+   o Claude Code, literalmente, amarrado. (UNBOUND quer dizer desamarrado.)
+3. **Duas linhas** coladas no terminal e um Enter **rasgam as fitas** — o drop da
+   música cai exatamente no Enter. A prova de que é fácil é o próprio clímax.
+4. A barra, solta, **vira o ∞**. Mesma linha, mesmo lugar, mesma cor: ela só se abre.
+5. A prova: nove agentes rodando ao mesmo tempo, cada um com o seu medidor de uso —
+   que agora mostra ∞. Depois, a mesma janela trocando de ferramenta no ritmo da
+   música, com a barra de status sempre “conectado · uso ∞”.
+6. No fim, a barra volta uma última vez, e é **a única que acaba**: a do lote.
+   *O acesso é limitado. O uso, nunca.*
+
+Nada aparece uma vez só: a barra, as três dores e o ∞ voltam transformados. É isso
+que faz o vídeo parecer uma peça única em vez de uma sequência de slides.
+
+## Por que essa estrutura
+
+- **Gancho sem texto para ler**: o primeiro quadro é um número (94%) e uma barra
+  quase cheia. Tensão instantânea, entendida em meio segundo, com ou sem som.
+- **Dor → amarra → soltura**: o problema não é descrito, é mostrado prendendo o
+  terminal. A solução chega como gesto (colar duas linhas), não como adjetivo.
+- **Prova antes da promessa**: agentes em paralelo e troca de IDE mostram “ilimitado”
+  e “qualquer ferramenta” em vez de só dizer.
+- **Objeções respondidas em 4 segundos**: preço (fixo, em reais), começo (minutos),
+  risco (7 dias de garantia).
+- **Escassez que fecha o conceito**: o lote é a única barra que acaba.
+- **Uma frase por cena ganha marcador colorido** — é o que o olho lê primeiro.
 
 ---
 
 ## Cena a cena
 
-Os tempos batem com `src/timeline.json`. A locução é opcional: o vídeo foi
-feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo.
+Os quadros batem com `src/timeline.json`. As cenas se sobrepõem alguns quadros:
+cada passagem é feita por continuidade, não por corte.
 
-### 1 · Gancho — 0:00 a 0:03
+### Ato 1 · O limite — 0:00 a 0:11 (um plano só)
 
-| | |
-|---|---|
-| **Tela** | “Claude Code / a todo vapor…” (degradê) → no 1,5 s troca para “…até bater / **no limite.**” (marcador vermelho) |
-| **Visual** | Fundo violeta e azul; o terminal de vidro já está trabalhando no primeiro quadro. No 1,5 s o último passo falha, entra o bloco *“Limite de uso atingido. Seu acesso volta em 4h 59min.”*, o selo muda de EXECUTANDO para INTERROMPIDO, o fundo vira vermelho, a tela dá um glitch e um carimbo **LIMITE ATINGIDO** cai girando e bate. |
-| **Som** | Groove leve rodando → a música perde rotação e para (tape stop) no exato quadro do erro + ruído digital de falha. |
-| **Locução** | “Seu Claude Code a todo vapor… até bater no limite.” |
+| Tempo | Tela | Visual | Som |
+|---|---|---|---|
+| 0:00 | **USO DO SEU PLANO · 94%** | Barra quase cheia, terminal do agente trabalhando embaixo. O número sobe um ponto a cada colcheia, a barra vai do laranja ao vermelho. | groove leve; um tique a cada ponto |
+| 0:01,5 | **100%** · carimbo **ACABOU.** | O último passo falha, o terminal mostra *“Limite de uso atingido. Seu acesso volta em 4h 59min…”* contando, o selo vira BLOQUEADO, fundo vermelho, glitch. | a música perde rotação e para; falha digital; carimbo |
+| 0:04 | fitas: **LIMITE DE 5 HORAS · LIMITE SEMANAL · FATURA EM DÓLAR** | Três fitas de interdição batem, uma por segundo, e amarram o terminal. | batimento grave; uma “fita” por batida |
+| 0:07,4 | **Seu Claude Code, / amarrado.** | “amarrado.” em marcador amarelo. | |
+| 0:09 | **Duas linhas / soltam tudo.** | “soltam tudo.” em marcador verde. No terminal são digitadas `export ANTHROPIC_BASE_URL=…` e `export ANTHROPIC_AUTH_TOKEN=…`; o selo vira LIBERADO. | subida; teclado |
+| 0:10,9 | *Enter* | | Enter pesado |
 
-> Por que funciona: começa no meio da ação (o feed mostra movimento desde o
-> quadro 0) e o público-alvo se reconhece no erro em menos de dois segundos.
+### Ato 2 · O ∞ — 0:11 a 0:15 (drop)
 
-### 2 · O custo do limite — 0:03 a 0:08
+| Tempo | Tela | Visual | Som |
+|---|---|---|---|
+| 0:11 | — | Clarão. As fitas **rasgam** e caem; os pedaços voam como confete. A barra vira uma linha de partículas vermelha, no mesmo lugar, e se abre em ∞ ganhando o degradê da marca. Raios giram atrás. | drop; rasgo; impacto |
+| 0:11,5 | **UNBOUND** apresenta · **Claude Code / sem limite.** | “sem limite.” num adesivo branco com o degradê. | |
+| 0:12,4 | as três fitas, pequenas, **riscadas de verde** | As dores voltam canceladas. | um pop por fita |
+| 0:14,5 | — | A câmera mergulha no cruzamento do ∞. | whoosh |
 
-| | |
-|---|---|
-| **Tela** | §01 · o custo do limite. Três golpes, um por tempo da música: **Cota.** `402 quota_exceeded` · **Fila.** `529 overloaded_error` · **429.** `429 too_many_requests`. Depois o relógio: “o limite volta em **04:59:59**” descontando, barra “cota 100%”, e a frase **“O seu prazo, / não.”** |
-| **Visual** | Fundo em alerta (vermelho e laranja). Cada palavra entra grande, girada e desfocada e assenta com mola e tremor de câmera, com o código numa pílula. O relógio vem num cartão de vidro, com os segundos em amarelo pulando a cada batida; “não.” entra num marcador amarelo. |
-| **Som** | Golpe grave a cada palavra; batimento grave por baixo; tique de relógio sincronizado com os segundos. |
-| **Locução** | “Cota. Fila. Erro 429. O limite volta em cinco horas. O seu prazo, não.” |
+### Ato 3 · A prova — 0:15 a 0:28
 
-### 3 · A virada — 0:08 a 0:10
+| Tempo | Tela | Visual | Som |
+|---|---|---|---|
+| 0:15 | **Rode quantos / agentes quiser.** · “9 agentes rodando · 0 limites” | Grade 3×3 de terminais, cada agente numa tarefa (testes, refactor, migração, docs, bug, frontend…), logs rolando. Cada painel tem um medidor de uso que mostra **∞**. | um pop por painel; groove com palmas e arpejo |
+| 0:20 | **No terminal / ou na sua IDE.** | O painel do meio cresce e vira uma janela de editor. A cada batida ela troca de ferramenta — Claude Code, VS Code, Cursor, JetBrains, Zed, Neovim — com a cor de cada uma, e o código continua sendo escrito de onde parou (com a sugestão fantasma à frente do cursor). A barra de status nunca muda: *UNBOUND conectado · uso ∞ · fila 0*. O marcador do título troca de cor junto. | um pop por troca |
+| 0:24 | **Do jeito que / devia ser.** · cartões | **Preço fixo** — em reais, todo mês · **Ativa em minutos** — sem call, sem fila de aprovação · **7 dias de garantia** — não gostou, devolvemos tudo. Um cartão por batida. | pops |
 
-| | |
-|---|---|
-| **Tela** | “E se o limite / não existisse?” — a palavra *limite* é riscada em vermelho. |
-| **Visual** | O fundo escurece para o violeta da tensão e raios de luz começam a girar por trás. No último meio segundo o texto é sugado para a câmera e a tela estoura em branco. |
-| **Som** | Subida de ruído + rufar acelerando; um instante de silêncio antes do drop. |
-| **Locução** | “E se o limite não existisse?” |
+### Ato 4 · A oferta — 0:28 a 0:33
 
-### 4 · Revelação — 0:10 a 0:14 (drop)
-
-| | |
-|---|---|
-| **Tela** | UNBOUND apresenta · **Claude Code / ilimitado.** · “API com uso ilimitado. Sem rate limit, sem cota de tokens, sem fila.” |
-| **Visual** | Um ∞ de partículas nasce do cruzamento como um cometa e fecha o laço num degradê que corre pela fita; confete explode do centro, raios giram atrás, e “ilimitado.” entra num adesivo branco com o degradê da marca. |
-| **Som** | Impacto grave com brilho agudo no drop; a música entra inteira (bumbo, baixo, pad). |
-| **Locução** | “Claude Code ilimitado. API sem rate limit, sem cota e sem fila.” |
-
-### 5 · Prova — 0:14 a 0:20
-
-| | |
-|---|---|
-| **Tela** | §02 · configuração · **“Troque 2 linhas. / Pronto.”** (Pronto em verde) |
-| **Visual** | Terminal digitando `export ANTHROPIC_BASE_URL=https://api.unbound.ai` e `export ANTHROPIC_AUTH_TOKEN=…`, depois `claude`. Entra “conectado · uso ilimitado · fila 0”, o pedido ao agente, três passos ficando verdes (6 agentes em paralelo, 128 arquivos editados, 212 testes passando) e “pronto · 0 limites atingidos”. Embaixo, contadores subindo: requisições, tokens e **limites: 0**. |
-| **Som** | Teclado de verdade (cada comando tem o som do tamanho dele), enter, tique de confirmação a cada passo, acorde de sucesso no fim. A trilha abaixa para o teclado aparecer. |
-| **Locução** | “Troque duas linhas de configuração e pronto. Seus agentes rodam em paralelo, sem bater em nada.” |
-
-### 6 · Qualquer CLI, qualquer IDE — 0:20 a 0:25
-
-| | |
-|---|---|
-| **Tela** | §03 · onde funciona · **“Qualquer CLI. / Qualquer IDE.”** · “Uma chave. Todas as ferramentas.” |
-| **Visual** | “CLI.” e “IDE.” em amarelo. Três esteiras de pílulas de vidro correndo em sentidos alternados, cada ferramenta com um ponto de cor: Claude Code, OpenCode, Aider, Codex CLI, Goose, Crush · VS Code, Cursor, JetBrains, Zed, Neovim, Emacs · Cline, Roo Code, Kilo Code, Continue, Avante. A frase de fecho entra numa pílula com o ícone da chave. |
-| **Som** | Entra o arpejo na trilha; um blip por esteira. |
-| **Locução** | “Funciona em qualquer CLI e em qualquer IDE. Uma chave, todas as ferramentas.” |
-
-### 7 · Benefícios — 0:25 a 0:29
-
-| | |
-|---|---|
-| **Tela** | §04 · o que vem com a chave · **“Use sem / contar.”** + painel: Rate limit **—** (não existe) · Cota de tokens **—** (não existe) · Fila **0** · Erros 429 **0,00 %** · Preço **fixo** por mês. |
-| **Visual** | “contar.” em marcador amarelo. Cartão de vidro com um selo colorido por benefício (raio, ∞, relógio, escudo, etiqueta), cada linha entrando com mola. O traço no lugar do número é desenhado — é o argumento: não é “alto”, é “não existe”. |
-| **Som** | Um blip por linha. |
-| **Locução** | “Sem rate limit, sem cota, sem fila. Preço fixo por mês. Use sem contar.” |
-
-### 8 · Oferta — 0:29 a 0:33
-
-| | |
-|---|---|
-| **Tela** | UNBOUND · ● Lote 07 aberto — 46 chaves de 150 (barra: vendidas em cinza, disponíveis em verde) · “O acesso é limitado.” / **“O uso, nunca.”** · botão **Garanta sua chave →** · ↓ link na bio · 7 dias de garantia incondicional · aviso de não afiliação. |
-| **Visual** | A cena mais quente (laranja e rosa). O botão branco tem um brilho que atravessa; um dedo chega, aperta a seta no golpe final da trilha (0:32) e solta confete, depois sai de cena. O último quadro é um cartaz completo: se a pessoa pausar, a oferta inteira está na tela. |
-| **Som** | Impacto leve na entrada, golpe final com prato e acorde, sino de sucesso. |
-| **Locução** | “O acesso é limitado. O uso, nunca. Garanta sua chave no link da bio.” |
+| Tempo | Tela | Visual | Som |
+|---|---|---|---|
+| 0:28 | UNBOUND · **Lote 07 · 46 de 150 chaves disponíveis** | Varredura com o degradê. A barra volta uma última vez: 104 vendidas em branco, 46 disponíveis em verde. | whoosh; impacto leve |
+| 0:28,5 | **O acesso é limitado. / O uso, nunca.** | | |
+| 0:29 | botão **Garanta sua chave →** · ↓ link na bio · 7 dias de garantia · aviso | Um brilho atravessa o botão. | |
+| 0:31 | — | Um dedo aperta a seta no golpe final da música; o botão salta, confete sobe, o dedo sai. Os 2 últimos segundos ficam parados como cartaz. | toque; golpe final; acorde segurando até o fim |
 
 ---
 
-## Locução corrida (≈ 95 palavras, ritmo rápido)
+## Locução (opcional — o vídeo foi feito para funcionar sem som)
 
-> Seu Claude Code a todo vapor… até bater no limite.
-> Cota. Fila. Erro 429. O limite volta em cinco horas. O seu prazo, não.
-> E se o limite não existisse?
-> Claude Code ilimitado. API sem rate limit, sem cota e sem fila.
-> Troque duas linhas de configuração e pronto. Seus agentes rodam em paralelo, sem bater em nada.
-> Funciona em qualquer CLI e em qualquer IDE. Uma chave, todas as ferramentas.
-> Sem rate limit, sem cota, sem fila. Preço fixo por mês. Use sem contar.
-> O acesso é limitado. O uso, nunca. Garanta sua chave no link da bio.
+> *(0:00)* Noventa e quatro… noventa e sete… cem.
+> *(0:01,5)* Acabou. No meio da tarefa.
+> *(0:04)* Limite de cinco horas. Limite semanal. Fatura em dólar.
+> *(0:07,4)* Seu Claude Code, amarrado.
+> *(0:09)* Mas duas linhas soltam tudo.
+> *(0:11)* Claude Code, sem limite.
+> *(0:15)* Rode quantos agentes quiser, ao mesmo tempo.
+> *(0:20)* No terminal ou na sua IDE.
+> *(0:24)* Preço fixo em reais, ativa em minutos, sete dias de garantia.
+> *(0:28)* O acesso é limitado. O uso, nunca. Garanta sua chave no link da bio.
 
-Grave por cena, não de uma vez: cada trecho precisa caber na janela da cena.
-Para colocar a voz no vídeo, salve os arquivos em `public/voz/` (a pasta
-`public/audio/` é regenerada pelo script) e, em cada cena, adicione
-`<Html5Audio src={staticFile('voz/cena-1.wav')} />` — e baixe a trilha
-(`trilha: 0.6`) para a voz ficar na frente.
+Grave por trecho — cada fala precisa caber na janela do tempo ao lado. Para colocar a
+voz no vídeo, salve os arquivos em `public/voz/` e adicione
+`<Html5Audio src={staticFile('voz/01.wav')} />` dentro de um `<Sequence>` no quadro
+certo; baixe a trilha (`trilha: 0.6`) para a voz ficar na frente.
 
 ---
 
@@ -127,73 +121,63 @@ Para colocar a voz no vídeo, salve os arquivos em `public/voz/` (a pasta
 ```
 Seu Claude Code parou no meio da tarefa de novo?
 
-Com a UNBOUND você usa Claude Code sem rate limit, sem cota de tokens e sem fila — com preço fixo por mês.
+Limite de 5 horas, limite semanal, fatura em dólar — com a UNBOUND nenhum deles existe.
+Duas linhas no terminal e o Claude Code roda sem limite, com preço fixo em reais.
 
-→ Funciona em qualquer CLI ou IDE: Claude Code, Cursor, VS Code, JetBrains, Zed, Neovim e mais
-→ Configuração em 2 linhas
-→ 7 dias de garantia
+→ Funciona no terminal ou na sua IDE: Claude Code, VS Code, Cursor, JetBrains, Zed, Neovim
+→ Rode quantos agentes quiser ao mesmo tempo
+→ Ativa em minutos · 7 dias de garantia
 
-Lote 07 aberto. As chaves são liberadas por lote.
+Lote 07 aberto: as chaves são liberadas por lote.
 Link na bio — ou comente CHAVE que eu te mando o acesso.
 
 Serviço independente de provisionamento de acesso. Claude e Claude Code são marcas da Anthropic, citadas apenas para identificar o que é oferecido.
 
-#claudecode #claude #ia #inteligenciaartificial #programacao #dev #desenvolvedor #vibecoding #vscode #cursor #api #agentesdeia
+#claudecode #claude #ia #inteligenciaartificial #programacao #dev #desenvolvedor #vibecoding #agentesdeia #vscode #cursor #api
 ```
 
-**Capa:** use `entrega/capa.jpg` (quadro do ∞ com “Claude Code ilimitado.”). O recorte
-3:4 do grid do perfil mantém o ∞ e a manchete inteiros.
+**Capa:** `entrega/capa.jpg` (o ∞ com “Claude Code sem limite.” e as três dores riscadas).
 
 ---
 
 ## Variações de gancho para teste A/B
 
-Os primeiros 3 segundos decidem o alcance. Rode duas ou três versões com o mesmo
-restante e fique com a que segura mais gente no 3º segundo (Insights → retenção).
-Cada variação é um JSON em `variacoes/`:
+O gancho é o rótulo, o número inicial e a palavra do carimbo — o resto do vídeo não
+muda. Cada variação é um JSON em `variacoes/`:
 
 ```bash
 npx remotion render Reels out/gancho-b.mp4 --props=variacoes/gancho-b.json
 ```
 
-| Arquivo | Manchete antes do erro | Manchete depois do erro | Ângulo |
-|---|---|---|---|
-| *(padrão)* | Claude Code / a todo vapor… | …até bater / no limite. | narrativa |
-| `gancho-b.json` | Faltava só / o último teste… | …e o limite / chegou antes. | frustração concreta |
-| `gancho-c.json` | Quanto custa / esperar 5 horas? | Seu deploy / parado. | custo do tempo |
-| `gancho-d.json` | Você paga / o plano máximo… | …e ainda / bate no limite. | objeção de preço |
+| Arquivo | Rótulo | Começa em | Carimbo | Ângulo |
+|---|---|---|---|---|
+| *(padrão)* | uso do seu plano | 94% | ACABOU. | a barra enchendo |
+| `gancho-b.json` | sua sessão de 5 horas | 90% | DE NOVO? | a repetição que irrita |
+| `gancho-c.json` | limite semanal | 96% | E AGORA? | o limite que dói mais |
+| `gancho-d.json` | orçamento da API em dólar | 88% | ESTOUROU. | quem paga por token |
+
+## Como medir
+
+- **Retenção aos 3 s** (Insights do Reels): decide qual gancho fica. Compare as
+  variações com o mesmo público e o mesmo orçamento.
+- **Retenção no drop (0:11)**: se cair antes, o ato 1 está longo para o seu público —
+  aproxime as marcas `fitas` em `src/timeline.json` (elas podem vir a cada meio segundo).
+- **Comentários com a palavra-chave** e **cliques no link**: a métrica que paga.
 
 ---
 
 ## Continuação da série
 
-Um vídeo só não fecha venda de produto técnico. A sequência abaixo reaproveita os
-mesmos componentes (terminal, fundo aurora, ∞, cartões de vidro) — cada um é uma cena nova
-em `src/cenas/` e uma `<Composition>` a mais em `src/Root.tsx`.
+O motivo da barra rende uma série com os mesmos componentes:
 
-**2 · “Lado a lado” (20 s) — prova por comparação**
-Tela dividida, o mesmo pedido nos dois terminais. À esquerda, API comum: 429 no
-segundo 4, contador de espera subindo. À direita, UNBOUND: passos verdes até o fim.
-Fecho: “A diferença não é de preço. É de permissão.” (frase da página).
-
-**3 · “24 horas sem parar” (15 s) — prova de carga**
-Timelapse de um agente rodando um dia inteiro: relógio acelerado, contadores de
-requisições e tokens subindo, “limites atingidos: 0” parado em verde o tempo todo.
-Fecho: “O dia 31 custa o mesmo que o dia 1.”
-
-**4 · “Configure em 20 segundos” (20–30 s) — tutorial que vende**
-Três cortes: Claude Code (2 variáveis de ambiente), Cursor (base URL + chave),
-VS Code com Cline. Cada corte termina em “funcionando”. É o vídeo para mandar a
-quem comentou “CHAVE”.
-
-**5 · “Ilimitado mesmo?” (3 × 8 s) — objeções**
-Uma pergunta por vídeo, resposta tirada do FAQ da página: *Ilimitado é ilimitado
-mesmo?* · *Funciona no meu editor?* · *E se eu não gostar?* (7 dias de garantia).
-
-**Stories de apoio (no dia da publicação)**
-1. Repost do Reels com enquete: “Quantas vezes você bateu no limite esta semana?”
-2. Contagem regressiva do lote (figurinha de contagem).
-3. Print do terminal “0 limites atingidos” + figurinha de link.
+1. **“Quanto sobra?” (10 s)** — só o medidor: 97%, 98%, 99%… e corta. Legenda:
+   *“Você conhece essa barra.”* Teaser para o vídeo principal.
+2. **“24 horas” (15 s)** — o relógio acelerado de um dia inteiro, a grade de agentes
+   rodando, o medidor em ∞ o tempo todo. *“O dia 31 custa o mesmo que o dia 1.”*
+3. **“Configure em 20 s” (20 s)** — tutorial: o mesmo terminal da soltura, depois VS
+   Code e Cursor. É o vídeo para mandar a quem comentou CHAVE.
+4. **“Lote fechando” (8 s)** — só a barra do lote diminuindo com a contagem
+   regressiva da página. Para os stories da última semana do lote.
 
 ---
 
@@ -204,9 +188,8 @@ O vídeo usa números da página de vendas, e a própria página avisa que eles 
 
 - [ ] Lote, chaves restantes e total (`oferta.lote`, `restantes`, `total`)
 - [ ] Endpoint e formato da chave (`endpoint`, `chave`)
-- [ ] “Erros 429: 0,00 % nos últimos 30 dias” (`beneficios.itens`)
-- [ ] Lista de ferramentas — deixe só as que vocês testaram (`compat.ferramentas`)
-- [ ] Garantia de 7 dias e as condições dela
+- [ ] “Preço fixo em reais”, “ativa em minutos” e a garantia de 7 dias (`confianca.cartoes`)
+- [ ] Ferramentas — deixe só as que vocês testaram (`editores.nomes`)
 - [ ] “Uso ilimitado” está sujeito à política de uso justo da página — se houver
       letra miúda, ela vai na legenda
 - [ ] Mantenha o aviso de não afiliação: ele protege a marca de parecer oficial

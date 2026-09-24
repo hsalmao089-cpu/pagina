@@ -26,14 +26,14 @@ const COMPASSO = TEMPO * 4; // 2 s
 const DUR = tl.duracao / tl.fps; // 33 s
 const seg = (quadro) => quadro / tl.fps;
 
-const T_ERRO = seg(tl.marcas.erro); // 1,5 s
-const T_CUSTO = seg(tl.cenas.custo.de); // 3 s
-const T_VIRADA = seg(tl.cenas.virada.de); // 8 s
-const T_DROP = seg(tl.marcas.drop); // 10 s
-const T_DEMO = seg(tl.cenas.demo.de); // 14 s
-const T_COMPAT = seg(tl.cenas.compat.de); // 20 s
-const T_OFERTA = seg(tl.cenas.oferta.de); // 29 s
-const T_FINAL = seg(tl.marcas.golpeFinal); // 32 s
+// marcas da linha do tempo (src/timeline.json) que a música obedece
+const T_ERRO = seg(tl.marcas.erro); // a barra chega a 100%: tape stop
+const T_TENSAO = seg(tl.marcas.amarras); // batimento enquanto as fitas amarram
+const T_SUBIDA = seg(tl.marcas.chave); // subida enquanto as duas linhas são digitadas
+const T_DROP = seg(tl.marcas.drop); // o Enter: drop
+const T_ENERGIA = seg(tl.marcas.agentes); // palmas, chimbal e arpejo
+const T_OITAVA = seg(tl.marcas.editores); // arpejo sobe uma oitava
+const T_FINAL = seg(tl.marcas.golpeFinal); // golpe final
 
 /* --------------------------------------------------------------------------
    Utilidades
@@ -457,7 +457,10 @@ const trilha = () => {
 	const F = {baixo: 41, pad: [57, 60, 65], arp: [65, 69, 72, 77]};
 	const C = {baixo: 48, pad: [55, 60, 64], arp: [67, 72, 76, 79]};
 	const G = {baixo: 43, pad: [55, 59, 62], arp: [67, 71, 74, 79]};
-	const progressao = [Am, F, C, G, Am, F, C, G, Am, F, G];
+	const compassos = Math.round((T_FINAL - T_DROP) / COMPASSO);
+	const progressao = Array.from({length: compassos}, (_, i) =>
+		i >= compassos - 2 ? [F, G][i - (compassos - 2)] : [Am, F, C, G][i % 4],
+	);
 
 	const bumbos = [];
 
@@ -537,13 +540,13 @@ const trilha = () => {
 		somar(envio[0], envio[1], fio, ini, 0.08);
 	}
 	// batimento a cada tempo, do custo até a virada
-	for (let t = T_CUSTO; t < T_VIRADA - 0.01; t += TEMPO) {
+	for (let t = T_TENSAO; t < T_SUBIDA - 0.01; t += TEMPO) {
 		somar(bateria[0], bateria[1], pulso(0.8), t, 0.75);
 	}
 
 	/* ---- C · subida (virada → drop) ---- */
 	{
-		const dur = T_DROP - T_VIRADA - 0.18;
+		const dur = T_DROP - T_SUBIDA - 0.18;
 		const x = Float32Array.from({length: amostras(dur)}, () => ruido());
 		const y = filtrar(x, 'bp', (t) => 350 * Math.pow(9000 / 350, t / dur), 1.8);
 		let fase = 0;
@@ -554,16 +557,16 @@ const trilha = () => {
 			y[i] = y[i] * Math.pow(u, 1.6) * 1.5 + Math.sin(fase) * Math.pow(u, 2) * 0.18;
 			y[i] *= Math.min(1, (dur - t) / 0.02);
 		}
-		somar(efeitos[0], efeitos[1], y, T_VIRADA, 0.8);
-		somar(envio[0], envio[1], y, T_VIRADA, 0.3);
+		somar(efeitos[0], efeitos[1], y, T_SUBIDA, 0.8);
+		somar(envio[0], envio[1], y, T_SUBIDA, 0.3);
 
 		// rufar acelerando: colcheia → semicolcheia → fusa
 		const marcas = [];
-		for (let t = T_VIRADA; t < T_VIRADA + 1.0; t += TEMPO / 2) marcas.push(t);
-		for (let t = T_VIRADA + 1.0; t < T_VIRADA + 1.5; t += TEMPO / 4) marcas.push(t);
-		for (let t = T_VIRADA + 1.5; t < T_DROP - 0.2; t += TEMPO / 8) marcas.push(t);
+		for (let t = T_SUBIDA; t < T_SUBIDA + 1.0; t += TEMPO / 2) marcas.push(t);
+		for (let t = T_SUBIDA + 1.0; t < T_SUBIDA + 1.5; t += TEMPO / 4) marcas.push(t);
+		for (let t = T_SUBIDA + 1.5; t < T_DROP - 0.2; t += TEMPO / 8) marcas.push(t);
 		for (const t of marcas) {
-			const u = (t - T_VIRADA) / (T_DROP - T_VIRADA);
+			const u = (t - T_SUBIDA) / (T_DROP - T_SUBIDA);
 			somar(bateria[0], bateria[1], caixa(0.15 + 0.6 * u * u), t, 0.7, (rnd() - 0.5) * 0.3);
 			somar(envio[0], envio[1], caixa(0.1 + 0.3 * u), t, 0.3);
 		}
@@ -573,7 +576,7 @@ const trilha = () => {
 	for (let t = T_DROP; t < T_FINAL - 0.01; t += TEMPO) {
 		const b = Math.round((t - T_DROP) / TEMPO); // tempo desde o drop
 		const noCompasso = b % 4;
-		const nivel = t < T_DEMO ? 0.9 : 1;
+		const nivel = t < T_ENERGIA ? 0.9 : 1;
 		// meio segundo sem bumbo antes do golpe final: o respiro que faz o golpe bater
 		const respiro = t >= T_FINAL - TEMPO - 0.01;
 		if (!respiro) {
@@ -581,7 +584,7 @@ const trilha = () => {
 			bumbos.push(t);
 		}
 		somar(bateria[0], bateria[1], chimbal(true, 0.7), t + TEMPO / 2, 0.6, 0.25);
-		if (t >= T_DEMO) {
+		if (t >= T_ENERGIA) {
 			for (const k of [1, 3]) {
 				somar(bateria[0], bateria[1], chimbal(false, 0.4 + rnd() * 0.15), t + (k * TEMPO) / 4, 0.5, -0.35);
 			}
@@ -614,11 +617,11 @@ const trilha = () => {
 		somar(envio[0], envio[1], l, t0, 0.25, -1);
 		somar(envio[0], envio[1], r, t0, 0.25, 1);
 		// arpejo a partir da demo; ganha oitava a partir da compatibilidade
-		if (t0 + COMPASSO > T_DEMO) {
+		if (t0 + COMPASSO > T_ENERGIA) {
 			for (let k = 0; k < 16; k++) {
 				const t = t0 + (k * TEMPO) / 4;
-				if (t < T_DEMO || t >= T_FINAL) continue;
-				const nota = ac.arp[[0, 1, 2, 3, 2, 1, 2, 3][k % 8]] + (t >= T_COMPAT && k >= 8 && k % 4 === 3 ? 12 : 0);
+				if (t < T_ENERGIA || t >= T_FINAL) continue;
+				const nota = ac.arp[[0, 1, 2, 3, 2, 1, 2, 3][k % 8]] + (t >= T_OITAVA && k >= 8 && k % 4 === 3 ? 12 : 0);
 				const v = k % 4 === 0 ? 0.55 : 0.35;
 				somar(arpejo[0], arpejo[1], pluck(midi(nota), v), t, 0.55, k % 2 ? 0.35 : -0.35);
 			}
@@ -629,9 +632,9 @@ const trilha = () => {
 	somar(bateria[0], bateria[1], bumbo(1.1, 44), T_FINAL, 1);
 	somar(bateria[0], bateria[1], prato(0.5), T_FINAL, 0.7);
 	somar(envio[0], envio[1], prato(0.4), T_FINAL, 0.5);
-	somar(graves[0], graves[1], baixo(midi(45), 0.9, 1), T_FINAL, 0.9);
+	somar(graves[0], graves[1], baixo(midi(45), 1.2, 1), T_FINAL, 0.9);
 	{
-		const [l, r] = pad([57, 60, 64, 69], 0.7, 0.7, 2600);
+		const [l, r] = pad([57, 60, 64, 69], Math.max(0.7, DUR - T_FINAL - 0.6), 0.7, 2600);
 		somar(harmonia[0], harmonia[1], l, T_FINAL, 1, -1);
 		somar(harmonia[0], harmonia[1], r, T_FINAL, 1, 1);
 		somar(envio[0], envio[1], l, T_FINAL, 0.6, -1);
@@ -818,46 +821,6 @@ const erro = () => {
 	return normalizar([y], dB(-3));
 };
 
-// Golpe das palavras: subgrave para quem está de fone, mas o que carrega no
-// alto-falante do celular é o baque médio e o estalo.
-const golpe = () => {
-	rnd = gerador(77);
-	const n = amostras(1.4);
-	const L = new Float32Array(n);
-	const R = new Float32Array(n);
-	const x = vazio(0.9);
-	let fase = 0;
-	let fase2 = 0;
-	for (let i = 0; i < x.length; i++) {
-		const t = i / SR;
-		fase += (2 * Math.PI * (40 + 80 * Math.exp(-t / 0.05))) / SR;
-		fase2 += (2 * Math.PI * (95 + 110 * Math.exp(-t / 0.02))) / SR;
-		const sub = Math.sin(fase) * Math.exp(-t / 0.22) * 0.32;
-		const baque = Math.sin(fase2) * Math.exp(-t / 0.1) * 0.8;
-		x[i] = Math.tanh((sub + baque) * 2.2) * 0.9;
-	}
-	const estalo = filtrar(
-		Float32Array.from({length: amostras(0.2)}, (_, i) => ruido() * Math.exp(-i / SR / 0.028)),
-		'bp',
-		1700,
-		0.7,
-	);
-	const faisca = filtrar(
-		Float32Array.from({length: amostras(0.05)}, (_, i) => ruido() * Math.exp(-i / SR / 0.008)),
-		'hp',
-		3000,
-	);
-	somar(L, R, x, 0, 1);
-	somar(L, R, estalo, 0, 2.4);
-	somar(L, R, faisca, 0, 0.8);
-	const [rl, rr] = reverb(L, R, {sala: 0.75, amort: 0.5});
-	for (let i = 0; i < n; i++) {
-		L[i] += rl[i] * 0.8;
-		R[i] += rr[i] * 0.8;
-	}
-	return normalizar([L, R], dB(-2));
-};
-
 const tique = () => {
 	rnd = gerador(12);
 	const x = vazio(0.1);
@@ -1025,6 +988,77 @@ const toque = () => {
 	return normalizar([filtrar(x, 'hp', 200)], dB(-6));
 };
 
+/** Fita batendo: tapa seco, corpo grave e o "zzip" da fita esticando. */
+const fita = () => {
+	rnd = gerador(1010);
+	const n = amostras(0.8);
+	const L = new Float32Array(n);
+	const R = new Float32Array(n);
+	const corpo = vazio(0.3);
+	let fase = 0;
+	for (let i = 0; i < corpo.length; i++) {
+		const t = i / SR;
+		fase += (2 * Math.PI * (70 + 90 * Math.exp(-t / 0.02))) / SR;
+		corpo[i] = Math.tanh(Math.sin(fase) * 2) * Math.exp(-t / 0.08);
+	}
+	const tapa = filtrar(
+		Float32Array.from({length: amostras(0.12)}, (_, i) => ruido() * Math.exp(-i / SR / 0.022)),
+		'bp',
+		1400,
+		0.8,
+	);
+	const zip = Float32Array.from({length: amostras(0.22)}, (_, i) => {
+		const t = i / SR;
+		return ruido() * (0.55 + 0.45 * Math.sin(2 * Math.PI * 70 * t)) * Math.exp(-t / 0.07);
+	});
+	somar(L, R, corpo, 0, 0.9);
+	somar(L, R, tapa, 0, 2.4);
+	somar(L, R, filtrar(zip, 'bp', 2900, 1.2), 0.01, 1.4, 0.2);
+	const [rl, rr] = reverb(L, R, {sala: 0.5, amort: 0.5});
+	for (let i = 0; i < n; i++) {
+		L[i] += rl[i] * 0.5;
+		R[i] += rr[i] * 0.5;
+	}
+	return normalizar([L, R], dB(-2));
+};
+
+/** Rasgo: fita rasgando — ruído granulado que varre para o agudo, com peso embaixo. */
+const rasgo = () => {
+	rnd = gerador(1111);
+	const dur = 0.75;
+	const n = amostras(dur + 0.4);
+	const L = new Float32Array(n);
+	const R = new Float32Array(n);
+	const x = new Float32Array(amostras(dur));
+	let grao = 0;
+	let resta = 0;
+	for (let i = 0; i < x.length; i++) {
+		const t = i / SR;
+		if (resta-- <= 0) {
+			grao = Math.pow(rnd(), 1.5);
+			resta = Math.floor(SR * (0.002 + rnd() * 0.006));
+		}
+		x[i] = ruido() * grao * Math.min(1, t / 0.004) * Math.exp(-t / 0.28);
+	}
+	const y = filtrar(x, 'bp', (t) => 1500 + 2600 * (t / dur), 0.9);
+	const peso = vazio(0.4);
+	let fase = 0;
+	for (let i = 0; i < peso.length; i++) {
+		const t = i / SR;
+		fase += (2 * Math.PI * (45 + 60 * Math.exp(-t / 0.05))) / SR;
+		peso[i] = Math.sin(fase) * Math.exp(-t / 0.15);
+	}
+	somar(L, R, y, 0, 2.2, -0.35);
+	somar(L, R, y, 0.012, 1.8, 0.35);
+	somar(L, R, peso, 0, 0.7);
+	const [rl, rr] = reverb(L, R, {sala: 0.7, amort: 0.4});
+	for (let i = 0; i < n; i++) {
+		L[i] += rl[i] * 0.6;
+		R[i] += rr[i] * 0.6;
+	}
+	return normalizar([L, R], dB(-3));
+};
+
 /* --------------------------------------------------------------------------
    Saída
    -------------------------------------------------------------------------- */
@@ -1037,7 +1071,6 @@ const lista = [
 	['check', check],
 	['sucesso', sucesso],
 	['erro', erro],
-	['golpe', golpe],
 	['tique', tique],
 	['whoosh', whoosh],
 	['impacto', () => impacto(false)],
@@ -1046,6 +1079,8 @@ const lista = [
 	['pop', pop],
 	['brilho', brilho],
 	['toque', toque],
+	['fita', fita],
+	['rasgo', rasgo],
 ];
 
 const t0 = Date.now();

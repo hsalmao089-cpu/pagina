@@ -9,7 +9,7 @@
     "dev": "npm run audio && remotion studio",
     "render": "npm run audio && remotion render Reels out/reels-claude-code.mp4",
     "render:sem-trilha": "npm run audio && remotion render Reels out/reels-claude-code-sem-trilha.mp4 --props='{\"trilha\":0}'",
-    "capa": "remotion still Reels out/capa.jpg --frame=360 --image-format=jpeg --jpeg-quality=92",
+    "capa": "remotion still Reels out/capa.jpg --frame=410 --image-format=jpeg --jpeg-quality=92",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

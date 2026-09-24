@@ -4,7 +4,7 @@ import {z} from 'zod';
    ROTEIRO EM DADOS
    Todo texto que aparece na tela mora aqui. Edite pelo painel direito do
    Remotion Studio (`npm run dev`) ou passe um JSON com --props no render.
-   O roteiro completo, com locução e legenda do post, está em ROTEIRO.md.
+   O roteiro completo — ideia, locução, legenda do post — está em ROTEIRO.md.
    ========================================================================== */
 
 const linhas = z.array(z.string());
@@ -16,46 +16,42 @@ export const esquema = z.object({
 	/** Chave mascarada exibida no terminal. */
 	chave: z.string(),
 
+	/** Ato 1 · a barra enche até acabar. */
 	gancho: z.object({
-		antes: linhas,
-		depois: linhas,
+		rotulo: z.string(),
+		/** Porcentagem do primeiro quadro; sobe de 1 em 1 até 100. */
+		inicio: z.number().int().min(80).max(99),
+		carimbo: z.string(),
 		pasta: z.string(),
 		pedido: z.string(),
 		passos: linhas,
 		erro: z.string(),
 		volta: z.string(),
 	}),
-	custo: z.object({
-		secao: z.string(),
-		golpes: z.array(z.object({palavra: z.string(), codigo: z.string()})),
-		rotulo: z.string(),
-		prazo: linhas,
+	/** Ato 1 · as amarras: uma fita de interdição por dor. */
+	amarras: z.object({
+		fitas: linhas,
+		titulo: linhas,
 	}),
-	virada: z.object({linhas}),
+	/** Ato 1 · a soltura: duas linhas coladas no terminal soltam tudo. */
+	soltura: z.object({
+		titulo: linhas,
+	}),
+	/** Ato 2 · a barra vira ∞. As fitas voltam riscadas. */
 	revelacao: z.object({
-		apresenta: z.string(),
 		titulo: linhas,
-		sub: z.string(),
 	}),
-	demo: z.object({
-		secao: z.string(),
+	agentes: z.object({
 		titulo: linhas,
-		pedido: z.string(),
-		saida: linhas,
-		fim: z.string(),
+		tarefas: linhas,
 	}),
-	compat: z.object({
-		secao: z.string(),
+	editores: z.object({
 		titulo: linhas,
-		ferramentas: z.array(linhas),
-		fecho: z.string(),
+		nomes: linhas,
 	}),
-	beneficios: z.object({
-		secao: z.string(),
+	confianca: z.object({
 		titulo: linhas,
-		itens: z.array(
-			z.object({rotulo: z.string(), valor: z.string(), nota: z.string()}),
-		),
+		cartoes: z.array(z.object({titulo: z.string(), sub: z.string()})),
 	}),
 	oferta: z.object({
 		lote: z.string(),
@@ -70,7 +66,7 @@ export const esquema = z.object({
 
 	/** Volume da trilha (0 = sem música, para usar um áudio do próprio Instagram). */
 	trilha: z.number().min(0).max(1),
-	/** Volume dos efeitos sonoros (teclas, impactos, glitch). */
+	/** Volume dos efeitos sonoros. */
 	efeitos: z.number().min(0).max(1),
 	/** Mostra as áreas cobertas pela interface do Reels. Só para conferência. */
 	guias: z.boolean(),
@@ -84,60 +80,43 @@ export const roteiroPadrao: Roteiro = {
 	chave: 'sk-unb-••••7f2a',
 
 	gancho: {
-		antes: ['Claude Code', 'a todo vapor…'],
-		depois: ['…até bater', 'no limite.'],
+		rotulo: 'uso do seu plano',
+		inicio: 94,
+		carimbo: 'Acabou.',
 		pasta: '~/loja-api',
 		pedido: 'refatore o checkout e rode os testes',
 		passos: ['Lendo 48 arquivos', 'Editando checkout/pagamento.ts', 'Rodando 212 testes'],
 		erro: 'Limite de uso atingido.',
-		volta: 'Seu acesso volta em 4h 59min.',
+		volta: 'Seu acesso volta em',
 	},
-	custo: {
-		secao: 'o custo do limite',
-		golpes: [
-			{palavra: 'Cota.', codigo: '402 quota_exceeded'},
-			{palavra: 'Fila.', codigo: '529 overloaded_error'},
-			{palavra: '429.', codigo: '429 too_many_requests'},
-		],
-		rotulo: 'o limite volta em',
-		prazo: ['O seu prazo,', 'não.'],
+	amarras: {
+		fitas: ['Limite de 5 horas', 'Limite semanal', 'Fatura em dólar'],
+		titulo: ['Seu Claude Code,', 'amarrado.'],
 	},
-	virada: {linhas: ['E se o limite', 'não existisse?']},
+	soltura: {
+		titulo: ['Duas linhas', 'soltam tudo.'],
+	},
 	revelacao: {
-		apresenta: 'apresenta',
-		titulo: ['Claude Code', 'ilimitado.'],
-		sub: 'API com uso ilimitado. Sem rate limit, sem cota de tokens, sem fila.',
+		titulo: ['Claude Code', 'sem limite.'],
 	},
-	demo: {
-		secao: 'configuração',
-		titulo: ['Troque 2 linhas.', 'Pronto.'],
-		pedido: 'crie a API de pedidos com testes',
-		saida: ['6 agentes em paralelo', '128 arquivos editados', '212 testes passando'],
-		fim: 'pronto · 0 limites atingidos',
+	agentes: {
+		titulo: ['Rode quantos', 'agentes quiser.'],
+		tarefas: ['testes', 'refactor', 'migração', 'docs', 'bug #481', 'frontend', 'revisão', 'infra', 'i18n'],
 	},
-	compat: {
-		secao: 'onde funciona',
-		titulo: ['Qualquer CLI.', 'Qualquer IDE.'],
-		ferramentas: [
-			['Claude Code', 'OpenCode', 'Aider', 'Codex CLI', 'Goose', 'Crush'],
-			['VS Code', 'Cursor', 'JetBrains', 'Zed', 'Neovim', 'Emacs'],
-			['Cline', 'Roo Code', 'Kilo Code', 'Continue', 'Avante'],
-		],
-		fecho: 'Uma chave. Todas as ferramentas.',
+	editores: {
+		titulo: ['No terminal', 'ou na sua IDE.'],
+		nomes: ['Claude Code', 'VS Code', 'Cursor', 'JetBrains', 'Zed', 'Neovim'],
 	},
-	beneficios: {
-		secao: 'o que vem com a chave',
-		titulo: ['Use sem', 'contar.'],
-		itens: [
-			{rotulo: 'Rate limit', valor: '—', nota: 'não existe'},
-			{rotulo: 'Cota de tokens', valor: '—', nota: 'não existe'},
-			{rotulo: 'Fila', valor: '0', nota: 'nenhuma'},
-			{rotulo: 'Erros 429', valor: '0,00 %', nota: 'últimos 30 dias'},
-			{rotulo: 'Preço', valor: 'fixo', nota: 'por mês'},
+	confianca: {
+		titulo: ['Do jeito que', 'devia ser.'],
+		cartoes: [
+			{titulo: 'Preço fixo', sub: 'em reais, todo mês'},
+			{titulo: 'Ativa em minutos', sub: 'sem call, sem fila de aprovação'},
+			{titulo: '7 dias de garantia', sub: 'não gostou, devolvemos tudo'},
 		],
 	},
 	oferta: {
-		lote: 'Lote 07 aberto',
+		lote: 'Lote 07',
 		restantes: 46,
 		total: 150,
 		titulo: ['O acesso é limitado.', 'O uso, nunca.'],

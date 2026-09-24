@@ -1,13 +1,8 @@
 {
   "gancho": {
-    "antes": [
-      "Quanto custa",
-      "esperar 5 horas?"
-    ],
-    "depois": [
-      "Seu deploy",
-      "parado."
-    ],
+    "rotulo": "limite semanal",
+    "inicio": 96,
+    "carimbo": "E agora?",
     "pasta": "~/loja-api",
     "pedido": "refatore o checkout e rode os testes",
     "passos": [
@@ -16,6 +11,6 @@
       "Rodando 212 testes"
     ],
     "erro": "Limite de uso atingido.",
-    "volta": "Seu acesso volta em 4h 59min."
+    "volta": "Seu acesso volta em"
   }
 }

@@ -1,13 +1,8 @@
 {
   "gancho": {
-    "antes": [
-      "Você paga",
-      "o plano máximo…"
-    ],
-    "depois": [
-      "…e ainda",
-      "bate no limite."
-    ],
+    "rotulo": "orçamento da API em dólar",
+    "inicio": 88,
+    "carimbo": "Estourou.",
     "pasta": "~/loja-api",
     "pedido": "refatore o checkout e rode os testes",
     "passos": [
@@ -16,6 +11,6 @@
       "Rodando 212 testes"
     ],
     "erro": "Limite de uso atingido.",
-    "volta": "Seu acesso volta em 4h 59min."
+    "volta": "Seu acesso volta em"
   }
 }

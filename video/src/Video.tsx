@@ -3,51 +3,41 @@ import {AbsoluteFill, Html5Audio, interpolate, Sequence, staticFile, useCurrentF
 import {Aurora} from './componentes/Aurora';
 import {Clarao, Grao, GuiasReels, Varredura, Vinheta} from './componentes/Camadas';
 import {Som, VolumeEfeitos} from './componentes/Som';
-import {Beneficios} from './cenas/Beneficios';
-import {Compat} from './cenas/Compat';
-import {Custo} from './cenas/Custo';
-import {Demo} from './cenas/Demo';
-import {Gancho} from './cenas/Gancho';
+import {Agentes} from './cenas/Agentes';
+import {Confianca} from './cenas/Confianca';
+import {Editores} from './cenas/Editores';
+import {Limite} from './cenas/Limite';
 import {Oferta} from './cenas/Oferta';
 import {Revelacao} from './cenas/Revelacao';
-import {Virada} from './cenas/Virada';
 import type {Roteiro} from './roteiro';
 import {CENAS, DURACAO, grad, MARCAS} from './tema';
 
+// As cenas se sobrepõem alguns quadros: cada passagem é feita por
+// continuidade — a barra vira ∞, o ∞ vira a grade, um painel vira o editor.
 const ordem = [
-	['gancho', Gancho],
-	['custo', Custo],
-	['virada', Virada],
+	['limite', Limite],
 	['revelacao', Revelacao],
-	['demo', Demo],
-	['compat', Compat],
-	['beneficios', Beneficios],
+	['agentes', Agentes],
+	['editores', Editores],
+	['confianca', Confianca],
 	['oferta', Oferta],
 ] as const;
 
-/** Cortes escondidos por uma varredura colorida (os outros têm transição própria). */
-const VARREDURAS = [
-	{em: CENAS.demo.de, fundo: grad.frio, sentido: 1},
-	{em: CENAS.compat.de, fundo: grad.marca, sentido: -1},
-	{em: CENAS.beneficios.de, fundo: grad.frio, sentido: 1},
-	{em: CENAS.oferta.de, fundo: grad.marca, sentido: -1},
-] as const;
-
-// A trilha abaixa onde o som da cena conta a história — o teclado da demo, os
-// cliques do terminal — e some nos últimos quadros, para o loop do Reels não
+// A trilha abaixa onde o som da cena conta a história — o teclado da chave,
+// os tiques do medidor — e some nos últimos quadros, para o loop do Reels não
 // emendar com estalo.
 const mixDaTrilha = (f: number) =>
 	interpolate(
 		f,
-		[0, 44, 50, 88, 94, 236, 244, 416, 426, 596, 606, 866, 874, DURACAO - 6, DURACAO],
-		[0.85, 0.85, 1, 1, 0.9, 0.9, 1, 1, 0.72, 0.72, 0.9, 0.9, 1, 1, 0],
+		[0, 44, 50, 118, 124, 266, 274, 326, 330, DURACAO - 6, DURACAO],
+		[0.85, 0.85, 1, 1, 0.92, 0.92, 0.8, 0.8, 1, 1, 0],
 		{extrapolateLeft: 'clamp', extrapolateRight: 'clamp'},
 	);
 
 export const Video: React.FC<Roteiro> = (r) => {
 	const frame = useCurrentFrame();
 
-	// clarão branco no drop: fecha a virada e abre a revelação
+	// clarão branco no drop: o Enter rasga as fitas
 	const clarao = interpolate(frame, [MARCAS.drop - 2, MARCAS.drop, MARCAS.drop + 7], [0, 0.9, 0], {
 		extrapolateLeft: 'clamp',
 		extrapolateRight: 'clamp',
@@ -56,7 +46,7 @@ export const Video: React.FC<Roteiro> = (r) => {
 	return (
 		<VolumeEfeitos.Provider value={r.efeitos}>
 			<AbsoluteFill>
-				{/* fundo único para o vídeo todo: a paleta muda por dentro das transições */}
+				{/* fundo único para o vídeo todo: a paleta muda com a história */}
 				<Aurora />
 
 				{ordem.map(([chave, Cena]) => {
@@ -68,12 +58,9 @@ export const Video: React.FC<Roteiro> = (r) => {
 					);
 				})}
 
-				{VARREDURAS.map((v) => (
-					<Varredura key={v.em} em={v.em} fundo={v.fundo} sentido={v.sentido} />
-				))}
-				{VARREDURAS.map((v) => (
-					<Som key={`s${v.em}`} efeito="whoosh" at={v.em - 8} volume={0.5} />
-				))}
+				{/* a entrada do último ato ganha uma varredura com o degradê da marca */}
+				<Varredura em={MARCAS.oferta} fundo={grad.marca} sentido={-1} />
+				<Som efeito="whoosh" at={MARCAS.oferta - 8} volume={0.5} />
 
 				<Clarao intensidade={clarao} />
 				<Vinheta />

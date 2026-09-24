@@ -1,13 +1,8 @@
 {
   "gancho": {
-    "antes": [
-      "Faltava só",
-      "o último teste…"
-    ],
-    "depois": [
-      "…e o limite",
-      "chegou antes."
-    ],
+    "rotulo": "sua sessão de 5 horas",
+    "inicio": 90,
+    "carimbo": "De novo?",
     "pasta": "~/loja-api",
     "pedido": "refatore o checkout e rode os testes",
     "passos": [
@@ -16,6 +11,6 @@
       "Rodando 212 testes"
     ],
     "erro": "Limite de uso atingido.",
-    "volta": "Seu acesso volta em 4h 59min."
+    "volta": "Seu acesso volta em"
   }
 }

@@ -8,7 +8,6 @@ export type Efeito =
 	| 'blip'
 	| 'check'
 	| 'erro'
-	| 'golpe'
 	| 'tique'
 	| 'whoosh'
 	| 'impacto'
@@ -17,7 +16,9 @@ export type Efeito =
 	| 'carimbo'
 	| 'pop'
 	| 'brilho'
-	| 'toque';
+	| 'toque'
+	| 'fita'
+	| 'rasgo';
 
 /** Volume geral dos efeitos, vindo da prop `efeitos`. */
 export const VolumeEfeitos = createContext(1);

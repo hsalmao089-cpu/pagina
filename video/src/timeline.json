@@ -3,18 +3,25 @@
   "bpm": 120,
   "duracao": 990,
   "cenas": {
-    "gancho":     { "de": 0,   "dur": 90 },
-    "custo":      { "de": 90,  "dur": 150 },
-    "virada":     { "de": 240, "dur": 60 },
-    "revelacao":  { "de": 300, "dur": 120 },
-    "demo":       { "de": 420, "dur": 180 },
-    "compat":     { "de": 600, "dur": 150 },
-    "beneficios": { "de": 750, "dur": 120 },
-    "oferta":     { "de": 870, "dur": 120 }
+    "limite":    { "de": 0,   "dur": 366 },
+    "revelacao": { "de": 330, "dur": 126 },
+    "agentes":   { "de": 450, "dur": 156 },
+    "editores":  { "de": 600, "dur": 126 },
+    "confianca": { "de": 720, "dur": 126 },
+    "oferta":    { "de": 840, "dur": 150 }
   },
   "marcas": {
     "erro": 45,
-    "drop": 300,
-    "golpeFinal": 960
+    "amarras": 120,
+    "fitas": [135, 165, 195],
+    "tituloAmarras": 222,
+    "chave": 270,
+    "enter": 327,
+    "drop": 330,
+    "agentes": 450,
+    "editores": 600,
+    "confianca": 720,
+    "oferta": 840,
+    "golpeFinal": 930
   }
 }

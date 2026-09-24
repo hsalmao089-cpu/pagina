@@ -138,13 +138,6 @@ export const InfinitoIcone: React.FC<P> = ({size = 28, color = 'currentColor', s
 	</svg>
 );
 
-export const Relogio: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
-	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
-		<circle cx="12" cy="12" r="8.5" stroke={color} strokeWidth={stroke} />
-		<path d="M12 7.5V12l3 2" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" />
-	</svg>
-);
-
 export const Etiqueta: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
 	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
 		<path
@@ -154,13 +147,6 @@ export const Etiqueta: React.FC<P> = ({size = 28, color = 'currentColor', stroke
 			strokeLinejoin="round"
 		/>
 		<circle cx="8.3" cy="8.3" r="1.6" fill={color} />
-	</svg>
-);
-
-export const Chave: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
-	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
-		<circle cx="8" cy="15.5" r="4.5" stroke={color} strokeWidth={stroke} />
-		<path d="M11.2 12.3 19.5 4M16.5 7l2.5 2.5M14.5 9l2 2" stroke={color} strokeWidth={stroke} strokeLinecap="round" />
 	</svg>
 );
 

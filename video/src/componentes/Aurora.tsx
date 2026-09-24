@@ -14,35 +14,48 @@ import {ALTURA, FPS, LARGURA, MARCAS, TEMPO} from '../tema';
 type Paleta = {base: string; manchas: [string, string, string, string]};
 
 export const PALETAS = {
-	trabalho: {base: '#1C1257', manchas: ['#6D28D9', '#2563EB', '#06B6D4', '#C026D3']},
-	alerta: {base: '#5C0A24', manchas: ['#FF2D55', '#FF6B00', '#D6186F', '#FF3B30']},
-	tensao: {base: '#150B3A', manchas: ['#4C1D95', '#9D174D', '#1E3A8A', '#6D28D9']},
+	foco: {base: '#130D3A', manchas: ['#4C1D95', '#1D4ED8', '#7C3AED', '#0E7490']},
+	alerta: {base: '#4A0A1C', manchas: ['#FF2D55', '#FF6B00', '#B3125F', '#E11D48']},
+	chave: {base: '#170620', manchas: ['#7F1D1D', '#4C1D95', '#831843', '#1E1B4B']},
 	revelacao: {base: '#2E1065', manchas: ['#FF3D9A', '#FF7A1A', '#8B5CF6', '#22D3EE']},
-	demo: {base: '#12195E', manchas: ['#3B82F6', '#7C3AED', '#06B6D4', '#DB2777']},
-	compat: {base: '#0B3358', manchas: ['#06B6D4', '#8B5CF6', '#10B981', '#EC4899']},
-	beneficios: {base: '#3B0F70', manchas: ['#A855F7', '#EC4899', '#6366F1', '#F97316']},
+	agentes: {base: '#0B1446', manchas: ['#2563EB', '#7C3AED', '#06B6D4', '#10B981']},
+	// uma por IDE, na ordem de `editores.nomes`
+	ed0: {base: '#2A0F08', manchas: ['#D97757', '#F59E0B', '#B45309', '#FB923C']},
+	ed1: {base: '#071A3A', manchas: ['#3B82F6', '#0EA5E9', '#6366F1', '#22D3EE']},
+	ed2: {base: '#101014', manchas: ['#52525B', '#A1A1AA', '#3F3F46', '#D4D4D8']},
+	ed3: {base: '#3B0A2A', manchas: ['#FF318C', '#FC801D', '#7B2FF7', '#FE2857']},
+	ed4: {base: '#0A1440', manchas: ['#4C7DFF', '#7C3AED', '#2563EB', '#60A5FA']},
+	ed5: {base: '#062A1A', manchas: ['#22C55E', '#16A34A', '#14B8A6', '#84CC16']},
+	confianca: {base: '#3B0F70', manchas: ['#A855F7', '#EC4899', '#6366F1', '#F97316']},
 	oferta: {base: '#7A1350', manchas: ['#FF7A1A', '#FF3D9A', '#FFC83D', '#8B5CF6']},
 } satisfies Record<string, Paleta>;
 
 type NomePaleta = keyof typeof PALETAS;
 
+/** Quadros em que a janela do editor troca de IDE — a cena usa os mesmos. */
+export const INICIO_EDITOR = MARCAS.editores + 12;
+export const PASSO_EDITOR = 14;
+const ED: NomePaleta[] = ['ed0', 'ed1', 'ed2', 'ed3', 'ed4', 'ed5'];
+
 /** Quadro → paleta. Entre dois marcos, as cores se misturam. */
 const MARCOS: [number, NomePaleta][] = [
-	[0, 'trabalho'],
-	[MARCAS.erro - 1, 'trabalho'],
+	[0, 'foco'],
+	[MARCAS.erro - 1, 'foco'],
 	[MARCAS.erro + 2, 'alerta'],
-	[236, 'alerta'],
-	[252, 'tensao'],
-	[MARCAS.drop - 2, 'tensao'],
-	[MARCAS.drop + 1, 'revelacao'],
-	[416, 'revelacao'],
-	[424, 'demo'],
-	[596, 'demo'],
-	[604, 'compat'],
-	[746, 'compat'],
-	[754, 'beneficios'],
-	[866, 'beneficios'],
-	[874, 'oferta'],
+	[MARCAS.chave - 4, 'alerta'],
+	[MARCAS.chave + 12, 'chave'],
+	[MARCAS.drop - 1, 'chave'],
+	[MARCAS.drop + 2, 'revelacao'],
+	[MARCAS.agentes - 6, 'revelacao'],
+	[MARCAS.agentes + 4, 'agentes'],
+	[INICIO_EDITOR - 10, 'agentes'],
+	...ED.flatMap<[number, NomePaleta]>((p, i) => [
+		[INICIO_EDITOR + i * PASSO_EDITOR, p],
+		[INICIO_EDITOR + (i + 1) * PASSO_EDITOR - 3, p],
+	]),
+	[MARCAS.confianca + 6, 'confianca'],
+	[MARCAS.oferta - 4, 'confianca'],
+	[MARCAS.oferta + 6, 'oferta'],
 ];
 
 const rgb = (hex: string): [number, number, number] => {

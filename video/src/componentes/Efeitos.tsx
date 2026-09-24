@@ -19,32 +19,6 @@ const gerador = (semente: number) => {
 export const mola = (frame: number, at: number, fps: number, rigidez = 200) =>
 	spring({frame: frame - at, fps, config: {damping: 12, stiffness: rigidez, mass: 0.6}});
 
-type PopProps = {
-	at: number;
-	de?: number;
-	style?: React.CSSProperties;
-	children: React.ReactNode;
-};
-
-/** Entra crescendo com mola. */
-export const Pop: React.FC<PopProps> = ({at, de = 0.5, style, children}) => {
-	const frame = useCurrentFrame();
-	const {fps} = useVideoConfig();
-	if (frame < at) return null;
-	const s = mola(frame, at, fps);
-	return (
-		<div
-			style={{
-				transform: `scale(${interpolate(s, [0, 1], [de, 1])})`,
-				opacity: Math.min(1, (frame - at) / 4),
-				...style,
-			}}
-		>
-			{children}
-		</div>
-	);
-};
-
 type MarcaProps = {
 	at: number;
 	fundo: string;
