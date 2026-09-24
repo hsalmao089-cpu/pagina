@@ -6,8 +6,11 @@ import {FPS} from '../tema';
    ∞ DE PARTÍCULAS
    Uma fita de partículas correndo sobre a lemniscata de Bernoulli. Nasce como
    um cometa saindo do cruzamento e se espalha até fechar o laço: de um ponto
-   ao infinito. Tudo é função do quadro — nada de estado entre quadros.
+   ao infinito. A cor corre pelo laço no degradê da marca, e o degradê também
+   gira com o tempo — a fita parece iridescente. Tudo é função do quadro.
    ========================================================================== */
+
+const CORES = ['#FFC83D', '#FF7A1A', '#FF3D9A', '#C084FC', '#818CF8', '#22D3EE'];
 
 type Props = {
 	/** Quadro local em que o ∞ nasce. */
@@ -111,35 +114,50 @@ export const Infinito: React.FC<Props> = ({
 		b.lineCap = 'round';
 		b.lineJoin = 'round';
 
-		// quatro faixas de brilho por partícula, do rastro velho para a cabeça
+		// a cor de cada partícula depende de onde ela está no laço agora
+		const giro = tau * 0.9;
+		const tom = (p: Particula) => {
+			const ab = abre;
+			const s = Math.PI / 2 + p.s0 * ab + p.w * tau;
+			const u = (((s + giro) / (Math.PI * 2)) % 1 + 1) % 1;
+			return Math.floor(u * CORES.length) % CORES.length;
+		};
+		const tons = ps.map(tom);
+
+		// quatro faixas de idade (rastro velho → cabeça) × três classes de brilho × seis cores
 		const cortes = [0, 5, 10, 14, TRILHA];
 		for (let fx = cortes.length - 2; fx >= 0; fx--) {
 			const k0 = cortes[fx];
 			const k1 = cortes[fx + 1];
 			const peso = 1 - (k0 + k1) / 2 / TRILHA;
 			for (const faixaA of [0.35, 0.7, 1]) {
-				b.strokeStyle = `rgba(242,239,233,${(faixaA * peso * 0.62 * brilho).toFixed(4)})`;
-				b.lineWidth = 1.4 + faixaA * 1.2;
-				b.beginPath();
-				for (const p of ps) {
-					const classe = p.a < 0.4 ? 0.35 : p.a < 0.75 ? 0.7 : 1;
-					if (classe !== faixaA) continue;
-					for (let k = k0; k <= k1; k++) {
-						const t = Math.max(0, tau - k * DT);
-						const ab = interpolate(t, [0, 1.1], [0, 1], {
-							extrapolateRight: 'clamp',
-							easing: Easing.bezier(0.16, 1, 0.3, 1),
-						});
-						const s = Math.PI / 2 + p.s0 * ab + p.w * t;
-						const d = p.d * ab * (1 + 0.35 * Math.sin(2.1 * t + p.fase));
-						const [x, y] = ponto(s, d);
-						if (k === k0) b.moveTo(x, y);
-						else b.lineTo(x, y);
+				b.globalAlpha = Math.min(1, faixaA * peso * 0.75 * brilho);
+				b.lineWidth = 1.6 + faixaA * 1.4;
+				for (let ci = 0; ci < CORES.length; ci++) {
+					b.strokeStyle = CORES[ci];
+					b.beginPath();
+					for (let pi = 0; pi < ps.length; pi++) {
+						const p = ps[pi];
+						const classe = p.a < 0.4 ? 0.35 : p.a < 0.75 ? 0.7 : 1;
+						if (classe !== faixaA || tons[pi] !== ci) continue;
+						for (let k = k0; k <= k1; k++) {
+							const t = Math.max(0, tau - k * DT);
+							const ab = interpolate(t, [0, 1.1], [0, 1], {
+								extrapolateRight: 'clamp',
+								easing: Easing.bezier(0.16, 1, 0.3, 1),
+							});
+							const s = Math.PI / 2 + p.s0 * ab + p.w * t;
+							const d = p.d * ab * (1 + 0.35 * Math.sin(2.1 * t + p.fase));
+							const [x, y] = ponto(s, d);
+							if (k === k0) b.moveTo(x, y);
+							else b.lineTo(x, y);
+						}
 					}
+					b.stroke();
 				}
-				b.stroke();
 			}
 		}
+		b.globalAlpha = 1;
 
 		// brilho: a fita inteira borrada por baixo, depois a fita nítida por cima
 		g.globalCompositeOperation = 'lighter';
@@ -161,8 +179,9 @@ export const Infinito: React.FC<Props> = ({
 		if (clarao > 0.001) {
 			const r = 40 + (1 - clarao) * 220 * abre;
 			const gr = g.createRadialGradient(cx, cy, 0, cx, cy, r);
-			gr.addColorStop(0, `rgba(242,239,233,${0.9 * clarao})`);
-			gr.addColorStop(1, 'rgba(242,239,233,0)');
+			gr.addColorStop(0, `rgba(255,255,255,${0.95 * clarao})`);
+			gr.addColorStop(0.4, `rgba(255,120,200,${0.5 * clarao})`);
+			gr.addColorStop(1, 'rgba(255,120,200,0)');
 			g.fillStyle = gr;
 			g.fillRect(cx - r, cy - r, r * 2, r * 2);
 		}

@@ -613,12 +613,12 @@ const trilha = () => {
 		somar(harmonia[0], harmonia[1], r, t0, 1, 1);
 		somar(envio[0], envio[1], l, t0, 0.25, -1);
 		somar(envio[0], envio[1], r, t0, 0.25, 1);
-		// arpejo a partir da cena de compatibilidade
-		if (t0 + COMPASSO > T_COMPAT) {
+		// arpejo a partir da demo; ganha oitava a partir da compatibilidade
+		if (t0 + COMPASSO > T_DEMO) {
 			for (let k = 0; k < 16; k++) {
 				const t = t0 + (k * TEMPO) / 4;
-				if (t < T_COMPAT || t >= T_FINAL) continue;
-				const nota = ac.arp[[0, 1, 2, 3, 2, 1, 2, 3][k % 8]] + (k >= 8 && k % 4 === 3 ? 12 : 0);
+				if (t < T_DEMO || t >= T_FINAL) continue;
+				const nota = ac.arp[[0, 1, 2, 3, 2, 1, 2, 3][k % 8]] + (t >= T_COMPAT && k >= 8 && k % 4 === 3 ? 12 : 0);
 				const v = k % 4 === 0 ? 0.55 : 0.35;
 				somar(arpejo[0], arpejo[1], pluck(midi(nota), v), t, 0.55, k % 2 ? 0.35 : -0.35);
 			}
@@ -945,6 +945,86 @@ const impacto = (leve = false) => {
 	return normalizar([oL, oR], dB(-2));
 };
 
+/** Carimbo: baque grave, tapa médio e estalo — lê como "bateu e ficou". */
+const carimbo = () => {
+	rnd = gerador(606);
+	const n = amostras(0.9);
+	const L = new Float32Array(n);
+	const R = new Float32Array(n);
+	const baque = vazio(0.5);
+	let fase = 0;
+	for (let i = 0; i < baque.length; i++) {
+		const t = i / SR;
+		fase += (2 * Math.PI * (48 + 70 * Math.exp(-t / 0.025))) / SR;
+		baque[i] = Math.tanh(Math.sin(fase) * 2.4) * Math.exp(-t / 0.12);
+	}
+	const tapa = filtrar(
+		Float32Array.from({length: amostras(0.2)}, (_, i) => ruido() * Math.exp(-i / SR / 0.035)),
+		'bp',
+		950,
+		0.9,
+	);
+	const estalo = filtrar(
+		Float32Array.from({length: amostras(0.03)}, (_, i) => ruido() * Math.exp(-i / SR / 0.006)),
+		'hp',
+		3200,
+	);
+	somar(L, R, baque, 0, 0.9);
+	somar(L, R, tapa, 0, 2.2);
+	somar(L, R, estalo, 0, 0.7);
+	const [rl, rr] = reverb(L, R, {sala: 0.55, amort: 0.5});
+	for (let i = 0; i < n; i++) {
+		L[i] += rl[i] * 0.6;
+		R[i] += rr[i] * 0.6;
+	}
+	return normalizar([L, R], dB(-2));
+};
+
+/** Pop de bolha: entrada de elemento. */
+const pop = () => {
+	rnd = gerador(707);
+	const x = vazio(0.12);
+	let fase = 0;
+	for (let i = 0; i < x.length; i++) {
+		const t = i / SR;
+		fase += (2 * Math.PI * (320 + 900 * (1 - Math.exp(-t / 0.018)))) / SR;
+		x[i] = Math.sin(fase) * Math.exp(-t / 0.035) * Math.min(1, t / 0.002) + ruido() * Math.exp(-t / 0.0015) * 0.3;
+	}
+	return normalizar([filtrar(x, 'hp', 150)], dB(-6));
+};
+
+/** Faíscas: uma chuva de sininhos agudos — confete e brilho. */
+const brilho = () => {
+	rnd = gerador(808);
+	const n = amostras(1.6);
+	const L = new Float32Array(n);
+	const R = new Float32Array(n);
+	// notas da pentatônica de lá menor, oitavas altas
+	const notas = [88, 91, 93, 95, 98, 100, 103, 105];
+	for (let k = 0; k < 16; k++) {
+		const t = k * 0.035 + rnd() * 0.03;
+		const nota = notas[Math.floor(rnd() * notas.length)];
+		somar(L, R, sino(midi(nota), 0.5, 0.08 + rnd() * 0.08), t, 0.3 * (1 - k / 20), rnd() * 1.6 - 0.8);
+	}
+	const [rl, rr] = reverb(L, R, {sala: 0.85, amort: 0.25});
+	for (let i = 0; i < n; i++) {
+		L[i] += rl[i] * 1.6;
+		R[i] += rr[i] * 1.6;
+	}
+	return normalizar([L, R], dB(-6));
+};
+
+/** Toque na tela: clique seco e macio. */
+const toque = () => {
+	rnd = gerador(909);
+	const x = vazio(0.08);
+	for (let i = 0; i < x.length; i++) {
+		const t = i / SR;
+		x[i] = ruido() * Math.exp(-t / 0.0025) * 0.6 + Math.sin(2 * Math.PI * 900 * t) * Math.exp(-t / 0.02);
+	}
+	return normalizar([filtrar(x, 'hp', 200)], dB(-6));
+};
+
 /* --------------------------------------------------------------------------
    Saída
    -------------------------------------------------------------------------- */
@@ -962,6 +1042,10 @@ const lista = [
 	['whoosh', whoosh],
 	['impacto', () => impacto(false)],
 	['impacto-leve', () => impacto(true)],
+	['carimbo', carimbo],
+	['pop', pop],
+	['brilho', brilho],
+	['toque', toque],
 ];
 
 const t0 = Date.now();

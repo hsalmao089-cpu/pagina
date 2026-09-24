@@ -1,8 +1,7 @@
 import React from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
-import {c, f, prog, slow} from '../tema';
+import {c, f, prog, slow, vidroEscuro} from '../tema';
 import {Check, Cross, Pip, Spinner} from './Icones';
-import {painel} from './Ui';
 
 type Trecho = {t: string; cor: string};
 
@@ -27,19 +26,18 @@ type Props = {
 	style?: React.CSSProperties;
 };
 
-/** Destaque de sintaxe no mesmo código de cor do bloco de requisição da página:
- *  palavra-chave em cinza, nome em osso, valor em verde. */
+/** Destaque de sintaxe: palavra-chave em rosa, nome em ciano, valor em amarelo. */
 const realce = (texto: string): Trecho[] => {
 	const env = /^(export )(\w+)(=)(.*)$/.exec(texto);
 	if (env) {
 		return [
-			{t: env[1], cor: c.ash},
-			{t: env[2], cor: c.bone},
-			{t: env[3], cor: c.dim},
-			{t: env[4], cor: c.live},
+			{t: env[1], cor: c.rosa},
+			{t: env[2], cor: c.ciano},
+			{t: env[3], cor: c.fumaca},
+			{t: env[4], cor: c.amarelo},
 		];
 	}
-	return [{t: texto, cor: c.bone}];
+	return [{t: texto, cor: c.branco}];
 };
 
 const digitados = (frame: number, at: number, total: number, cps: number) =>
@@ -66,14 +64,15 @@ export const Terminal: React.FC<Props> = ({
 	return (
 		<div
 			style={{
-				...painel,
+				...vidroEscuro,
+				position: 'relative',
 				width: largura,
 				minHeight: alturaMin,
 				overflow: 'hidden',
 				...style,
 			}}
 		>
-			{/* barra: três pontos apagados — cor só quando significa algo */}
+			{/* barra de janela */}
 			<div
 				style={{
 					display: 'flex',
@@ -81,14 +80,11 @@ export const Terminal: React.FC<Props> = ({
 					gap: 12,
 					height: 76,
 					padding: '0 28px',
-					borderBottom: `2px solid ${c.edge}`,
+					borderBottom: '2px solid rgba(255,255,255,.12)',
 				}}
 			>
-				{[0, 1, 2].map((i) => (
-					<span
-						key={i}
-						style={{width: 14, height: 14, borderRadius: '50%', background: 'rgba(242,239,233,.14)'}}
-					/>
+				{[c.rosa, c.amarelo, c.verde].map((cor) => (
+					<span key={cor} style={{width: 16, height: 16, borderRadius: '50%', background: cor}} />
 				))}
 				<span
 					style={{
@@ -96,7 +92,7 @@ export const Terminal: React.FC<Props> = ({
 						textAlign: 'center',
 						fontFamily: f.mono,
 						fontSize: 21,
-						color: c.dim,
+						color: c.fumaca,
 						letterSpacing: '0.02em',
 						marginRight: chip ? 0 : 66,
 					}}
@@ -112,7 +108,7 @@ export const Terminal: React.FC<Props> = ({
 					fontFamily: f.mono,
 					fontSize: fonte,
 					lineHeight: `${lh}px`,
-					color: c.ash,
+					color: c.nevoa,
 				}}
 			>
 				{visiveis.map((l, i) => {
@@ -129,12 +125,12 @@ export const Terminal: React.FC<Props> = ({
 						const cps = l.cps ?? 2;
 						const n = digitados(frame, l.at, l.texto.length, cps);
 						const digitando = n < l.texto.length;
-						const trechos = l.tipo === 'cmd' ? realce(l.texto) : [{t: l.texto, cor: c.bone}];
+						const trechos = l.tipo === 'cmd' ? realce(l.texto) : [{t: l.texto, cor: c.branco}];
 						let resto = n;
 						const pisca = digitando || Math.floor((frame - l.at) / 8) % 2 === 0;
 						return (
 							<div key={i} style={{...base, marginTop: l.tipo === 'pedido' && i > 0 ? fonte * 0.5 : 0}}>
-								<span style={{color: l.tipo === 'cmd' ? c.dim : c.bone, flex: 'none', width: fonte * 0.9}}>
+								<span style={{color: l.tipo === 'cmd' ? c.rosa : c.roxo, flex: 'none', width: fonte * 0.9, fontWeight: 700}}>
 									{l.tipo === 'cmd' ? '$' : '›'}
 								</span>
 								<span style={{flex: 1, wordBreak: 'break-all'}}>
@@ -156,7 +152,7 @@ export const Terminal: React.FC<Props> = ({
 												marginLeft: 2,
 												verticalAlign: 'middle',
 												transform: 'translateY(-2px)',
-												background: c.bone,
+												background: c.rosa,
 												opacity: pisca ? 0.9 : 0,
 											}}
 										/>
@@ -181,16 +177,16 @@ export const Terminal: React.FC<Props> = ({
 								}}
 							>
 								<span style={{flex: 'none', width: fonte * 0.9, display: 'flex', justifyContent: 'center'}}>
-									<Pip color={falhou ? c.halt : feito ? c.live : c.ash} size={11} glow={feito || falhou ? 1 : 0} />
+									<Pip color={falhou ? c.vermelho : feito ? c.verde : c.ciano} size={12} glow={1} />
 								</span>
-								<span style={{flex: 1, color: falhou ? c.halt : feito ? c.bone : c.ash}}>{l.texto}</span>
+								<span style={{flex: 1, color: falhou ? c.vermelho : feito ? c.branco : c.nevoa}}>{l.texto}</span>
 								<span style={{flex: 'none', width: 34, display: 'flex', justifyContent: 'center'}}>
 									{falhou ? (
-										<Cross size={28} color={c.halt} />
+										<Cross size={28} color={c.vermelho} />
 									) : feito ? (
-										<Check size={30} color={c.live} draw={traco} />
+										<Check size={30} color={c.verde} draw={traco} />
 									) : (
-										<Spinner size={26} color={c.ash} frame={frame} />
+										<Spinner size={26} color={c.ciano} frame={frame} />
 									)}
 								</span>
 							</div>
@@ -207,17 +203,19 @@ export const Terminal: React.FC<Props> = ({
 								style={{
 									marginTop: fonte * 0.7,
 									padding: `${fonte * 0.6}px ${fonte * 0.8}px`,
-									borderLeft: `5px solid ${c.halt}`,
-									background: `rgba(229,86,91,${0.06 + pulso * 0.14})`,
+									borderLeft: `6px solid ${c.vermelho}`,
+									borderRadius: 12,
+									background: `rgba(255,45,85,${0.14 + pulso * 0.2})`,
+									boxShadow: `0 0 ${30 + pulso * 50}px rgba(255,45,85,.35)`,
 									opacity: entra,
 								}}
 							>
-								<div style={{display: 'flex', alignItems: 'center', gap: fonte * 0.55, color: c.halt, fontWeight: 600}}>
-									<Cross size={30} color={c.halt} stroke={3.2} />
+								<div style={{display: 'flex', alignItems: 'center', gap: fonte * 0.55, color: '#FF6B86', fontWeight: 700}}>
+									<Cross size={30} color="#FF6B86" stroke={3.2} />
 									<span>{l.texto}</span>
 								</div>
 								{l.sub ? (
-									<div style={{color: c.ash, paddingLeft: 30 + fonte * 0.55}}>{l.sub}</div>
+									<div style={{color: c.nevoa, paddingLeft: 30 + fonte * 0.55}}>{l.sub}</div>
 								) : null}
 							</div>
 						);
@@ -231,14 +229,15 @@ export const Terminal: React.FC<Props> = ({
 									...base,
 									alignItems: 'center',
 									marginTop: fonte * 0.5,
-									color: c.live,
-									fontWeight: 600,
+									color: c.verde,
+									fontWeight: 700,
+									textShadow: '0 0 24px rgba(46,229,157,.45)',
 									opacity: entra,
 									transform: `translateY(${(1 - entra) * 10}px)`,
 								}}
 							>
 								<span style={{flex: 'none', width: fonte * 0.9, display: 'flex', justifyContent: 'center'}}>
-									<Check size={30} color={c.live} draw={prog(frame, l.at, 8, slow)} />
+									<Check size={30} color={c.verde} draw={prog(frame, l.at, 8, slow)} />
 								</span>
 								<span>{l.texto}</span>
 							</div>
@@ -252,13 +251,13 @@ export const Terminal: React.FC<Props> = ({
 							style={{
 								...base,
 								alignItems: 'center',
-								color: l.cor ?? c.dim,
+								color: l.cor ?? c.fumaca,
 								opacity: entra,
 								transform: `translateY(${(1 - entra) * 10}px)`,
 							}}
 						>
 							<span style={{flex: 'none', width: fonte * 0.9, display: 'flex', justifyContent: 'center'}}>
-								<Pip color={l.cor ?? c.dim} size={11} />
+								<Pip color={l.cor ?? c.fumaca} size={12} />
 							</span>
 							<span>{l.texto}</span>
 						</div>

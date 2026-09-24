@@ -13,8 +13,11 @@ vira a chave com uma pergunta: *e se o limite não existisse?* A resposta é o �
 e daí em diante é prova, compatibilidade, benefício e oferta.
 
 Estrutura: **gancho → dor → virada → revelação → prova → abrangência → benefício → oferta.**
-A cor segue a regra da página: verde só quando algo funciona, vermelho só quando
-algo trava. O resto é preto e osso.
+O fundo muda de cor com a história: violeta e azul enquanto o trabalho flui,
+vermelho quando trava, violeta escuro na pergunta, o degradê inteiro da marca na
+revelação e o quente da oferta no fim. Verde continua sendo “funciona” e
+vermelho, “travou”. Da demo em diante, cada corte é escondido por uma varredura
+colorida que cruza a tela junto com um whoosh.
 
 ---
 
@@ -27,8 +30,8 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 
 | | |
 |---|---|
-| **Tela** | “Claude Code / a todo vapor…” → no 1,5 s troca para “…até bater / **no limite.**” (vermelho) |
-| **Visual** | O terminal já está trabalhando no primeiro quadro: pedido digitado, passos ficando verdes. No 1,5 s o último passo falha, entra o bloco vermelho *“Limite de uso atingido. Seu acesso volta em 4h 59min.”*, o selo muda de EXECUTANDO para INTERROMPIDO e a tela dá um glitch. |
+| **Tela** | “Claude Code / a todo vapor…” (degradê) → no 1,5 s troca para “…até bater / **no limite.**” (marcador vermelho) |
+| **Visual** | Fundo violeta e azul; o terminal de vidro já está trabalhando no primeiro quadro. No 1,5 s o último passo falha, entra o bloco *“Limite de uso atingido. Seu acesso volta em 4h 59min.”*, o selo muda de EXECUTANDO para INTERROMPIDO, o fundo vira vermelho, a tela dá um glitch e um carimbo **LIMITE ATINGIDO** cai girando e bate. |
 | **Som** | Groove leve rodando → a música perde rotação e para (tape stop) no exato quadro do erro + ruído digital de falha. |
 | **Locução** | “Seu Claude Code a todo vapor… até bater no limite.” |
 
@@ -40,7 +43,7 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 | | |
 |---|---|
 | **Tela** | §01 · o custo do limite. Três golpes, um por tempo da música: **Cota.** `402 quota_exceeded` · **Fila.** `529 overloaded_error` · **429.** `429 too_many_requests`. Depois o relógio: “o limite volta em **04:59:59**” descontando, barra “cota 100%”, e a frase **“O seu prazo, / não.”** |
-| **Visual** | Cada palavra entra grande e desfocada e assenta com tremor de câmera. O relógio pula o segundo a cada batida. |
+| **Visual** | Fundo em alerta (vermelho e laranja). Cada palavra entra grande, girada e desfocada e assenta com mola e tremor de câmera, com o código numa pílula. O relógio vem num cartão de vidro, com os segundos em amarelo pulando a cada batida; “não.” entra num marcador amarelo. |
 | **Som** | Golpe grave a cada palavra; batimento grave por baixo; tique de relógio sincronizado com os segundos. |
 | **Locução** | “Cota. Fila. Erro 429. O limite volta em cinco horas. O seu prazo, não.” |
 
@@ -49,7 +52,7 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 | | |
 |---|---|
 | **Tela** | “E se o limite / não existisse?” — a palavra *limite* é riscada em vermelho. |
-| **Visual** | O campo de partículas (a arte da página) começa a acender por trás. No último meio segundo o texto é sugado para a câmera e a tela estoura em branco. |
+| **Visual** | O fundo escurece para o violeta da tensão e raios de luz começam a girar por trás. No último meio segundo o texto é sugado para a câmera e a tela estoura em branco. |
 | **Som** | Subida de ruído + rufar acelerando; um instante de silêncio antes do drop. |
 | **Locução** | “E se o limite não existisse?” |
 
@@ -58,7 +61,7 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 | | |
 |---|---|
 | **Tela** | UNBOUND apresenta · **Claude Code / ilimitado.** · “API com uso ilimitado. Sem rate limit, sem cota de tokens, sem fila.” |
-| **Visual** | Um ∞ feito de partículas nasce do cruzamento como um cometa e fecha o laço — de um ponto ao infinito. O campo de fluxo corre no fundo. |
+| **Visual** | Um ∞ de partículas nasce do cruzamento como um cometa e fecha o laço num degradê que corre pela fita; confete explode do centro, raios giram atrás, e “ilimitado.” entra num adesivo branco com o degradê da marca. |
 | **Som** | Impacto grave com brilho agudo no drop; a música entra inteira (bumbo, baixo, pad). |
 | **Locução** | “Claude Code ilimitado. API sem rate limit, sem cota e sem fila.” |
 
@@ -76,7 +79,7 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 | | |
 |---|---|
 | **Tela** | §03 · onde funciona · **“Qualquer CLI. / Qualquer IDE.”** · “Uma chave. Todas as ferramentas.” |
-| **Visual** | Três esteiras correndo em sentidos alternados, com ponto verde em cada ferramenta: Claude Code, OpenCode, Aider, Codex CLI, Goose, Crush · VS Code, Cursor, JetBrains, Zed, Neovim, Emacs · Cline, Roo Code, Kilo Code, Continue, Avante. |
+| **Visual** | “CLI.” e “IDE.” em amarelo. Três esteiras de pílulas de vidro correndo em sentidos alternados, cada ferramenta com um ponto de cor: Claude Code, OpenCode, Aider, Codex CLI, Goose, Crush · VS Code, Cursor, JetBrains, Zed, Neovim, Emacs · Cline, Roo Code, Kilo Code, Continue, Avante. A frase de fecho entra numa pílula com o ícone da chave. |
 | **Som** | Entra o arpejo na trilha; um blip por esteira. |
 | **Locução** | “Funciona em qualquer CLI e em qualquer IDE. Uma chave, todas as ferramentas.” |
 
@@ -85,7 +88,7 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 | | |
 |---|---|
 | **Tela** | §04 · o que vem com a chave · **“Use sem / contar.”** + painel: Rate limit **—** (não existe) · Cota de tokens **—** (não existe) · Fila **0** · Erros 429 **0,00 %** · Preço **fixo** por mês. |
-| **Visual** | A régua de instrumentos do herói da página. O traço no lugar do número é desenhado — é o argumento: não é “alto”, é “não existe”. |
+| **Visual** | “contar.” em marcador amarelo. Cartão de vidro com um selo colorido por benefício (raio, ∞, relógio, escudo, etiqueta), cada linha entrando com mola. O traço no lugar do número é desenhado — é o argumento: não é “alto”, é “não existe”. |
 | **Som** | Um blip por linha. |
 | **Locução** | “Sem rate limit, sem cota, sem fila. Preço fixo por mês. Use sem contar.” |
 
@@ -94,7 +97,7 @@ feito para funcionar **sem som**, porque a maior parte do Reels é vista no mudo
 | | |
 |---|---|
 | **Tela** | UNBOUND · ● Lote 07 aberto — 46 chaves de 150 (barra: vendidas em cinza, disponíveis em verde) · “O acesso é limitado.” / **“O uso, nunca.”** · botão **Garanta sua chave →** · ↓ link na bio · 7 dias de garantia incondicional · aviso de não afiliação. |
-| **Visual** | O último quadro é um cartaz completo: se a pessoa pausar, a oferta inteira está na tela. O botão pulsa no golpe final da trilha (0:32). |
+| **Visual** | A cena mais quente (laranja e rosa). O botão branco tem um brilho que atravessa; um dedo chega, aperta a seta no golpe final da trilha (0:32) e solta confete, depois sai de cena. O último quadro é um cartaz completo: se a pessoa pausar, a oferta inteira está na tela. |
 | **Som** | Impacto leve na entrada, golpe final com prato e acorde, sino de sucesso. |
 | **Locução** | “O acesso é limitado. O uso, nunca. Garanta sua chave no link da bio.” |
 
@@ -165,7 +168,7 @@ npx remotion render Reels out/gancho-b.mp4 --props=variacoes/gancho-b.json
 ## Continuação da série
 
 Um vídeo só não fecha venda de produto técnico. A sequência abaixo reaproveita os
-mesmos componentes (terminal, campo de fluxo, ∞, painel) — cada um é uma cena nova
+mesmos componentes (terminal, fundo aurora, ∞, cartões de vidro) — cada um é uma cena nova
 em `src/cenas/` e uma `<Composition>` a mais em `src/Root.tsx`.
 
 **2 · “Lado a lado” (20 s) — prova por comparação**

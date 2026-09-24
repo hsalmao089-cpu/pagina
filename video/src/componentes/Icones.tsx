@@ -106,9 +106,83 @@ export const Pip: React.FC<{color: string; size?: number; glow?: number}> = ({
 			height: size,
 			borderRadius: '50%',
 			background: color,
-			boxShadow: `0 0 ${size * 1.6}px ${color}${Math.round(glow * 0.6 * 255)
-				.toString(16)
-				.padStart(2, '0')}`,
+			boxShadow: glow > 0 ? `0 0 ${size * 1.6 * glow}px ${color}` : undefined,
 		}}
 	/>
+);
+
+/* Ícones dos benefícios — traço grosso, pensados para ler pequenos no celular. */
+
+export const Raio: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
+	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
+		<path
+			d="M13.5 2.5 5 13.5h6l-1 8 8.5-11h-6l1-8z"
+			stroke={color}
+			strokeWidth={stroke}
+			strokeLinejoin="round"
+			fill={color}
+			fillOpacity={0.25}
+		/>
+	</svg>
+);
+
+export const InfinitoIcone: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.4, style}) => (
+	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
+		<path
+			d="M12 12c-2-2.6-3.6-4-5.5-4a4 4 0 1 0 0 8c1.9 0 3.5-1.4 5.5-4zm0 0c2 2.6 3.6 4 5.5 4a4 4 0 1 0 0-8c-1.9 0-3.5 1.4-5.5 4z"
+			stroke={color}
+			strokeWidth={stroke}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		/>
+	</svg>
+);
+
+export const Relogio: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
+	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
+		<circle cx="12" cy="12" r="8.5" stroke={color} strokeWidth={stroke} />
+		<path d="M12 7.5V12l3 2" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" />
+	</svg>
+);
+
+export const Etiqueta: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
+	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
+		<path
+			d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1 1 0 0 1 0 1.4l-7.3 7.3a1 1 0 0 1-1.4 0L3.5 12.2z"
+			stroke={color}
+			strokeWidth={stroke}
+			strokeLinejoin="round"
+		/>
+		<circle cx="8.3" cy="8.3" r="1.6" fill={color} />
+	</svg>
+);
+
+export const Chave: React.FC<P> = ({size = 28, color = 'currentColor', stroke = 2.2, style}) => (
+	<svg viewBox="0 0 24 24" width={size} height={size} fill="none" style={style}>
+		<circle cx="8" cy="15.5" r="4.5" stroke={color} strokeWidth={stroke} />
+		<path d="M11.2 12.3 19.5 4M16.5 7l2.5 2.5M14.5 9l2 2" stroke={color} strokeWidth={stroke} strokeLinecap="round" />
+	</svg>
+);
+
+/** Selo circular com degradê, que abriga um ícone. */
+export const Selo: React.FC<{fundo: string; tamanho?: number; children: React.ReactNode}> = ({
+	fundo,
+	tamanho = 76,
+	children,
+}) => (
+	<span
+		style={{
+			flex: 'none',
+			width: tamanho,
+			height: tamanho,
+			borderRadius: tamanho * 0.32,
+			background: fundo,
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+			boxShadow: '0 14px 30px -10px rgba(30,0,70,.55), inset 0 2px 0 rgba(255,255,255,.45)',
+		}}
+	>
+		{children}
+	</span>
 );

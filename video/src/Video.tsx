@@ -1,8 +1,8 @@
 import React from 'react';
 import {AbsoluteFill, Html5Audio, interpolate, Sequence, staticFile, useCurrentFrame} from 'remotion';
-import {CampoDeFluxo} from './componentes/CampoDeFluxo';
-import {Clarao, Grao, GuiasReels, Vinheta} from './componentes/Camadas';
-import {VolumeEfeitos} from './componentes/Som';
+import {Aurora} from './componentes/Aurora';
+import {Clarao, Grao, GuiasReels, Varredura, Vinheta} from './componentes/Camadas';
+import {Som, VolumeEfeitos} from './componentes/Som';
 import {Beneficios} from './cenas/Beneficios';
 import {Compat} from './cenas/Compat';
 import {Custo} from './cenas/Custo';
@@ -12,7 +12,7 @@ import {Oferta} from './cenas/Oferta';
 import {Revelacao} from './cenas/Revelacao';
 import {Virada} from './cenas/Virada';
 import type {Roteiro} from './roteiro';
-import {c, CENAS, DURACAO, MARCAS} from './tema';
+import {CENAS, DURACAO, grad, MARCAS} from './tema';
 
 const ordem = [
 	['gancho', Gancho],
@@ -23,6 +23,14 @@ const ordem = [
 	['compat', Compat],
 	['beneficios', Beneficios],
 	['oferta', Oferta],
+] as const;
+
+/** Cortes escondidos por uma varredura colorida (os outros têm transição própria). */
+const VARREDURAS = [
+	{em: CENAS.demo.de, fundo: grad.frio, sentido: 1},
+	{em: CENAS.compat.de, fundo: grad.marca, sentido: -1},
+	{em: CENAS.beneficios.de, fundo: grad.frio, sentido: 1},
+	{em: CENAS.oferta.de, fundo: grad.marca, sentido: -1},
 ] as const;
 
 // A trilha abaixa onde o som da cena conta a história — o teclado da demo, os
@@ -47,9 +55,9 @@ export const Video: React.FC<Roteiro> = (r) => {
 
 	return (
 		<VolumeEfeitos.Provider value={r.efeitos}>
-			<AbsoluteFill style={{background: c.pitch}}>
-				{/* o campo é um só, atrás de todas as cenas: a vazão é o fio do vídeo */}
-				<CampoDeFluxo />
+			<AbsoluteFill>
+				{/* fundo único para o vídeo todo: a paleta muda por dentro das transições */}
+				<Aurora />
 
 				{ordem.map(([chave, Cena]) => {
 					const {de, dur} = CENAS[chave];
@@ -59,6 +67,13 @@ export const Video: React.FC<Roteiro> = (r) => {
 						</Sequence>
 					);
 				})}
+
+				{VARREDURAS.map((v) => (
+					<Varredura key={v.em} em={v.em} fundo={v.fundo} sentido={v.sentido} />
+				))}
+				{VARREDURAS.map((v) => (
+					<Som key={`s${v.em}`} efeito="whoosh" at={v.em - 8} volume={0.5} />
+				))}
 
 				<Clarao intensidade={clarao} />
 				<Vinheta />

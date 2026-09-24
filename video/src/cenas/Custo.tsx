@@ -1,11 +1,13 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {Cut} from '../componentes/Cut';
+import {Marca, mola} from '../componentes/Efeitos';
+import {Pip} from '../componentes/Icones';
 import {Som} from '../componentes/Som';
 import {Camera, Secao} from '../componentes/Ui';
 import {useCorpo} from '../componentes/useCorpo';
 import type {Roteiro} from '../roteiro';
-import {c, dsp, exit, f, prog, slow, TEMPO} from '../tema';
+import {c, dsp, exit, f, grad, prog, TEMPO, vidro} from '../tema';
 
 /* 0:03–0:08 · O CUSTO DO LIMITE
    Três golpes no tempo da música — Cota. Fila. 429. —, cada um com o código de
@@ -22,20 +24,21 @@ const Golpe: React.FC<{at: number; palavra: string; codigo: string; sai: number;
 	corpo,
 }) => {
 	const frame = useCurrentFrame();
-	const t = frame - at;
-	if (t < 0) return null;
-	// batida seca: entra grande e desfocada, assenta em 5 quadros
-	const p = prog(frame, at, 6, slow);
-	const escala = interpolate(p, [0, 1], [1.45, 1]);
-	const blur = interpolate(p, [0, 1], [14, 0]);
-	const pc = prog(frame, at + 3, 8, slow);
+	const {fps} = useVideoConfig();
+	if (frame < at) return null;
+	// batida seca: entra grande, girada e desfocada, e assenta com mola
+	const s = mola(frame, at, fps, 260);
+	const escala = interpolate(s, [0, 1], [1.7, 1]);
+	const giro = interpolate(s, [0, 1], [-7, 0]);
+	const blur = interpolate(frame - at, [0, 4], [12, 0], {extrapolateRight: 'clamp'});
+	const pc = prog(frame, at + 3, 8);
 	const ps = prog(frame, sai, 9, exit);
 	return (
 		<div
 			style={{
-				opacity: Math.min(1, p * 1.6) * (1 - ps),
+				opacity: Math.min(1, (frame - at) / 2) * (1 - ps),
 				transform: `translateY(${-ps * 80}px)`,
-				marginBottom: 34,
+				marginBottom: 30,
 			}}
 		>
 			<div
@@ -43,7 +46,7 @@ const Golpe: React.FC<{at: number; palavra: string; codigo: string; sai: number;
 					...dsp,
 					fontSize: corpo,
 					transformOrigin: 'left 70%',
-					transform: `scale(${escala})`,
+					transform: `scale(${escala}) rotate(${giro}deg)`,
 					filter: blur > 0.2 ? `blur(${blur}px)` : undefined,
 				}}
 			>
@@ -51,16 +54,24 @@ const Golpe: React.FC<{at: number; palavra: string; codigo: string; sai: number;
 			</div>
 			<div
 				style={{
+					display: 'inline-flex',
+					alignItems: 'center',
+					gap: 14,
+					marginTop: 14,
+					padding: '10px 20px',
+					borderRadius: 999,
+					background: 'rgba(40,0,15,.45)',
+					border: '2px solid rgba(255,255,255,.22)',
 					fontFamily: f.mono,
 					fontSize: 32,
-					fontWeight: 500,
-					color: c.halt,
-					letterSpacing: '0.04em',
-					marginTop: 6,
+					fontWeight: 600,
+					color: c.branco,
+					letterSpacing: '0.02em',
 					opacity: pc,
-					transform: `translateX(${(1 - pc) * -20}px)`,
+					transform: `translateX(${(1 - pc) * -24}px)`,
 				}}
 			>
+				<Pip color={c.amarelo} size={12} />
 				{codigo}
 			</div>
 		</div>
@@ -69,6 +80,7 @@ const Golpe: React.FC<{at: number; palavra: string; codigo: string; sai: number;
 
 const Relogio: React.FC<{at: number; rotulo: string}> = ({at, rotulo}) => {
 	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
 	const t = frame - at;
 	if (t < 0) return null;
 	// um segundo a menos por tempo da música: o tique do relógio é o chimbal
@@ -77,19 +89,26 @@ const Relogio: React.FC<{at: number; rotulo: string}> = ({at, rotulo}) => {
 	const hh = String(Math.floor(total / 3600)).padStart(2, '0');
 	const mm = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
 	const ss = String(total % 60).padStart(2, '0');
-	const dentro = t % TEMPO;
-	const pulo = interpolate(dentro, [0, 4], [1, 0], {extrapolateRight: 'clamp'});
-	const p = prog(frame, at, 14, slow);
+	const pulo = interpolate(t % TEMPO, [0, 4], [1, 0], {extrapolateRight: 'clamp'});
+	const s = mola(frame, at, fps, 170);
 	return (
-		<div style={{opacity: p, transform: `translateY(${(1 - p) * 30}px)`}}>
+		<div
+			style={{
+				...vidro,
+				padding: '34px 40px 38px',
+				transformOrigin: 'left top',
+				transform: `scale(${interpolate(s, [0, 1], [0.85, 1])})`,
+				opacity: Math.min(1, t / 5),
+			}}
+		>
 			<div
 				style={{
 					fontFamily: f.mono,
-					fontWeight: 500,
+					fontWeight: 600,
 					fontSize: 24,
 					letterSpacing: '0.2em',
 					textTransform: 'uppercase',
-					color: c.ash,
+					color: c.nevoa,
 				}}
 			>
 				{rotulo}
@@ -97,14 +116,15 @@ const Relogio: React.FC<{at: number; rotulo: string}> = ({at, rotulo}) => {
 			<div
 				style={{
 					fontFamily: f.mono,
-					fontWeight: 500,
-					fontSize: 176,
-					letterSpacing: '-0.04em',
+					fontWeight: 600,
+					fontSize: 150,
+					letterSpacing: '-0.05em',
 					lineHeight: 1,
-					color: c.bone,
-					marginTop: 18,
+					color: c.branco,
+					marginTop: 16,
 					fontVariantNumeric: 'tabular-nums',
 					display: 'flex',
+					textShadow: '0 10px 40px rgba(60,0,20,.4)',
 				}}
 			>
 				<span>
@@ -112,33 +132,43 @@ const Relogio: React.FC<{at: number; rotulo: string}> = ({at, rotulo}) => {
 				</span>
 				<span
 					style={{
-						color: c.halt,
+						color: c.amarelo,
 						display: 'inline-block',
-						transform: `translateY(${-pulo * 14}px)`,
-						opacity: 1 - pulo * 0.35,
+						transform: `translateY(${-pulo * 16}px) scale(${1 + pulo * 0.08})`,
+						textShadow: '0 0 40px rgba(255,200,61,.55)',
 					}}
 				>
 					{ss}
 				</span>
 			</div>
 			{/* cota consumida: a barra já nasce cheia */}
-			<div style={{marginTop: 34, display: 'flex', alignItems: 'center', gap: 22}}>
-				<div style={{flex: 1, height: 10, background: c.edge, borderRadius: 2, overflow: 'hidden'}}>
+			<div style={{marginTop: 28, display: 'flex', alignItems: 'center', gap: 22}}>
+				<div
+					style={{
+						flex: 1,
+						height: 16,
+						background: 'rgba(255,255,255,.18)',
+						borderRadius: 999,
+						overflow: 'hidden',
+					}}
+				>
 					<div
 						style={{
-							width: `${prog(frame, at + 4, 18, slow) * 100}%`,
+							width: `${prog(frame, at + 4, 18) * 100}%`,
 							height: '100%',
-							background: c.halt,
-							boxShadow: `0 0 24px ${c.halt}`,
+							borderRadius: 999,
+							background: grad.alerta,
+							boxShadow: '0 0 30px rgba(255,90,60,.7)',
 						}}
 					/>
 				</div>
 				<span
 					style={{
 						fontFamily: f.mono,
+						fontWeight: 700,
 						fontSize: 24,
-						letterSpacing: '0.14em',
-						color: c.halt,
+						letterSpacing: '0.12em',
+						color: c.amarelo,
 						textTransform: 'uppercase',
 					}}
 				>
@@ -154,7 +184,7 @@ export const Custo: React.FC<{r: Roteiro; dur: number}> = ({r, dur}) => {
 	const k = r.custo;
 	const corpoGolpe = useCorpo(
 		k.golpes.map((g) => g.palavra),
-		212,
+		220,
 		920,
 		dsp,
 	);
@@ -164,8 +194,8 @@ export const Custo: React.FC<{r: Roteiro; dur: number}> = ({r, dur}) => {
 		const t = frame - i * TEMPO;
 		return acc + (t >= 0 && t < 6 ? (6 - t) / 6 : 0);
 	}, 0);
-	const tx = Math.sin(frame * 9.1) * 7 * tremor;
-	const ty = Math.cos(frame * 7.3) * 5 * tremor;
+	const tx = Math.sin(frame * 9.1) * 9 * tremor;
+	const ty = Math.cos(frame * 7.3) * 6 * tremor;
 	const sai = prog(frame, dur - 8, 8, exit);
 
 	return (
@@ -177,11 +207,11 @@ export const Custo: React.FC<{r: Roteiro; dur: number}> = ({r, dur}) => {
 						opacity: 1 - sai,
 					}}
 				>
-					<Secao n="§01" at={0} out={dur - 10} style={{position: 'absolute', left: 80, top: 272, width: 920}}>
+					<Secao n="01" at={0} out={dur - 10} style={{position: 'absolute', left: 80, top: 262}}>
 						{k.secao}
 					</Secao>
 
-					<div style={{position: 'absolute', left: 80, top: 360, width: 920}}>
+					<div style={{position: 'absolute', left: 80, top: 370, width: 920}}>
 						{k.golpes.map((gp, i) => (
 							<Golpe
 								key={i}
@@ -194,14 +224,18 @@ export const Custo: React.FC<{r: Roteiro; dur: number}> = ({r, dur}) => {
 						))}
 					</div>
 
-					<div style={{position: 'absolute', left: 80, top: 420, width: 920}}>
+					<div style={{position: 'absolute', left: 80, top: 390, width: 920}}>
 						<Relogio at={TROCA} rotulo={k.rotulo} />
 					</div>
 
-					<div style={{...dsp, fontSize: corpoPrazo, position: 'absolute', left: 80, top: 900, width: 920}}>
-						<Cut at={TROCA + 16} dur={18}>{k.prazo[0]}</Cut>
-						<Cut at={TROCA + 21} dur={18} style={{color: c.halt}}>
-							{k.prazo[1]}
+					<div style={{...dsp, fontSize: corpoPrazo, position: 'absolute', left: 80, top: 880, width: 920}}>
+						<Cut at={TROCA + 14} dur={16}>
+							{k.prazo[0]}
+						</Cut>
+						<Cut at={TROCA + 19} dur={16}>
+							<Marca at={TROCA + 28} fundo={c.amarelo} corTexto={c.tinta}>
+								{k.prazo[1]}
+							</Marca>
 						</Cut>
 					</div>
 				</AbsoluteFill>
@@ -214,6 +248,7 @@ export const Custo: React.FC<{r: Roteiro; dur: number}> = ({r, dur}) => {
 			{[0, 1, 2, 3, 4].map((i) => (
 				<Som key={`t${i}`} efeito="tique" at={TROCA + i * TEMPO} volume={0.55} />
 			))}
+			<Som efeito="pop" at={TROCA + 28} volume={0.5} />
 		</AbsoluteFill>
 	);
 };

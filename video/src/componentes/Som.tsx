@@ -13,7 +13,11 @@ export type Efeito =
 	| 'whoosh'
 	| 'impacto'
 	| 'impacto-leve'
-	| 'sucesso';
+	| 'sucesso'
+	| 'carimbo'
+	| 'pop'
+	| 'brilho'
+	| 'toque';
 
 /** Volume geral dos efeitos, vindo da prop `efeitos`. */
 export const VolumeEfeitos = createContext(1);

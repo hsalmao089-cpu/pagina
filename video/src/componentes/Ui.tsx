@@ -1,47 +1,8 @@
 import React from 'react';
-import {useCurrentFrame} from 'remotion';
-import {c, exit, f, prog, slow, tag} from '../tema';
+import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {c, exit, f, grad, prog, tag} from '../tema';
+import {mola} from './Efeitos';
 import {Pip} from './Icones';
-
-/** .panel da página: sombra difusa por baixo e um fio de luz na aresta de cima. */
-export const painel: React.CSSProperties = {
-	position: 'relative',
-	background: c.surf,
-	border: `2px solid ${c.edge}`,
-	borderRadius: 6,
-	boxShadow:
-		'0 2px 0 rgba(242,239,233,.07) inset, 0 80px 140px -60px rgba(0,0,0,.95), 0 30px 60px -30px rgba(0,0,0,.8)',
-};
-
-type TagProps = {
-	at?: number;
-	out?: number;
-	pip?: string;
-	style?: React.CSSProperties;
-	children: React.ReactNode;
-};
-
-/** Rótulo mono em caixa alta, entrando com um deslize curto. */
-export const Tag: React.FC<TagProps> = ({at = 0, out, pip, style, children}) => {
-	const frame = useCurrentFrame();
-	const p = prog(frame, at, 14, slow) * (out === undefined ? 1 : 1 - prog(frame, out, 10, exit));
-	return (
-		<div
-			style={{
-				...tag,
-				display: 'flex',
-				alignItems: 'center',
-				gap: 16,
-				opacity: p,
-				transform: `translateY(${(1 - p) * 18}px)`,
-				...style,
-			}}
-		>
-			{pip ? <Pip color={pip} size={12} /> : null}
-			<span>{children}</span>
-		</div>
-	);
-};
 
 type SecaoProps = {
 	n: string;
@@ -51,46 +12,47 @@ type SecaoProps = {
 	style?: React.CSSProperties;
 };
 
-/** Cabeçalho de seção da página: número, título e um fio que corre até a borda. */
+/** Cabeçalho de seção em pílula de vidro, com o número num selo colorido. */
 export const Secao: React.FC<SecaoProps> = ({n, at = 0, out, children, style}) => {
 	const frame = useCurrentFrame();
-	const p = prog(frame, at, 16, slow);
+	const {fps} = useVideoConfig();
+	const s = frame < at ? 0 : mola(frame, at, fps, 180);
 	const po = out === undefined ? 0 : prog(frame, out, 10, exit);
-	const fio = prog(frame, at + 4, 26, slow) * (1 - po);
 	return (
-		<div
-			style={{
-				display: 'flex',
-				alignItems: 'center',
-				gap: 22,
-				opacity: p * (1 - po),
-				...style,
-			}}
-		>
-			<span
+		<div style={{...style, opacity: Math.min(1, Math.max(0, (frame - at) / 4)) * (1 - po)}}>
+			<div
 				style={{
-					fontFamily: f.mono,
-					fontWeight: 500,
-					fontSize: 24,
-					letterSpacing: '0.1em',
-					color: c.dim,
-					transform: `translateY(${(1 - p) * 16}px)`,
+					display: 'inline-flex',
+					alignItems: 'center',
+					gap: 16,
+					padding: '9px 26px 9px 9px',
+					borderRadius: 999,
+					background: 'rgba(255,255,255,.14)',
+					border: '2px solid rgba(255,255,255,.26)',
+					boxShadow: '0 16px 40px -18px rgba(30,0,70,.6)',
+					transformOrigin: 'left center',
+					transform: `scale(${0.7 + 0.3 * s})`,
 				}}
 			>
-				{n}
-			</span>
-			<span style={{...tag, color: c.ash, transform: `translateY(${(1 - p) * 16}px)`}}>
-				{children}
-			</span>
-			<span
-				style={{
-					flex: 1,
-					height: 2,
-					background: c.edge2,
-					transformOrigin: 'left center',
-					transform: `scaleX(${fio})`,
-				}}
-			/>
+				<span
+					style={{
+						width: 48,
+						height: 48,
+						borderRadius: 999,
+						background: grad.marca,
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						fontFamily: f.mono,
+						fontWeight: 700,
+						fontSize: 20,
+						color: c.tinta,
+					}}
+				>
+					{n}
+				</span>
+				<span style={{...tag, color: c.branco, fontSize: 22}}>{children}</span>
+			</div>
 		</div>
 	);
 };
@@ -101,10 +63,10 @@ type ChipProps = {
 	style?: React.CSSProperties;
 };
 
-/** .chip / .chip-live / .chip-halt da página. */
+/** Selo de estado no terminal: verde funcionando, vermelho travado. */
 export const Chip: React.FC<ChipProps> = ({tom, children, style}) => {
-	const cor = tom === 'live' ? c.live : tom === 'halt' ? c.halt : c.ash;
-	const rgb = tom === 'live' ? '63,191,127' : tom === 'halt' ? '229,86,91' : '242,239,233';
+	const cor = tom === 'live' ? c.verde : tom === 'halt' ? c.vermelho : c.nevoa;
+	const rgb = tom === 'live' ? '46,229,157' : tom === 'halt' ? '255,45,85' : '255,255,255';
 	return (
 		<span
 			style={{
@@ -112,20 +74,21 @@ export const Chip: React.FC<ChipProps> = ({tom, children, style}) => {
 				alignItems: 'center',
 				gap: 12,
 				fontFamily: f.mono,
-				fontWeight: 500,
+				fontWeight: 700,
 				fontSize: 19,
-				letterSpacing: '0.16em',
+				letterSpacing: '0.14em',
 				textTransform: 'uppercase',
-				padding: '8px 14px',
-				borderRadius: 3,
+				padding: '9px 16px',
+				borderRadius: 999,
 				color: cor,
-				border: `2px solid rgba(${rgb},.32)`,
-				background: `rgba(${rgb},.07)`,
+				border: `2px solid rgba(${rgb},.5)`,
+				background: `rgba(${rgb},.14)`,
+				boxShadow: `0 0 30px rgba(${rgb},.25)`,
 				whiteSpace: 'nowrap',
 				...style,
 			}}
 		>
-			{tom === 'neutro' ? null : <Pip color={cor} size={9} />}
+			{tom === 'neutro' ? null : <Pip color={cor} size={10} />}
 			{children}
 		</span>
 	);

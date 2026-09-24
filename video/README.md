@@ -10,11 +10,21 @@ os próximos vídeos da série) está em **[ROTEIRO.md](ROTEIRO.md)**.
 
 ## Direção
 
-A mesma da página: preto de estúdio, osso, e cor só quando significa algo —
-verde para “funciona”, vermelho para “travou”. Mesmas fontes (Bricolage
-Grotesque, Instrument Sans, Spline Sans Mono), mesmo campo de fluxo em canvas,
-mesma entrada de manchete por corte de máscara. Quem vê o Reels e clica no link
-cai numa página que parece continuação do vídeo.
+Vibrante, feita para disputar atenção no feed. A tipografia é a da página
+(Bricolage Grotesque, Instrument Sans, Spline Sans Mono), com a mesma entrada de
+manchete por corte de máscara; a cor é de campanha:
+
+- **Fundo aurora** — manchas de luz derivando sobre uma base saturada, com
+  bokeh subindo. Cada trecho tem sua paleta (violeta e azul no trabalho,
+  vermelho no alerta, o degradê da marca na revelação, quente na oferta) e,
+  no groove, o fundo respira junto com o bumbo.
+- **Degradê da marca** — amarelo → laranja → rosa → roxo, no ∞, nas
+  transições e nos selos.
+- **Destaque** — a palavra que importa entra num marcador (vermelho no
+  limite, amarelo em “não.” e “contar.”, branco em “ilimitado.”).
+- **Sinais** — verde continua querendo dizer “funciona”; vermelho, “travou”.
+- **Energia** — molas com sobra, carimbo, confete, raios, varreduras
+  coloridas entre as cenas e um dedo que aperta o botão no golpe final.
 
 ## Rodar
 
@@ -41,7 +51,8 @@ Se o Remotion não conseguir baixar o Chrome, aponte para um já instalado:
 | Volume da trilha e dos efeitos, guias de área segura | props `trilha`, `efeitos`, `guias` |
 | Duração e ordem das cenas | `src/timeline.json` (em quadros, 30 por segundo) |
 | Uma cena específica | `src/cenas/*.tsx` |
-| Cores e fontes | `src/tema.ts` — tokens idênticos aos da página |
+| Cores, degradês e fontes | `src/tema.ts` |
+| Paleta do fundo em cada trecho | `PALETAS` em `src/componentes/Aurora.tsx` |
 | Música e efeitos | `scripts/gerar-audio.mjs` |
 
 Para trocar só o gancho, há três variações prontas em `variacoes/`:
@@ -74,7 +85,7 @@ src/
   tema.ts           tokens, fontes e curvas de animação
   Video.tsx         monta as cenas, o campo de fundo, grão, vinheta e trilha
   cenas/            Gancho, Custo, Virada, Revelacao, Demo, Compat, Beneficios, Oferta
-  componentes/      Terminal, CampoDeFluxo, Infinito, Cut, Glitch, Som, Ui…
+  componentes/      Aurora, Terminal, Infinito, Efeitos, Cut, Glitch, Som, Ui…
 scripts/
   gerar-audio.mjs   síntese da trilha e dos efeitos
 variacoes/          JSONs de gancho alternativo para teste A/B
