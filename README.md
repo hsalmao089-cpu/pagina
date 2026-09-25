@@ -54,7 +54,7 @@ No fim do `index.html` fica o objeto `CONFIG`:
 - **Garantia de 7 dias**: aparece no topo, nos planos, na tabela, no FAQ e na
   chamada final. Corresponde ao direito de arrependimento do Código de Defesa
   do Consumidor para compras online. Confirme que vai oferecer.
-- **Limites dos planos**: "padrão", "ampliados" e "altos" são descrições
+- **Limites dos planos**: "padrão", "ampliados" e "os maiores" são descrições
   genéricas. Se tiver números (requisições por minuto, tokens por mês),
   coloque nos cartões.
 - **Afirmações sobre o serviço**: Pix e cartão, painel de consumo, chaves por
