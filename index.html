@@ -439,6 +439,118 @@ code{font-family:var(--f-mono)}
 .wa[hidden]{display:none}
 
 /* ============================================================
+   Acabamento extra e elementos de conversão
+   ============================================================ */
+.btn{translate:var(--tx,0px) var(--ty,0px);transition:transform .25s var(--ease),box-shadow .25s var(--ease),background-color .25s,translate .35s var(--ease)}
+.micro{margin-top:16px;color:var(--dim);font-size:.88rem}
+.micro b{color:var(--baby);font-weight:600}
+
+/* palavra que gira em 3D no título */
+.rot{position:relative;display:inline-block;perspective:520px;color:var(--baby);text-shadow:0 0 34px rgba(90,166,255,.45)}
+.rot-sizer{display:inline-block}
+.rot-live .rot-sizer{visibility:hidden}
+.rot-w{position:absolute;left:0;top:0;white-space:nowrap;opacity:0;transform-origin:50% 55%;backface-visibility:hidden}
+.rot-w.is-in{animation:rotIn .75s var(--ease) forwards}
+.rot-w.is-out{animation:rotOut .6s var(--ease) forwards}
+@keyframes rotIn{from{opacity:0;transform:rotateX(-85deg) translateY(.3em)}to{opacity:1;transform:none}}
+@keyframes rotOut{from{opacity:1;transform:none}to{opacity:0;transform:rotateX(85deg) translateY(-.3em)}}
+
+/* globo: arrastar para girar */
+.stage canvas{pointer-events:auto;cursor:grab;touch-action:pan-y}
+.stage canvas.grabbing{cursor:grabbing}
+.drag-hint{position:absolute;left:50%;bottom:3%;translate:-50% 0;padding:7px 12px;border:1px solid var(--line-2);border-radius:999px;background:rgba(3,7,16,.72);color:var(--muted);font:500 .72rem/1 var(--f-mono);letter-spacing:.04em;white-space:nowrap;transition:opacity .5s}
+.drag-hint.gone{opacity:0}
+
+/* luz que acompanha o cursor */
+.spot{position:fixed;left:-320px;top:-320px;z-index:0;width:640px;height:640px;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(30,107,255,.12),transparent);opacity:0;transform:translate3d(-999px,-999px,0);transition:opacity .5s}
+.spot.on{opacity:1}
+
+/* brilhos de fundo que se movem devagar */
+#devs::before,#planos::before{animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(-4%,0,0)}to{transform:translate3d(4%,3%,0)}}
+
+/* números */
+.stats{position:relative;padding:clamp(44px,6vw,72px) 0 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stat{position:relative;overflow:hidden;padding:24px 22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(150,200,255,.05),rgba(150,200,255,.01))}
+.stat::before{content:"";position:absolute;left:-20%;right:-20%;bottom:-70%;height:120%;pointer-events:none;background:radial-gradient(closest-side,rgba(30,107,255,.28),transparent)}
+.stat strong{position:relative;display:block;font:700 clamp(1.8rem,3.3vw,2.9rem)/1 var(--f-display);letter-spacing:-.04em;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff 20%,#a8d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{position:relative;display:block;margin-top:10px;color:var(--muted);font-size:.92rem}
+
+/* dólar x open33 */
+.vs{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:22px;max-width:1000px;margin-inline:auto}
+.vs-card{padding:clamp(24px,3vw,38px)}
+.vs-old{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)),#06080d}
+.vs-new{border-color:rgba(90,166,255,.35);background:radial-gradient(420px 260px at 85% 0%,rgba(30,107,255,.24),transparent 70%),linear-gradient(180deg,rgba(150,200,255,.06),rgba(150,200,255,.02)),var(--bg-2)}
+.vs-tag{display:inline-block;margin-bottom:22px;padding:7px 11px;border-radius:999px;font:600 .72rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.vs-old .vs-tag{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#8a95a8}
+.vs-new .vs-tag{background:var(--grad);color:#00101f}
+.vs-list{display:grid;gap:15px;margin:0;padding:0;list-style:none}
+.vs-list li{display:flex;align-items:flex-start;gap:12px;font-size:1rem;line-height:1.45}
+.mk{display:grid;place-items:center;flex:none;width:24px;height:24px;margin-top:-1px;border-radius:50%}
+.mk .ic{width:14px;height:14px;stroke-width:2.6}
+.vs-old li{color:#8391a8}
+.vs-old .mk{background:rgba(255,255,255,.06);color:#7d879a}
+.vs-new li{color:#e6f1ff}
+.vs-new .mk{background:rgba(90,166,255,.18);color:var(--baby);box-shadow:0 0 16px rgba(30,107,255,.35)}
+.vs-new .btn{width:100%;margin-top:28px}
+.vs-badge{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#f4faff,#a8d8ff 30%,#1e6bff 75%,#0a2a7a);color:#00101f;font:700 1.05rem/1 var(--f-display);box-shadow:0 0 40px rgba(30,107,255,.6),inset 0 -6px 12px rgba(0,20,80,.4);animation:bob 5s ease-in-out infinite}
+
+/* planos: garantia, tabela e faixa final */
+.plan-note{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;font-size:.82rem}
+.card .plan-note{color:var(--dim)}
+.plan-note .ic{width:15px;height:15px;color:var(--baby)}
+.cmp{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--bg-2)}
+.cmp table{width:100%;min-width:640px;border-collapse:collapse;font-size:.95rem}
+.cmp th,.cmp td{padding:15px 20px;border-bottom:1px solid var(--line);text-align:center}
+.cmp thead th{background:rgba(150,200,255,.03);color:var(--text);font:600 1rem/1 var(--f-display)}
+.cmp tbody th{color:var(--muted);font-weight:500;text-align:left}
+.cmp td{color:#dcecff}
+.cmp .hi{background:rgba(30,107,255,.08)}
+.cmp thead .hi{color:var(--baby)}
+.cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:0}
+.cmp td .ic{margin:auto;color:var(--baby)}
+.cmp .no{color:var(--dim)}
+.assure{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:18px}
+.assure .ent{margin-top:0}
+.guarantee{display:flex;align-items:center;gap:24px;transform:none;transform-style:flat}
+.guarantee h3{margin-bottom:6px}
+.shield{position:relative;flex:none;width:76px;height:86px;animation:wob 6s ease-in-out infinite}
+.shield svg{width:100%;height:100%;filter:drop-shadow(0 10px 24px rgba(30,107,255,.55))}
+.shield b{position:absolute;inset:0;display:grid;place-items:center;padding-bottom:6px;color:#00101f;font:700 1.9rem/1 var(--f-display)}
+@keyframes wob{0%,100%{transform:perspective(400px) rotateY(-16deg)}50%{transform:perspective(400px) rotateY(16deg)}}
+.final-card .micro{text-align:center}
+
+/* barra fixa de assinatura (celular) */
+.sticky-cta{position:fixed;left:12px;right:12px;bottom:12px;z-index:45;display:none;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 16px;border:1px solid var(--line-2);border-radius:18px;background:rgba(4,8,17,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 20px 50px -12px rgba(0,0,0,.9),0 0 0 1px rgba(30,107,255,.15);visibility:hidden;transform:translateY(140%);transition:transform .45s var(--ease),visibility 0s linear .45s}
+.sticky-cta.show{visibility:visible;transform:none;transition:transform .45s var(--ease)}
+.sticky-cta strong{display:block;font:600 .95rem/1.2 var(--f-display)}
+.sticky-cta span{color:var(--muted);font-size:.8rem}
+.sticky-cta .btn{--h:44px;flex:none;padding:0 18px}
+
+/* janela de código gira conforme a rolagem (navegadores com suporte) */
+@supports (animation-timeline: view()){
+  @media (min-width:961px) and (prefers-reduced-motion:no-preference){
+    .code-rig{animation:rig linear both;animation-timeline:view();animation-range:entry 10% cover 50%}
+    @keyframes rig{from{transform:rotateY(-34deg) rotateX(18deg) rotateZ(4deg) translateZ(-120px)}to{transform:rotateY(-12deg) rotateX(6deg) rotateZ(1deg)}}
+  }
+}
+@media (max-width:860px){
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .assure{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .vs{grid-template-columns:minmax(0,1fr)}
+  .vs-badge{position:relative;z-index:2;width:52px;height:52px;margin:-10px auto}
+  .sticky-cta{display:flex}
+  .sticky-on .wa{bottom:88px}
+}
+@media (max-width:640px){
+  .drag-hint{display:none}
+  .guarantee{flex-direction:column;align-items:flex-start}
+}
+
+/* ============================================================
    Responsivo
    ============================================================ */
 @media (max-width:1000px){
@@ -517,10 +629,13 @@ code{font-family:var(--f-mono)}
   <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4.5 17l6-5.5-6-5.5M12.5 18.5h7"/></symbol>
   <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20.5 2.5M16 7l3 3M18.5 4.5l2 2"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16.2v.3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 2.8v5.7c0 4.6-3.2 8.3-7.5 9.9-4.3-1.6-7.5-5.3-7.5-9.9V5.8z"/><path d="M9 12l2 2 4-4"/></symbol>
 </svg>
 
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <div class="progress" aria-hidden="true"></div>
+<div class="spot" aria-hidden="true"></div>
 
 <!-- ============================ Navegação ============================ -->
 <header class="nav">
@@ -536,7 +651,7 @@ code{font-family:var(--f-mono)}
       <a href="#opus">Opus 5</a>
       <a href="#planos">Planos</a>
       <a href="#duvidas">Dúvidas</a>
-      <a class="btn btn-primary btn-sm" href="#planos">Assinar agora</a>
+      <a class="btn btn-primary btn-sm" href="#planos">Começar agora</a>
     </nav>
   </div>
 </header>
@@ -548,22 +663,24 @@ code{font-family:var(--f-mono)}
   <div class="hero-bg" aria-hidden="true"><div class="stars"></div><div class="floor"><div class="plane"></div></div></div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <a class="pill rv" href="#devs"><span class="pill-tag">Devs</span>Especial para devs<span class="pill-more">: integre em 1 minuto</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <h1 class="rv" style="--dl:.08s">Claude Opus 5 na sua aplicação. <span class="grad-text">Pagando em reais.</span></h1>
+      <a class="pill rv" href="#devs"><span class="pill-tag">Devs</span><span>Especial para devs<span class="pill-more">: integre em 1 minuto</span></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <h1 class="rv" style="--dl:.08s">Claude Opus 5 no seu <span class="rot" aria-hidden="true"><span class="rot-sizer">produto.</span><span class="rot-w">app.</span><span class="rot-w">SaaS.</span><span class="rot-w">agente.</span><span class="rot-w">chatbot.</span><span class="rot-w">produto.</span></span><span class="sr-only">produto.</span><br><span class="grad-text">Pagando em reais.</span></h1>
       <p class="lead rv" style="--dl:.16s">Uma API compatível com o SDK oficial para usar o Claude Opus 5 sem cartão internacional. Plano mensal em reais, painel de consumo e suporte em português.</p>
       <div class="cta-row rv" style="--dl:.24s">
-        <a class="btn btn-primary" href="#planos">Ver planos<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-primary" href="#planos">Começar agora<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-ghost" href="#devs"><svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>Integrar em 1 minuto</a>
       </div>
+      <p class="micro rv" style="--dl:.28s">Planos a partir de <b>R$ 97/mês</b>. Ative hoje e faça a primeira chamada em minutos.</p>
       <ul class="checks rv" style="--dl:.32s">
-        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Plano mensal em reais</li>
-        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Pix e cartão nacional</li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>7 dias de garantia</li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Pix ou cartão nacional</li>
         <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Suporte em português</li>
       </ul>
     </div>
 
     <div class="stage rv" style="--dl:.12s" aria-hidden="true">
       <canvas id="globe"></canvas>
+      <span class="drag-hint">⟷ arraste para girar</span>
       <div class="float f1"><div class="float-in glass req">
         <div class="req-top"><span class="live"></span>POST /v1/messages<span class="ok">200</span></div>
         <dl>
@@ -591,6 +708,16 @@ code{font-family:var(--f-mono)}
     </ul>
   </div>
 </div>
+
+<!-- ============================ Números ============================ -->
+<section class="stats" aria-label="O Claude Opus 5 na open33 em números">
+  <div class="wrap stats-grid">
+    <div class="stat rv"><strong data-count="1000000">1.000.000</strong><span>tokens de contexto</span></div>
+    <div class="stat rv" style="--dl:.06s"><strong data-count="128000">128.000</strong><span>tokens por resposta</span></div>
+    <div class="stat rv" style="--dl:.12s"><strong data-count="2">2</strong><span>linhas para migrar seu código</span></div>
+    <div class="stat rv" style="--dl:.18s"><strong data-count="100" data-suffix="%">100%</strong><span>em reais, sem dólar</span></div>
+  </div>
+</section>
 
 <!-- ============================ Recursos ============================ -->
 <section class="sec" id="recursos">
@@ -838,6 +965,39 @@ resposta = client.messages.<span class="f">create</span>(
   </div>
 </section>
 
+<!-- ============================ Dólar x open33 ============================ -->
+<section class="sec" id="comparar">
+  <div class="wrap">
+    <header class="sec-head center rv">
+      <span class="eyebrow">Compare</span>
+      <h2 class="h2">Chega de pagar <span class="grad-text">API em dólar.</span></h2>
+      <p class="lead">O mesmo Claude Opus 5, sem cartão internacional e sem surpresa na fatura.</p>
+    </header>
+    <div class="vs">
+      <article class="card vs-card vs-old rv" data-tilt="5">
+        <span class="vs-tag">Pagando em dólar</span>
+        <ul class="vs-list">
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></span>Cartão de crédito internacional obrigatório</li>
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></span>IOF e câmbio somados na fatura</li>
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></span>O valor muda junto com o dólar</li>
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></span>Sem Pix</li>
+        </ul>
+      </article>
+      <div class="vs-badge" aria-hidden="true">VS</div>
+      <article class="card vs-card vs-new rv" data-tilt="5" style="--dl:.1s">
+        <span class="vs-tag">Com a open33</span>
+        <ul class="vs-list">
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Pix ou cartão de crédito nacional</li>
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Preço fixo em reais, sem IOF</li>
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>A mesma API e o mesmo código</li>
+          <li><span class="mk"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></span>Suporte em português no WhatsApp</li>
+        </ul>
+        <a class="btn btn-primary z1" href="#planos">Quero pagar em reais<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ Planos mensais ============================ -->
 <section class="sec" id="planos">
   <div class="wrap">
@@ -860,6 +1020,7 @@ resposta = client.messages.<span class="f">create</span>(
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Suporte por e-mail</li>
         </ul>
         <a class="btn btn-ghost z1" href="#contato" data-checkout="start" data-msg="Olá! Quero assinar o plano Start (R$ 97/mês) da open33.">Assinar o Start</a>
+        <p class="plan-note"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>7 dias de garantia</p>
       </article>
 
       <article class="card plan featured rv" data-tilt="6" style="--dl:.08s">
@@ -875,29 +1036,60 @@ resposta = client.messages.<span class="f">create</span>(
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Suporte prioritário no WhatsApp</li>
         </ul>
         <a class="btn btn-primary z2" href="#contato" data-checkout="pro" data-msg="Olá! Quero assinar o plano Pro (R$ 197/mês) da open33.">Assinar o Pro<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <p class="plan-note"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>7 dias de garantia</p>
       </article>
 
       <article class="card plan rv" data-tilt="6" style="--dl:.16s">
-        <h3 class="plan-name">Scale</h3>
-        <p class="plan-desc">Para times e alto volume de chamadas.</p>
+        <h3 class="plan-name">Ultra</h3>
+        <p class="plan-desc">Para times e o maior volume de uso.</p>
         <div class="price z1"><span class="cur">R$</span><span class="val">497</span><span class="per">/mês</span></div>
         <p class="price-sub">Cobrança mensal · Pix ou cartão</p>
         <ul class="feat">
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Acesso ao Claude Opus 5</li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limites de uso altos</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Nosso maior limite de uso</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Relatórios de uso por chave</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Atendimento prioritário dedicado</li>
         </ul>
-        <a class="btn btn-ghost z1" href="#contato" data-checkout="scale" data-msg="Olá! Quero assinar o plano Scale (R$ 497/mês) da open33.">Assinar o Scale</a>
+        <a class="btn btn-ghost z1" href="#contato" data-checkout="ultra" data-msg="Olá! Quero assinar o plano Ultra (R$ 497/mês) da open33.">Assinar o Ultra</a>
+        <p class="plan-note"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>7 dias de garantia</p>
       </article>
     </div>
 
-    <div class="card ent rv">
-      <div>
-        <h3>Empresas e alto volume</h3>
-        <p>Plano sob medida, com limites dedicados, faturamento com nota fiscal, contrato e um canal direto com o nosso time.</p>
+    <div class="cmp rv">
+      <table>
+        <caption class="sr-only">Comparação entre os planos Start, Pro e Ultra</caption>
+        <thead><tr><th scope="col"><span class="sr-only">Recurso</span></th><th scope="col">Start</th><th scope="col" class="hi">Pro</th><th scope="col">Ultra</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Preço mensal</th><td>R$ 97</td><td class="hi">R$ 197</td><td>R$ 497</td></tr>
+          <tr><th scope="row">Claude Opus 5</th><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td class="hi"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td></tr>
+          <tr><th scope="row">Limites de uso</th><td>Padrão</td><td class="hi">Ampliados</td><td>Os maiores</td></tr>
+          <tr><th scope="row">Painel de consumo</th><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td class="hi"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td></tr>
+          <tr><th scope="row">Chaves por projeto</th><td><span class="no" aria-hidden="true">—</span><span class="sr-only">Não incluído</span></td><td class="hi"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td></tr>
+          <tr><th scope="row">Relatórios por chave</th><td><span class="no" aria-hidden="true">—</span><span class="sr-only">Não incluído</span></td><td class="hi"><span class="no" aria-hidden="true">—</span><span class="sr-only">Não incluído</span></td><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td></tr>
+          <tr><th scope="row">Suporte</th><td>E-mail</td><td class="hi">WhatsApp prioritário</td><td>Atendimento dedicado</td></tr>
+          <tr><th scope="row">Garantia de 7 dias</th><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td class="hi"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td><td><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Incluído</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="assure">
+      <div class="card guarantee rv">
+        <div class="shield" aria-hidden="true">
+          <svg viewBox="0 0 64 72"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eaf6ff"/><stop offset=".5" stop-color="#5aa6ff"/><stop offset="1" stop-color="#1a4fc4"/></linearGradient></defs><path d="M32 3l25 9v19c0 18-11 31-25 38C18 62 7 49 7 31V12z" fill="url(#sg)"/><path d="M32 9l19 7v15c0 14-8.5 24.5-19 30.5C21.5 55.5 13 45 13 31V16z" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/></svg>
+          <b>7</b>
+        </div>
+        <div>
+          <h3>Garantia de 7 dias</h3>
+          <p>Assine sem risco. Se a open33 não for pra você, é só pedir o reembolso integral em até 7 dias.</p>
+        </div>
       </div>
-      <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero falar sobre um plano para empresas na open33.">Falar com vendas<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <div class="card ent rv" style="--dl:.08s">
+        <div>
+          <h3>Empresas e alto volume</h3>
+          <p>Plano sob medida, com limites dedicados, faturamento com nota fiscal, contrato e um canal direto com o nosso time.</p>
+        </div>
+        <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero falar sobre um plano para empresas na open33.">Falar com vendas<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
     </div>
   </div>
 </section>
@@ -927,6 +1119,10 @@ resposta = client.messages.<span class="f">create</span>(
         <div class="faq-a"><p>É um plano mensal com valor fixo em reais. Você paga com Pix ou cartão de crédito nacional, e a assinatura renova todo mês.</p></div>
       </details>
       <details class="faq rv">
+        <summary>Tem garantia?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><p>Sim. Você tem 7 dias para testar: se a open33 não for pra você, é só pedir o reembolso integral nesse prazo.</p></div>
+      </details>
+      <details class="faq rv">
         <summary>Existe limite de uso?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><p>Sim. Cada plano tem limites de requisições e de tokens, informados no painel. Se o seu projeto precisar de mais, você pode mudar de plano ou falar com a gente sobre um plano sob medida.</p></div>
       </details>
@@ -946,9 +1142,10 @@ resposta = client.messages.<span class="f">create</span>(
       <h2 class="h2">Coloque o Claude Opus 5 para trabalhar <span class="grad-text">no seu produto hoje.</span></h2>
       <p class="lead">Escolha seu plano, troque a base URL e faça a primeira chamada em minutos.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#planos">Ver planos<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-primary" href="#planos">Escolher meu plano<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero começar a usar a open33."><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>Falar com a equipe</a>
       </div>
+      <p class="micro">7 dias de garantia · Pix ou cartão · Suporte em português</p>
     </div>
   </div>
 </section>
@@ -983,6 +1180,11 @@ resposta = client.messages.<span class="f">create</span>(
   </div>
 </footer>
 
+<div class="sticky-cta" role="region" aria-label="Assinar a open33">
+  <div><strong>Claude Opus 5</strong><span>Planos a partir de R$ 97/mês</span></div>
+  <a class="btn btn-primary" href="#planos">Assinar</a>
+</div>
+
 <a class="wa" id="wa" href="#contato" hidden aria-label="Falar pelo WhatsApp"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><span>WhatsApp</span></a>
 
 <script>
@@ -999,7 +1201,7 @@ resposta = client.messages.<span class="f">create</span>(
     checkout: {                                // links de assinatura; vazio = abre WhatsApp/e-mail com a mensagem pronta
       start: "",
       pro: "",
-      scale: "",
+      ultra: "",
     },
   };
 
@@ -1009,6 +1211,7 @@ resposta = client.messages.<span class="f">create</span>(
   const reduce = media("(prefers-reduced-motion: reduce)");
   const fine = media("(hover: hover) and (pointer: fine)");
   const pointer = { x: 0, y: 0 };
+  const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const run = fn => { try { fn(); } catch (err) { console.error(err); } };
 
   function contactHref(msg) {
@@ -1248,6 +1451,7 @@ resposta = client.messages.<span class="f">create</span>(
     let W = 1, H = 1, R = 1, CX = 0, CY = 0, gHalo = null, gBody = null, gRim = null;
     let rot = 0.8, time = 0, mx = 0, my = 0, sax = 0, cax = 1, px = 0, py = 0, pz = 0;
     let running = false, visible = true, raf = 0, last = 0;
+    let spin = 0, dragging = false, lastX = 0, lastT = 0;
 
     const proj = (x, y, z, sa, ca) => {
       const x1 = x * ca + z * sa, z1 = -x * sa + z * ca;
@@ -1359,6 +1563,7 @@ resposta = client.messages.<span class="f">create</span>(
 
     const frame = dt => {
       time += dt; rot += dt * 0.1;
+      if (!dragging && spin) { rot += spin * dt; spin *= Math.pow(0.08, dt); if (Math.abs(spin) < 0.01) spin = 0; }
       const f = Math.min(1, dt * 2.5);
       mx += (pointer.x - mx) * f; my += (pointer.y - my) * f;
       const ay = rot + mx * 0.45, ax = 0.36 + my * 0.2;
@@ -1447,6 +1652,31 @@ resposta = client.messages.<span class="f">create</span>(
     if ("IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; sync(); }).observe(stage);
     document.addEventListener("visibilitychange", sync);
     sync();
+
+    // arrastar para girar, com inércia
+    const hint = stage.querySelector(".drag-hint");
+    canvas.addEventListener("pointerdown", e => {
+      dragging = true; spin = 0; lastX = e.clientX; lastT = performance.now();
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      canvas.classList.add("grabbing");
+      if (hint) hint.classList.add("gone");
+    });
+    canvas.addEventListener("pointermove", e => {
+      if (!dragging) return;
+      const now = performance.now(), dx = e.clientX - lastX, dts = Math.max(8, now - lastT) / 1000;
+      rot += dx * 0.006;
+      spin = Math.max(-6, Math.min(6, (dx * 0.006) / dts));
+      lastX = e.clientX; lastT = now;
+      if (!running) frame(0);
+    });
+    const release = () => {
+      if (!dragging) return;
+      dragging = false;
+      canvas.classList.remove("grabbing");
+      if (performance.now() - lastT > 90) spin = 0;
+    };
+    canvas.addEventListener("pointerup", release);
+    canvas.addEventListener("pointercancel", release);
   }
 
   /* ---------- abas do código ---------- */
@@ -1502,7 +1732,107 @@ resposta = client.messages.<span class="f">create</span>(
     });
   }
 
-  [config, nav, reveal, offscreen, tilt, parallax, globe, tabs, copyButtons].forEach(run);
+  /* ---------- palavra que gira em 3D no título ---------- */
+  function rotator() {
+    const rot = $(".rot");
+    if (!rot || reduce) return;
+    const words = $$(".rot-w", rot);
+    if (words.length < 2) return;
+    const fit = () => { rot.style.width = Math.max(...words.map(w => w.offsetWidth)) + "px"; };
+    rot.classList.add("rot-live");
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    addEventListener("resize", fit);
+    let i = 0;
+    words[0].classList.add("is-in");
+    setInterval(() => {
+      if (document.hidden) return;
+      const cur = words[i];
+      i = (i + 1) % words.length;
+      cur.classList.remove("is-in"); cur.classList.add("is-out");
+      words[i].classList.remove("is-out"); words[i].classList.add("is-in");
+    }, 2400);
+  }
+
+  /* ---------- números que sobem quando aparecem ---------- */
+  function counters() {
+    const els = $$("[data-count]");
+    if (!els.length || reduce || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        const el = en.target, end = Number(el.dataset.count), suf = el.dataset.suffix || "", t0 = performance.now();
+        const step = now => {
+          const p = Math.min(1, (now - t0) / 1600), e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(end * e).toLocaleString("pt-BR") + suf;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
+    els.forEach(el => { el.textContent = "0" + (el.dataset.suffix || ""); io.observe(el); });
+  }
+
+  /* ---------- botões principais "magnéticos" ---------- */
+  function magnetic() {
+    if (!fine || reduce) return;
+    $$(".btn-primary").forEach(b => {
+      b.addEventListener("pointermove", e => {
+        const r = b.getBoundingClientRect();
+        b.style.setProperty("--tx", (((e.clientX - r.left) / r.width - 0.5) * 12).toFixed(1) + "px");
+        b.style.setProperty("--ty", (((e.clientY - r.top) / r.height - 0.5) * 8).toFixed(1) + "px");
+      });
+      b.addEventListener("pointerleave", () => { b.style.setProperty("--tx", "0px"); b.style.setProperty("--ty", "0px"); });
+    });
+  }
+
+  /* ---------- luz que acompanha o cursor ---------- */
+  function spotlight() {
+    const spot = $(".spot");
+    if (!spot || !fine || reduce) return;
+    let raf = 0, x = 0, y = 0;
+    addEventListener("pointermove", e => {
+      x = e.clientX; y = e.clientY;
+      if (!raf) raf = requestAnimationFrame(() => {
+        raf = 0;
+        spot.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+        spot.classList.add("on");
+      });
+    }, { passive: true });
+    document.documentElement.addEventListener("mouseleave", () => spot.classList.remove("on"));
+  }
+
+  /* ---------- barra fixa de assinatura no celular ---------- */
+  function stickyCta() {
+    const bar = $(".sticky-cta"), hero = $(".hero");
+    if (!bar || !hero || !("IntersectionObserver" in window)) return;
+    const blockers = new Set();
+    let heroOn = true;
+    const update = () => {
+      const on = !heroOn && blockers.size === 0;
+      bar.classList.toggle("show", on);
+      document.body.classList.toggle("sticky-on", on);
+    };
+    new IntersectionObserver(([en]) => { heroOn = en.isIntersecting; update(); }).observe(hero);
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) blockers.add(en.target); else blockers.delete(en.target); });
+      update();
+    });
+    ["#planos", "#contato"].forEach(sel => { const el = $(sel); if (el) io.observe(el); });
+  }
+
+  /* ---------- preço por dia em cada plano ---------- */
+  function perDay() {
+    $$(".plan").forEach(card => {
+      const val = $(".val", card), sub = $(".price-sub", card);
+      if (!val || !sub) return;
+      const n = Number(val.textContent.replace(/\./g, "").replace(",", "."));
+      if (n > 0) sub.textContent = "Cobrança mensal · cerca de " + brl.format(n / 30) + " por dia";
+    });
+  }
+
+  [config, nav, reveal, offscreen, tilt, parallax, globe, tabs, copyButtons, rotator, counters, magnetic, spotlight, stickyCta, perDay].forEach(run);
   run(() => { const y = $("#year"); if (y) y.textContent = String(new Date().getFullYear()); });
   window.__open33Ok = true;
 })();
