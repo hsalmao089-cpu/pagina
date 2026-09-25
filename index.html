@@ -4,27 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#05060d">
-<title>Órbita API — Claude na sua aplicação, pagando em reais</title>
-<meta name="description" content="Acesse os modelos Claude por uma API compatível com o SDK oficial. Recarga com Pix, créditos pré-pagos, painel de consumo e suporte em português.">
+<meta name="theme-color" content="#000000">
+<title>open33 — API do Claude Opus 5 para devs, em reais</title>
+<meta name="description" content="Acesse o Claude Opus 5 por uma API compatível com o SDK oficial. Plano mensal em reais, Pix ou cartão e suporte em português.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="Órbita API — Claude na sua aplicação, pagando em reais">
-<meta property="og:description" content="API compatível com o SDK oficial. Recarga com Pix, créditos pré-pagos e suporte em português.">
+<meta property="og:title" content="open33 — API do Claude Opus 5 para devs, em reais">
+<meta property="og:description" content="Claude Opus 5 por uma API compatível com o SDK oficial. Plano mensal em reais e suporte em português.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.35' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23e8fbff'/%3E%3Cstop offset='.35' stop-color='%2363e3ff'/%3E%3Cstop offset='1' stop-color='%237f6bff'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='15' fill='url(%23g)'/%3E%3Cellipse cx='32' cy='32' rx='28' ry='9' fill='none' stroke='%23ffffff' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.35' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23f2f9ff'/%3E%3Cstop offset='.35' stop-color='%23a8d8ff'/%3E%3Cstop offset='1' stop-color='%231e6bff'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='15' fill='url(%23g)'/%3E%3Cellipse cx='32' cy='32' rx='28' ry='9' fill='none' stroke='%23d9efff' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
 
 <!--
   ===========================================================================
-  ÓRBITA API — página de vendas
+  open33 — página de vendas
   ---------------------------------------------------------------------------
   Arquivo único, sem build e sem dependências de JavaScript.
-  Dados do negócio (endpoint, WhatsApp, e-mail, links de pagamento e bônus)
-  ficam no objeto CONFIG, no fim do arquivo. O nome "Órbita" é provisório:
-  troque pela sua marca com buscar-e-substituir.
+  Dados do negócio (endpoint, WhatsApp, e-mail e links de assinatura)
+  ficam no objeto CONFIG, no fim do arquivo.
   ===========================================================================
 -->
 
@@ -32,27 +31,27 @@
   document.documentElement.classList.add("js");
   /* Se o script principal falhar, mostra todo o conteúdo mesmo assim. */
   setTimeout(function () {
-    if (!window.__orbitaOk) document.documentElement.classList.add("fallback");
+    if (!window.__open33Ok) document.documentElement.classList.add("fallback");
   }, 2500);
 </script>
 
 <style>
 /* ============================================================
-   Tokens
+   Tokens — preto, azul e azul bebê
    ============================================================ */
 :root{
-  --bg:#05060d;
-  --bg-2:#090b18;
-  --line:rgba(255,255,255,.08);
-  --line-2:rgba(255,255,255,.14);
-  --text:#eef0ff;
-  --muted:#a4aacb;
-  --dim:#6f7699;
-  --cyan:#3fd9f5;
-  --violet:#7f6bff;
-  --pink:#ff72d2;
-  --mint:#5ef0b6;
-  --grad:linear-gradient(115deg,#3fd9f5 0%,#7f6bff 50%,#ff72d2 100%);
+  --bg:#000;
+  --bg-2:#050912;
+  --line:rgba(150,195,255,.09);
+  --line-2:rgba(150,195,255,.17);
+  --text:#eef5ff;
+  --muted:#9fb0c9;
+  --dim:#64748f;
+  --blue:#1e6bff;
+  --sky:#4f9dff;
+  --baby:#a8d8ff;
+  --ice:#d9efff;
+  --grad:linear-gradient(115deg,#1e6bff 0%,#5aa6ff 50%,#a8d8ff 100%);
   --r:22px;
   --ease:cubic-bezier(.2,.7,.2,1);
   --f-display:"Space Grotesk",Inter,system-ui,sans-serif;
@@ -66,23 +65,23 @@
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%;overflow-x:clip}
 body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:clip}
-body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 img,svg,canvas{display:block}
 a{color:inherit}
 h1,h2,h3,h4{margin:0;font-family:var(--f-display);font-weight:600;line-height:1.05;letter-spacing:-.03em}
 p{margin:0}
 button{font:inherit;color:inherit}
 code{font-family:var(--f-mono)}
-::selection{background:rgba(127,107,255,.45);color:#fff}
-:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:8px}
+::selection{background:rgba(30,107,255,.5);color:#fff}
+:focus-visible{outline:2px solid var(--baby);outline-offset:3px;border-radius:8px}
 .wrap{width:min(1200px,100% - 32px);margin-inline:auto}
 @media (min-width:720px){.wrap{width:min(1200px,100% - 64px)}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.skip{position:absolute;left:16px;top:-80px;z-index:200;padding:10px 14px;border-radius:10px;background:#fff;color:#05060d;font-weight:600;text-decoration:none}
+.skip{position:absolute;left:16px;top:-80px;z-index:200;padding:10px 14px;border-radius:10px;background:#fff;color:#000;font-weight:600;text-decoration:none}
 .skip:focus{top:12px}
 .ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-.grad-text{background:linear-gradient(100deg,#6ee7ff 0%,#9a88ff 30%,#ff85d8 55%,#9a88ff 78%,#6ee7ff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone;animation:sheen 9s linear infinite}
+.grad-text{background:linear-gradient(100deg,#3b8bff 0%,#8fcbff 28%,#e3f3ff 50%,#8fcbff 72%,#3b8bff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone;animation:sheen 9s linear infinite}
 @keyframes sheen{from{background-position:0% 50%}to{background-position:200% 50%}}
 
 /* ============================================================
@@ -92,12 +91,12 @@ code{font-family:var(--f-mono)}
 .btn .ic{transition:transform .25s var(--ease)}
 .btn:hover .ic-arrow{transform:translateX(3px)}
 .btn:active{transform:translateY(1px)}
-.btn-primary{color:#070817;background:linear-gradient(135deg,#7ae9ff 0%,#9c8cff 52%,#e39bff 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -3px 0 rgba(30,10,90,.22),0 14px 34px -10px rgba(127,107,255,.7),0 0 0 1px rgba(255,255,255,.14)}
-.btn-primary::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.7) 50%,transparent 65%);background-size:260% 100%;background-position:130% 0;transition:background-position .8s var(--ease)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -3px 0 rgba(30,10,90,.22),0 22px 44px -12px rgba(127,107,255,.9),0 0 0 1px rgba(255,255,255,.2)}
+.btn-primary{color:#00101f;background:linear-gradient(135deg,#e3f3ff 0%,#a8d8ff 42%,#3b8bff 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 -3px 0 rgba(0,30,90,.24),0 14px 34px -10px rgba(30,107,255,.8),0 0 0 1px rgba(255,255,255,.14)}
+.btn-primary::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.75) 50%,transparent 65%);background-size:260% 100%;background-position:130% 0;transition:background-position .8s var(--ease)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 -3px 0 rgba(0,30,90,.24),0 22px 44px -12px rgba(30,107,255,1),0 0 0 1px rgba(255,255,255,.2)}
 .btn-primary:hover::after{background-position:-30% 0}
-.btn-ghost{color:var(--text);background:rgba(255,255,255,.045);box-shadow:inset 0 0 0 1px var(--line-2),inset 0 1px 0 rgba(255,255,255,.06)}
-.btn-ghost:hover{background:rgba(255,255,255,.09);transform:translateY(-2px)}
+.btn-ghost{color:var(--text);background:rgba(150,200,255,.05);box-shadow:inset 0 0 0 1px var(--line-2),inset 0 1px 0 rgba(255,255,255,.06)}
+.btn-ghost:hover{background:rgba(150,200,255,.1);transform:translateY(-2px)}
 .btn-sm{--h:42px;padding:0 18px;border-radius:12px;font-size:.92rem}
 
 /* ============================================================
@@ -105,27 +104,28 @@ code{font-family:var(--f-mono)}
    ============================================================ */
 .progress{position:fixed;left:0;top:0;z-index:60;width:100%;height:2px;background:var(--grad);transform-origin:0 50%;transform:scaleX(var(--sp,0))}
 .nav{position:fixed;inset:0 0 auto;z-index:50;border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
-.nav.scrolled{background:rgba(6,7,15,.74);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);border-bottom-color:var(--line)}
+.nav.scrolled{background:rgba(0,0,0,.74);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);border-bottom-color:var(--line)}
 .nav-in{display:flex;align-items:center;gap:24px;height:72px}
-.brand{display:inline-flex;align-items:center;gap:12px;font:700 1.22rem/1 var(--f-display);letter-spacing:-.02em;text-decoration:none}
-.brand small{margin-left:-4px;padding:4px 6px;border:1px solid var(--line-2);border-radius:6px;font:500 .66rem/1 var(--f-mono);letter-spacing:.08em;color:var(--muted)}
+.brand{display:inline-flex;align-items:center;gap:12px;font:700 1.28rem/1 var(--f-display);letter-spacing:-.03em;text-decoration:none}
+.brand b{color:var(--baby);font-weight:700}
+.brand small{padding:4px 6px;border:1px solid var(--line-2);border-radius:6px;font:500 .66rem/1 var(--f-mono);letter-spacing:.08em;color:var(--muted)}
 .logo{position:relative;flex:none;width:30px;height:30px;transform-style:preserve-3d;perspective:140px}
-.logo-planet{position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#e8fbff 0,#63e3ff 26%,#7f6bff 64%,#2c1f86 100%);box-shadow:0 0 16px rgba(63,217,245,.55)}
-.logo-orbit{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(214,220,255,.9);transform:rotateX(74deg) rotateY(14deg);animation:orbit 5s linear infinite}
-.logo-orbit::after{content:"";position:absolute;top:-3.5px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#fff;box-shadow:0 0 10px var(--cyan)}
+.logo-planet{position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#f2f9ff 0,#a8d8ff 28%,#3b8bff 64%,#0b2f86 100%);box-shadow:0 0 16px rgba(90,170,255,.6)}
+.logo-orbit{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(200,230,255,.9);transform:rotateX(74deg) rotateY(14deg);animation:orbit 5s linear infinite}
+.logo-orbit::after{content:"";position:absolute;top:-3.5px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#fff;box-shadow:0 0 10px var(--baby)}
 @keyframes orbit{from{transform:rotateX(74deg) rotateY(14deg) rotateZ(0)}to{transform:rotateX(74deg) rotateY(14deg) rotateZ(360deg)}}
 .nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
 .nav-links a:not(.btn){padding:10px 14px;border-radius:10px;color:var(--muted);font-size:.95rem;font-weight:500;text-decoration:none;transition:color .2s,background .2s}
-.nav-links a:not(.btn):hover{color:var(--text);background:rgba(255,255,255,.05)}
+.nav-links a:not(.btn):hover{color:var(--text);background:rgba(150,200,255,.07)}
 .nav-links .btn{margin-left:10px}
-.nav-toggle{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:44px;height:44px;margin-left:auto;border:1px solid var(--line-2);border-radius:12px;background:rgba(255,255,255,.04);cursor:pointer}
+.nav-toggle{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:44px;height:44px;margin-left:auto;border:1px solid var(--line-2);border-radius:12px;background:rgba(150,200,255,.05);cursor:pointer}
 .nav-toggle span{display:block;width:18px;height:1.5px;border-radius:2px;background:currentColor;transition:transform .25s var(--ease),opacity .2s}
 .menu-open .nav-toggle span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .menu-open .nav-toggle span:nth-child(2){opacity:0}
 .menu-open .nav-toggle span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 @media (max-width:880px){
   .nav-toggle{display:inline-flex}
-  .nav-links{position:fixed;left:16px;right:16px;top:80px;flex-direction:column;align-items:stretch;gap:2px;margin:0;padding:10px;border:1px solid var(--line-2);border-radius:18px;background:#0b0d1d;box-shadow:0 30px 80px -20px rgba(0,0,0,.85);opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s,visibility .2s}
+  .nav-links{position:fixed;left:16px;right:16px;top:80px;flex-direction:column;align-items:stretch;gap:2px;margin:0;padding:10px;border:1px solid var(--line-2);border-radius:18px;background:#040811;box-shadow:0 30px 80px -20px rgba(0,0,0,.9);opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .2s,transform .2s,visibility .2s}
   .menu-open .nav-links{opacity:1;visibility:visible;transform:none}
   .nav-links a:not(.btn){padding:14px 16px;font-size:1rem}
   .nav-links .btn{margin:8px 0 0}
@@ -145,20 +145,20 @@ code{font-family:var(--f-mono)}
    Hero
    ============================================================ */
 .hero{position:relative;isolation:isolate;display:flex;align-items:center;min-height:100vh;min-height:100svh;padding:124px 0 76px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(1100px 620px at 74% 30%,rgba(127,107,255,.2),transparent 62%),radial-gradient(820px 520px at 6% 4%,rgba(63,217,245,.13),transparent 60%),radial-gradient(760px 420px at 50% 112%,rgba(255,114,210,.12),transparent 62%)}
+.hero-bg{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(1100px 620px at 74% 30%,rgba(30,107,255,.24),transparent 62%),radial-gradient(820px 520px at 6% 4%,rgba(120,190,255,.12),transparent 60%),radial-gradient(760px 420px at 50% 112%,rgba(30,107,255,.18),transparent 62%)}
 .stars,.stars::after{position:absolute;inset:0;content:""}
-.stars{opacity:.6;background-image:radial-gradient(1.2px 1.2px at 22px 34px,#fff,transparent),radial-gradient(1px 1px at 94px 146px,rgba(255,255,255,.8),transparent),radial-gradient(1.4px 1.4px at 168px 62px,rgba(180,225,255,.95),transparent),radial-gradient(1px 1px at 232px 196px,#fff,transparent),radial-gradient(1px 1px at 52px 214px,rgba(255,255,255,.6),transparent),radial-gradient(1.2px 1.2px at 140px 250px,rgba(210,190,255,.8),transparent);background-size:270px 270px;-webkit-mask-image:linear-gradient(to bottom,#000 35%,transparent 80%);mask-image:linear-gradient(to bottom,#000 35%,transparent 80%)}
-.stars::after{background-image:radial-gradient(1.3px 1.3px at 60px 80px,#fff,transparent),radial-gradient(1px 1px at 300px 40px,rgba(255,255,255,.7),transparent),radial-gradient(1.5px 1.5px at 210px 300px,rgba(160,230,255,.9),transparent),radial-gradient(1px 1px at 350px 220px,#fff,transparent);background-size:397px 397px;animation:twinkle 4.5s ease-in-out infinite alternate}
+.stars{opacity:.6;background-image:radial-gradient(1.2px 1.2px at 22px 34px,#fff,transparent),radial-gradient(1px 1px at 94px 146px,rgba(255,255,255,.8),transparent),radial-gradient(1.4px 1.4px at 168px 62px,rgba(180,220,255,.95),transparent),radial-gradient(1px 1px at 232px 196px,#fff,transparent),radial-gradient(1px 1px at 52px 214px,rgba(255,255,255,.6),transparent),radial-gradient(1.2px 1.2px at 140px 250px,rgba(168,216,255,.85),transparent);background-size:270px 270px;-webkit-mask-image:linear-gradient(to bottom,#000 35%,transparent 80%);mask-image:linear-gradient(to bottom,#000 35%,transparent 80%)}
+.stars::after{background-image:radial-gradient(1.3px 1.3px at 60px 80px,#fff,transparent),radial-gradient(1px 1px at 300px 40px,rgba(255,255,255,.7),transparent),radial-gradient(1.5px 1.5px at 210px 300px,rgba(168,216,255,.9),transparent),radial-gradient(1px 1px at 350px 220px,#fff,transparent);background-size:397px 397px;animation:twinkle 4.5s ease-in-out infinite alternate}
 @keyframes twinkle{from{opacity:.2}to{opacity:1}}
 .floor{position:absolute;left:0;right:0;bottom:0;height:44%;overflow:hidden;perspective:320px;perspective-origin:50% 0%;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 26%,#000 74%);mask-image:linear-gradient(to bottom,transparent 0%,transparent 26%,#000 74%)}
 .plane{position:absolute;left:-70%;right:-70%;bottom:0;height:250%;overflow:hidden;transform-origin:50% 100%;transform:rotateX(77deg)}
-.plane::before{content:"";position:absolute;left:0;right:0;top:-72px;bottom:0;background-image:linear-gradient(to top,rgba(127,107,255,.36) 1px,transparent 1px),linear-gradient(to right,rgba(127,107,255,.36) 1px,transparent 1px);background-size:72px 72px;animation:floor 3.4s linear infinite}
+.plane::before{content:"";position:absolute;left:0;right:0;top:-72px;bottom:0;background-image:linear-gradient(to top,rgba(59,139,255,.38) 1px,transparent 1px),linear-gradient(to right,rgba(59,139,255,.38) 1px,transparent 1px);background-size:72px 72px;animation:floor 3.4s linear infinite}
 @keyframes floor{from{transform:translateY(0)}to{transform:translateY(72px)}}
 
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:center;gap:clamp(24px,4vw,56px)}
-.pill{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border:1px solid var(--line-2);border-radius:999px;background:rgba(255,255,255,.04);color:var(--muted);font-size:.88rem;text-decoration:none;transition:border-color .2s,background .2s}
-.pill:hover{border-color:rgba(127,107,255,.6);background:rgba(127,107,255,.08);color:var(--text)}
-.pill-tag{padding:5px 9px;border-radius:999px;background:var(--grad);color:#07081a;font:600 .68rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border:1px solid var(--line-2);border-radius:999px;background:rgba(150,200,255,.05);color:var(--muted);font-size:.88rem;text-decoration:none;transition:border-color .2s,background .2s,color .2s}
+.pill:hover{border-color:rgba(90,166,255,.6);background:rgba(30,107,255,.1);color:var(--text)}
+.pill-tag{padding:5px 9px;border-radius:999px;background:var(--grad);color:#00101f;font:600 .68rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
 .pill .ic{width:15px;height:15px}
 .hero h1{margin:26px 0 22px;font-size:clamp(2.45rem,5vw,4.5rem);font-weight:700;line-height:.98;letter-spacing:-.045em;text-wrap:balance}
 .hero h1 .grad-text{display:inline-block;padding-bottom:.06em}
@@ -167,7 +167,7 @@ code{font-family:var(--f-mono)}
 .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
 .checks{display:flex;flex-wrap:wrap;gap:10px 22px;margin:30px 0 0;padding:0;list-style:none;color:var(--muted);font-size:.93rem}
 .checks li{display:inline-flex;align-items:center;gap:8px}
-.checks .ic{color:var(--mint)}
+.checks .ic{color:var(--baby)}
 
 /* Palco 3D do hero */
 .stage{position:relative;width:100%;max-width:640px;aspect-ratio:1;margin-inline:auto;perspective:1100px;pointer-events:none;user-select:none}
@@ -180,32 +180,32 @@ code{font-family:var(--f-mono)}
 .f2 .float-in{animation-delay:-3.5s}
 .f3{right:9%;top:5%;--d:12;--fy:-8deg}
 .f3 .float-in{animation-delay:-1.8s}
-.glass{border:1px solid rgba(255,255,255,.12);border-radius:16px;background:linear-gradient(180deg,rgba(26,28,58,.76),rgba(12,13,30,.72));box-shadow:0 30px 60px -20px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.1);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.glass{border:1px solid rgba(168,216,255,.16);border-radius:16px;background:linear-gradient(180deg,rgba(12,22,44,.8),rgba(3,7,16,.76));box-shadow:0 30px 60px -20px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.1);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .req{min-width:236px;padding:14px 16px;color:var(--muted);font:500 .78rem/1.5 var(--f-mono)}
 .req-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:10px;border-bottom:1px solid var(--line);color:var(--text)}
-.req-top .ok{margin-left:auto;padding:2px 6px;border-radius:6px;background:var(--mint);color:#07170f;font-weight:600}
+.req-top .ok{margin-left:auto;padding:2px 6px;border-radius:6px;background:var(--baby);color:#00101f;font-weight:600}
 .req dl{display:grid;gap:3px;margin:0}
 .req dl div{display:flex;justify-content:space-between;gap:18px}
 .req dt{color:var(--dim)}
-.req dd{margin:0;color:#d9ddff}
-.live{flex:none;width:8px;height:8px;border-radius:50%;background:var(--mint);animation:live 2s infinite}
-@keyframes live{0%{box-shadow:0 0 0 0 rgba(94,240,182,.55)}70%{box-shadow:0 0 0 8px rgba(94,240,182,0)}100%{box-shadow:0 0 0 0 rgba(94,240,182,0)}}
+.req dd{margin:0;color:#dcecff}
+.live{flex:none;width:8px;height:8px;border-radius:50%;background:var(--baby);animation:live 2s infinite}
+@keyframes live{0%{box-shadow:0 0 0 0 rgba(168,216,255,.6)}70%{box-shadow:0 0 0 8px rgba(168,216,255,0)}100%{box-shadow:0 0 0 0 rgba(168,216,255,0)}}
 .pix{display:flex;align-items:center;gap:12px;min-width:252px;padding:14px 16px 14px 14px}
-.pix-ic{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#5ef0b6,#1fb98a);color:#04150e;box-shadow:0 8px 20px -6px rgba(94,240,182,.6)}
+.pix-ic{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#e3f3ff,#5aa6ff);color:#00101f;box-shadow:0 8px 20px -6px rgba(90,166,255,.7)}
 .pix-ic .ic{width:20px;height:20px;stroke-width:3}
 .pix strong{display:block;color:var(--text);font:600 .92rem/1.25 var(--f-body)}
 .pix span{color:var(--muted);font-size:.8rem}
-.pix b{color:var(--mint);font-weight:600}
-.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;color:#dfe3ff;font:500 .78rem/1 var(--f-mono);white-space:nowrap}
-.chip i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.pix b{color:var(--baby);font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;color:#dcecff;font:500 .78rem/1 var(--f-mono);white-space:nowrap}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--baby);box-shadow:0 0 10px var(--baby)}
 
 /* Faixa de compatibilidade */
-.marquee{position:relative;overflow:hidden;padding:20px 0;border-block:1px solid var(--line);background:rgba(255,255,255,.012);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marquee{position:relative;overflow:hidden;padding:20px 0;border-block:1px solid var(--line);background:rgba(150,200,255,.015);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
 .marquee-track{display:flex;width:max-content;animation:marquee 42s linear infinite}
 .marquee:hover .marquee-track{animation-play-state:paused}
 .marquee ul{display:flex;flex:none;align-items:center;gap:44px;margin:0;padding:0 44px 0 0;list-style:none}
 .marquee li{display:inline-flex;align-items:center;gap:14px;color:var(--muted);font:500 .9rem/1 var(--f-mono);white-space:nowrap}
-.marquee li::before{content:"✦";color:var(--violet);font-size:.8rem}
+.marquee li::before{content:"✦";color:var(--sky);font-size:.8rem}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
 /* ============================================================
@@ -215,18 +215,17 @@ code{font-family:var(--f-mono)}
 .sec-head{max-width:780px;margin-bottom:clamp(40px,6vw,64px)}
 .sec-head.center{margin-inline:auto;text-align:center}
 .sec-head.center .lead{margin-inline:auto}
-.eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--cyan);font:500 .74rem/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--baby);font:500 .74rem/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase}
 .eyebrow::before{content:"";width:18px;height:1px;background:currentColor;opacity:.7}
 .h2{margin:16px 0 18px;font-size:clamp(2.1rem,4.6vw,3.6rem);text-wrap:balance}
-.note{margin-top:28px;color:var(--dim);font-size:.9rem;text-align:center}
-#modelos::before,#planos::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(900px 380px at 50% 380px,rgba(127,107,255,.12),transparent 70%)}
+#devs::before,#planos::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(900px 380px at 50% 380px,rgba(30,107,255,.14),transparent 70%)}
 
 /* ============================================================
    Cartões com profundidade real (inclinação 3D)
    ============================================================ */
-.card{position:relative;min-width:0;padding:clamp(22px,2.6vw,32px);border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.016) 100%),var(--bg-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 40px 80px -40px rgba(0,0,0,.85);transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transform-style:preserve-3d;transition:transform .35s var(--ease),border-color .3s}
-.card::before{content:"";position:absolute;inset:-1px;padding:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(63,217,245,.75),rgba(127,107,255,.25) 35%,transparent 60%,rgba(255,114,210,.55));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s}
-.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(520px circle at var(--mx,50%) var(--my,0%),rgba(150,170,255,.12),transparent 42%);opacity:0;transition:opacity .35s}
+.card{position:relative;min-width:0;padding:clamp(22px,2.6vw,32px);border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,rgba(150,200,255,.05) 0%,rgba(150,200,255,.014) 100%),var(--bg-2);box-shadow:inset 0 1px 0 rgba(200,230,255,.06),0 40px 80px -40px rgba(0,0,0,.9);transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transform-style:preserve-3d;transition:transform .35s var(--ease),border-color .3s}
+.card::before{content:"";position:absolute;inset:-1px;padding:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(168,216,255,.85),rgba(59,139,255,.35) 35%,transparent 60%,rgba(30,107,255,.65));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(520px circle at var(--mx,50%) var(--my,0%),rgba(150,200,255,.12),transparent 42%);opacity:0;transition:opacity .35s}
 .card:hover::before,.card:hover::after{opacity:1}
 .card h3{margin-bottom:10px;font-size:clamp(1.25rem,1.8vw,1.5rem)}
 .card p{color:var(--muted)}
@@ -241,141 +240,149 @@ code{font-family:var(--f-mono)}
 .bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .span-2{grid-column:span 2}
 .feat-card{display:flex;flex-direction:column}
-.feat-ic{display:grid;place-items:center;width:50px;height:50px;margin-bottom:22px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:linear-gradient(145deg,rgba(63,217,245,.24),rgba(127,107,255,.24));color:#e3e8ff;box-shadow:0 12px 30px -10px rgba(127,107,255,.65),inset 0 1px 0 rgba(255,255,255,.16)}
+.feat-ic{display:grid;place-items:center;width:50px;height:50px;margin-bottom:22px;border:1px solid rgba(168,216,255,.2);border-radius:14px;background:linear-gradient(145deg,rgba(168,216,255,.22),rgba(30,107,255,.32));color:#e6f4ff;box-shadow:0 12px 30px -10px rgba(30,107,255,.7),inset 0 1px 0 rgba(255,255,255,.16)}
 .feat-ic .ic{width:22px;height:22px}
-.diff{margin-top:auto;padding:16px 18px;overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#070814;font:500 .84rem/1.8 var(--f-mono);font-variant-ligatures:none}
-.feat-card p+.diff,.feat-card p+.meter-box,.feat-card p+.bars-box,.feat-card p+.chips,.feat-card p+.chat{margin-top:26px}
+.feat-card>p{margin-bottom:26px}
+.diff{margin-top:auto;padding:16px 18px;overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#02050c;font:500 .84rem/1.8 var(--f-mono);font-variant-ligatures:none}
 .diff>span{display:block;padding:0 10px;border-radius:6px;white-space:pre}
-.diff .del{background:rgba(255,80,110,.08);color:#ff8a9a}
-.diff .add{background:rgba(80,240,170,.08);color:#7ef0c0}
+.diff .del{background:rgba(255,255,255,.03);color:#6f7f99}
+.diff .add{background:rgba(90,166,255,.11);color:#c4e5ff}
 .diff .ep{color:inherit}
 .coin{width:92px;height:92px;margin-bottom:24px;perspective:700px}
 .coin-b{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:coin 7s linear infinite}
 .coin-f,.coin-e{position:absolute;inset:0;border-radius:50%}
-.coin-f{display:grid;place-items:center;color:#3a2604;font:700 1.55rem/1 var(--f-display);letter-spacing:-.04em;background:radial-gradient(circle at 32% 28%,#fff6cf 0,#ffd978 30%,#f0b43c 64%,#b8801f 100%);box-shadow:inset 0 0 0 5px rgba(255,244,200,.45),inset 0 0 0 8px rgba(160,105,20,.35),inset 0 -8px 16px rgba(120,70,0,.35)}
+.coin-f{display:grid;place-items:center;color:#001533;font:700 1.55rem/1 var(--f-display);letter-spacing:-.04em;background:radial-gradient(circle at 32% 28%,#f4faff 0,#bfe3ff 28%,#5aa6ff 64%,#1a4fc4 100%);box-shadow:inset 0 0 0 5px rgba(235,246,255,.5),inset 0 0 0 8px rgba(20,70,190,.35),inset 0 -8px 16px rgba(10,40,130,.35)}
 .coin-f.front{transform:translateZ(6px)}
 .coin-f.back{transform:rotateY(180deg) translateZ(6px)}
-.coin-e{background:#b98224;transform:translateZ(var(--z))}
+.coin-e{background:#2459c9;transform:translateZ(var(--z))}
 @keyframes coin{from{transform:rotateX(12deg) rotateY(0)}to{transform:rotateX(12deg) rotateY(360deg)}}
-.meter-box{margin-top:auto;padding:18px;border:1px solid var(--line);border-radius:16px;background:#070814}
+.meter-box,.ctx-box{margin-top:auto;padding:18px;border:1px solid var(--line);border-radius:16px;background:#02050c}
 .meter-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;color:var(--muted);font-size:.9rem}
 .meter-row strong{color:var(--text);font:700 1.35rem/1 var(--f-display);letter-spacing:-.02em}
 .meter-row.small{margin-top:10px;color:var(--dim);font:500 .74rem/1.4 var(--f-mono)}
-.meter{height:10px;margin-top:14px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.07)}
-.meter b{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#3fd9f5,#7f6bff);box-shadow:0 0 18px rgba(127,107,255,.6);transition:width 1.6s var(--ease) .3s}
-.in .meter b,html:not(.js) .meter b,.fallback .meter b{width:82%}
+.meter{height:10px;margin-top:14px;overflow:hidden;border-radius:999px;background:rgba(150,200,255,.08)}
+.meter b{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#a8d8ff,#1e6bff);box-shadow:0 0 18px rgba(30,107,255,.6);transition:width 1.6s var(--ease) .3s}
+.in .meter b,html:not(.js) .meter b,.fallback .meter b{width:62%}
 .bars-box{margin-top:auto}
-.bars{display:flex;align-items:flex-end;gap:6px;height:132px;padding:16px 16px 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#070814,#0a0b1b)}
-.bars i{flex:1;height:var(--h);border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#7ae9ff,#7f6bff 70%,rgba(127,107,255,.4));box-shadow:0 0 16px -4px rgba(127,107,255,.7);transform-origin:50% 100%;transform:scaleY(.06);transition:transform 1.1s var(--ease) var(--d,0s)}
+.bars{display:flex;align-items:flex-end;gap:6px;height:132px;padding:16px 16px 0;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#02050c,#050a16)}
+.bars i{flex:1;height:var(--h);border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#d9efff,#3b8bff 70%,rgba(30,107,255,.4));box-shadow:0 0 16px -4px rgba(30,107,255,.75);transform-origin:50% 100%;transform:scaleY(.06);transition:transform 1.1s var(--ease) var(--d,0s)}
 .in .bars i,html:not(.js) .bars i,.fallback .bars i{transform:scaleY(1)}
 .bars-cap{display:flex;justify-content:space-between;margin-top:10px;color:var(--dim);font:500 .74rem/1 var(--f-mono)}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin:auto 0 0;padding:0;list-style:none}
-.chips li{padding:9px 14px;border:1px solid var(--line-2);border-radius:999px;background:rgba(255,255,255,.05);color:#dfe3ff;font:500 .8rem/1 var(--f-mono)}
-.chips li:nth-child(3n+1){border-color:rgba(63,217,245,.4)}
-.chips li:nth-child(3n+2){border-color:rgba(127,107,255,.45)}
-.chips li:nth-child(3n){border-color:rgba(255,114,210,.4)}
+.ctx-bar{display:flex;gap:4px;height:18px;padding:3px;border-radius:999px;background:rgba(150,200,255,.07)}
+.ctx-bar i{width:0;border-radius:999px;transition:width 1.4s var(--ease) var(--d,.2s)}
+.in .ctx-bar i,html:not(.js) .ctx-bar i,.fallback .ctx-bar i{width:var(--w)}
+.c1{background:linear-gradient(90deg,#1e6bff,#3b8bff)}
+.c2{background:linear-gradient(90deg,#4f9dff,#86c2ff)}
+.c3{background:linear-gradient(90deg,#a8d8ff,#e3f3ff)}
+.ctx-legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:14px;color:var(--muted);font:500 .76rem/1 var(--f-mono)}
+.ctx-legend span{display:inline-flex;align-items:center;gap:7px}
+.ctx-legend b{display:inline-block;width:9px;height:9px;border-radius:3px}
+.ctx-total{margin-left:auto;color:var(--text)}
+.ctx-scale{display:flex;justify-content:space-between;margin:8px 3px 0;color:var(--dim);font:500 .68rem/1 var(--f-mono)}
 .chat{display:grid;gap:8px;margin-top:auto}
 .msg{max-width:90%;padding:10px 14px;border-radius:14px;font-size:.88rem;line-height:1.45}
-.card .msg.me{justify-self:end;border:1px solid rgba(127,107,255,.3);border-bottom-right-radius:4px;background:linear-gradient(135deg,rgba(63,217,245,.2),rgba(127,107,255,.22));color:#e8ebff}
-.card .msg.them{border:1px solid var(--line-2);border-bottom-left-radius:4px;background:rgba(255,255,255,.05);color:#cfd3ee}
+.card .msg.me{justify-self:end;border:1px solid rgba(90,166,255,.35);border-bottom-right-radius:4px;background:linear-gradient(135deg,rgba(168,216,255,.16),rgba(30,107,255,.26));color:#eaf5ff}
+.card .msg.them{border:1px solid var(--line-2);border-bottom-left-radius:4px;background:rgba(150,200,255,.05);color:#cfdcef}
 
 /* ============================================================
-   Modelos
-   ============================================================ */
-.models{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
-.model{display:flex;flex-direction:column;grid-column:span 2;min-height:340px;--h1:190;--h2:240}
-.model.lg{grid-column:span 3;min-height:350px}
-.m-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px}
-.badge{padding:7px 10px;border:1px solid hsl(var(--h1) 90% 70% / .38);border-radius:999px;background:hsl(var(--h1) 90% 60% / .09);color:hsl(var(--h1) 90% 80%);font:600 .7rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
-.orb{position:relative;width:72px;height:72px;margin:-8px -6px 0 0;transform-style:preserve-3d;animation:bob 6s ease-in-out infinite}
-.orb::before{content:"";position:absolute;inset:13px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0,hsl(var(--h1) 95% 78%) 20%,hsl(var(--h2) 80% 56%) 60%,hsl(var(--h2) 70% 18%) 100%);box-shadow:0 0 34px hsl(var(--h1) 95% 65% / .55),0 18px 30px -10px rgba(0,0,0,.7)}
-.orb::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid hsl(var(--h1) 90% 80% / .75);box-shadow:0 0 12px hsl(var(--h1) 90% 70% / .4);transform:rotateX(72deg) rotateY(-18deg)}
-.model h3{font-size:clamp(1.4rem,2.2vw,1.85rem)}
-.model h3 span{color:var(--dim);font-weight:500}
-.specs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 20px;padding-top:18px;border-top:1px solid var(--line)}
-.specs dt{margin-bottom:6px;color:var(--dim);font:500 .7rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
-.specs dd{margin:0;color:var(--text);font-weight:600;font-size:.95rem}
-.m-id{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:auto;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#070814;color:var(--muted);font:500 .85rem/1 var(--f-mono);cursor:pointer;transition:border-color .2s,color .2s}
-.m-id:hover{border-color:hsl(var(--h1) 90% 70% / .55);color:var(--text)}
-.m-id code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cp{display:inline-flex;flex:none;align-items:center;gap:6px;color:var(--dim);font:500 .74rem/1 var(--f-mono)}
-.cp .ic{width:14px;height:14px}
-.ok .cp,.copy.ok{color:var(--mint)}
-
-/* ============================================================
-   Como funciona + janela de código em 3D
+   Especial para devs + janela de código em 3D
    ============================================================ */
 .how{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:center;gap:clamp(36px,6vw,84px)}
 .how .sec-head{margin-bottom:0}
 .steps{display:grid;gap:14px;margin:36px 0 0;padding:0;list-style:none}
-.step{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:20px;padding:22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.02);transition:opacity .9s var(--ease) var(--dl,0s),translate .9s var(--ease) var(--dl,0s),background .3s,border-color .3s}
-.step:hover{border-color:var(--line-2);background:rgba(255,255,255,.04)}
-.num{min-width:64px;color:#ecebff;font:700 2.6rem/1 var(--f-display);letter-spacing:-.04em;text-shadow:1px 1px 0 #7a68ff,2px 2px 0 #6b59f2,3px 3px 0 #5d4be2,4px 4px 0 #4f3ecf,5px 5px 0 #4233ba,6px 8px 18px rgba(0,0,0,.55)}
+.step{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:20px;padding:22px;border:1px solid var(--line);border-radius:18px;background:rgba(150,200,255,.025);transition:opacity .9s var(--ease) var(--dl,0s),translate .9s var(--ease) var(--dl,0s),background .3s,border-color .3s}
+.step:hover{border-color:var(--line-2);background:rgba(150,200,255,.05)}
+.num{min-width:64px;color:#eef7ff;font:700 2.6rem/1 var(--f-display);letter-spacing:-.04em;text-shadow:1px 1px 0 #5aa6ff,2px 2px 0 #4a95f7,3px 3px 0 #3b84ee,4px 4px 0 #2d72e0,5px 5px 0 #2160cc,6px 8px 18px rgba(0,0,0,.6)}
 .step h3{margin:4px 0 6px;font-size:1.2rem}
 .step p{color:var(--muted);font-size:.97rem}
 .code-scene{position:relative;perspective:1600px}
-.code-scene::before{content:"";position:absolute;inset:8% 4% -8%;z-index:-1;background:radial-gradient(closest-side,rgba(127,107,255,.38),transparent);filter:blur(30px)}
+.code-scene::before{content:"";position:absolute;inset:8% 4% -8%;z-index:-1;background:radial-gradient(closest-side,rgba(30,107,255,.42),transparent);filter:blur(30px)}
 .code-rig{position:relative;transform-style:preserve-3d;transform:rotateY(-15deg) rotateX(8deg) rotateZ(1deg);transition:transform .9s var(--ease)}
 .code-scene:hover .code-rig{transform:rotateY(-4deg) rotateX(2deg)}
-.ghost{position:absolute;inset:0;border:1px solid rgba(127,107,255,.28);border-radius:20px;background:linear-gradient(180deg,rgba(127,107,255,.09),rgba(63,217,245,.03))}
+.ghost{position:absolute;inset:0;border:1px solid rgba(90,166,255,.3);border-radius:20px;background:linear-gradient(180deg,rgba(30,107,255,.1),rgba(168,216,255,.03))}
 .ghost.g1{opacity:.75;transform:translate3d(26px,-26px,-70px)}
 .ghost.g2{opacity:.4;transform:translate3d(52px,-52px,-140px)}
-.code-win{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:linear-gradient(180deg,#0e1024,#090a17);box-shadow:0 60px 120px -40px rgba(0,0,0,.9),0 0 0 1px rgba(127,107,255,.12),0 0 90px -30px rgba(127,107,255,.6)}
-.code-head{display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.code-win{position:relative;overflow:hidden;border:1px solid rgba(168,216,255,.16);border-radius:20px;background:linear-gradient(180deg,#07101f,#02060e);box-shadow:0 60px 120px -40px rgba(0,0,0,.95),0 0 0 1px rgba(30,107,255,.14),0 0 90px -30px rgba(30,107,255,.7)}
+.code-head{display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid var(--line);background:rgba(150,200,255,.03)}
 .dots{display:flex;flex:none;gap:7px}
-.dots i{width:11px;height:11px;border-radius:50%;background:#ff5f57}
-.dots i:nth-child(2){background:#febc2e}
-.dots i:nth-child(3){background:#28c840}
+.dots i{width:11px;height:11px;border-radius:50%;background:#1e3a6b}
+.dots i:nth-child(2){background:#2a56a3}
+.dots i:nth-child(3){background:#3b8bff}
 .tabs{display:flex;gap:4px;min-width:0;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:9px 12px;border:0;border-radius:9px;background:transparent;color:var(--dim);font:500 .82rem/1 var(--f-mono);white-space:nowrap;cursor:pointer;transition:color .2s,background .2s}
 .tab:hover{color:var(--muted)}
-.tab[aria-selected="true"]{background:rgba(255,255,255,.08);color:var(--text)}
-.copy{display:inline-flex;flex:none;align-items:center;gap:6px;margin-left:auto;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.03);color:var(--muted);font:500 .76rem/1 var(--f-mono);cursor:pointer;transition:color .2s,border-color .2s}
+.tab[aria-selected="true"]{background:rgba(150,200,255,.1);color:var(--text)}
+.copy{display:inline-flex;flex:none;align-items:center;gap:6px;margin-left:auto;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(150,200,255,.04);color:var(--muted);font:500 .76rem/1 var(--f-mono);cursor:pointer;transition:color .2s,border-color .2s}
 .copy:hover{border-color:var(--line-2);color:var(--text)}
 .copy .ic{width:14px;height:14px}
 .code-body{min-height:392px;padding:20px 22px 22px}
-.code-body pre{margin:0;overflow-x:auto;color:#d7dcff;font:400 .86rem/1.78 var(--f-mono);font-variant-ligatures:none;tab-size:2}
+.code-body pre{margin:0;overflow-x:auto;color:#d6e6fb;font:400 .86rem/1.78 var(--f-mono);font-variant-ligatures:none;tab-size:2}
 .panel:focus-visible{outline-offset:6px}
-.k{color:#c3a6ff}.s{color:#8ef0c8}.f{color:#76e4ff}.n{color:#ffc27a}.c{color:#6a72a0;font-style:italic}
+.k{color:#5aa2ff}.s{color:#bde4ff}.f{color:#fff}.n{color:#8cc8ff}.c{color:#56657e;font-style:italic}
 .code-foot{display:flex;align-items:center;gap:10px;padding:12px 18px;border-top:1px solid var(--line);color:var(--dim);font:500 .76rem/1 var(--f-mono)}
 .code-foot b{color:var(--muted);font-weight:500}
+.dev-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:clamp(48px,7vw,80px)}
+.tile{padding:22px}
+.tile .feat-ic{width:42px;height:42px;margin-bottom:16px;border-radius:12px}
+.tile .feat-ic .ic{width:19px;height:19px}
+.card.tile h3{margin-bottom:6px;font-size:1.06rem;letter-spacing:-.01em}
+.tile p{font-size:.9rem;line-height:1.55}
+.tile code{color:var(--baby);font-size:.8rem;overflow-wrap:anywhere}
 
 /* ============================================================
-   Planos
+   Claude Opus 5 em destaque
+   ============================================================ */
+.opus-card{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:clamp(24px,4vw,56px);padding:clamp(28px,4vw,56px);background:radial-gradient(700px 420px at 85% 40%,rgba(30,107,255,.16),transparent 65%),linear-gradient(180deg,rgba(150,200,255,.05) 0%,rgba(150,200,255,.014) 100%),var(--bg-2)}
+.badge{display:inline-block;padding:7px 10px;border:1px solid rgba(168,216,255,.4);border-radius:999px;background:rgba(90,166,255,.1);color:#cfe9ff;font:600 .7rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.card .opus-name{margin:20px 0 14px;font-size:clamp(2rem,4vw,3.1rem);letter-spacing:-.04em}
+.opus-name span{color:var(--dim);font-weight:500}
+.opus-info>p{max-width:520px;font-size:1.05rem}
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;margin:28px 0 26px;padding-top:22px;border-top:1px solid var(--line)}
+.specs dt{margin-bottom:6px;color:var(--dim);font:500 .7rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.specs dd{margin:0;color:var(--text);font-weight:600}
+.m-id{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:420px;padding:13px 16px;border:1px solid var(--line-2);border-radius:12px;background:#02050c;color:var(--muted);font:500 .9rem/1 var(--f-mono);cursor:pointer;transition:border-color .2s,color .2s}
+.m-id:hover{border-color:rgba(168,216,255,.55);color:var(--text)}
+.m-id code{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.cp{display:inline-flex;flex:none;align-items:center;gap:6px;color:var(--dim);font:500 .74rem/1 var(--f-mono)}
+.cp .ic{width:14px;height:14px}
+.ok .cp,.copy.ok{color:var(--baby)}
+.opus-visual{position:relative;width:100%;max-width:440px;aspect-ratio:1;margin-inline:auto}
+.big-orb{position:absolute;inset:14%;transform-style:preserve-3d;perspective:900px;animation:bob 7s ease-in-out infinite}
+.bo-core{position:absolute;inset:20%;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0,#d9efff 14%,#6fb4ff 44%,#1a56d6 72%,#051a4d 100%);box-shadow:0 0 60px rgba(30,107,255,.75),0 0 150px rgba(168,216,255,.25),inset -16px -22px 46px rgba(0,8,40,.55)}
+.bo-ring{position:absolute;inset:0;border:2px solid rgba(168,216,255,.75);border-radius:50%;box-shadow:0 0 26px rgba(30,107,255,.45),inset 0 0 26px rgba(168,216,255,.15)}
+.bo-ring::after{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#fff;box-shadow:0 0 16px #a8d8ff,0 0 34px #1e6bff}
+.r-a{animation:ra 11s linear infinite}
+.r-b{inset:9%;border-color:rgba(59,139,255,.85);animation:rb 15s linear infinite}
+@keyframes ra{from{transform:rotateX(74deg) rotateY(-12deg) rotateZ(0)}to{transform:rotateX(74deg) rotateY(-12deg) rotateZ(360deg)}}
+@keyframes rb{from{transform:rotateX(62deg) rotateY(30deg) rotateZ(360deg)}to{transform:rotateX(62deg) rotateY(30deg) rotateZ(0)}}
+.tag{position:absolute;padding:9px 13px;border:1px solid rgba(168,216,255,.22);border-radius:999px;background:rgba(6,14,32,.86);color:#dcecff;font:500 .76rem/1 var(--f-mono);white-space:nowrap;box-shadow:0 16px 34px -14px rgba(0,0,0,.9);animation:bob 6s ease-in-out infinite}
+.t1{left:0;top:12%}
+.t2{right:0;top:26%;animation-delay:-2s}
+.t3{left:2%;bottom:20%;animation-delay:-4s}
+.t4{right:4%;bottom:7%;animation-delay:-1s}
+
+/* ============================================================
+   Planos mensais
    ============================================================ */
 .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:18px}
 .plan{display:flex;flex-direction:column}
 .plan-name{font-size:1.35rem}
 .plan-desc{margin-top:6px;font-size:.96rem}
-.price{display:flex;align-items:flex-start;gap:6px;margin:26px 0 4px;font-family:var(--f-display)}
+.price{display:flex;align-items:flex-start;gap:6px;margin:26px 0 6px;font-family:var(--f-display)}
 .price .cur{margin-top:10px;color:var(--muted);font-size:1.25rem;font-weight:600}
 .price .val{font-size:clamp(3.2rem,5vw,4.2rem);font-weight:700;line-height:1;letter-spacing:-.05em}
-.card .price-sub{font-size:.93rem}
-.price-sub b{color:var(--mint);font-weight:600}
+.price .per{align-self:flex-end;margin-bottom:6px;color:var(--muted);font:500 1rem/1 var(--f-body)}
+.card .price-sub{color:var(--dim);font-size:.9rem}
 .feat{display:grid;gap:12px;margin:24px 0 28px;padding:22px 0 0;border-top:1px solid var(--line);list-style:none}
-.feat li{display:flex;gap:10px;color:#cfd3ee;font-size:.96rem}
-.feat .ic{margin-top:3px;color:var(--mint)}
+.feat li{display:flex;gap:10px;color:#cfdcef;font-size:.96rem}
+.feat .ic{margin-top:3px;color:var(--baby)}
 .plan .btn{width:100%;margin-top:auto}
 @property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
-.featured{border-color:transparent;background:linear-gradient(180deg,rgba(127,107,255,.17),rgba(63,217,245,.05) 60%,rgba(255,255,255,.02)),var(--bg-2)}
-.featured::before{padding:1.5px;opacity:1;background:conic-gradient(from var(--ang),#3fd9f5,#7f6bff,#ff72d2,#3fd9f5);animation:ang 5s linear infinite}
+.featured{border-color:transparent;background:linear-gradient(180deg,rgba(30,107,255,.2),rgba(168,216,255,.05) 60%,rgba(255,255,255,.02)),var(--bg-2)}
+.featured::before{padding:1.5px;opacity:1;background:conic-gradient(from var(--ang),#1e6bff,#a8d8ff,#ffffff,#5aa6ff,#1e6bff);animation:ang 5s linear infinite}
 @keyframes ang{to{--ang:360deg}}
-.ribbon{position:absolute;top:-14px;left:50%;padding:8px 12px;border-radius:999px;background:var(--grad);color:#07081a;font:600 .7rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;box-shadow:0 10px 30px -8px rgba(127,107,255,.85);transform:translateX(-50%) translateZ(40px)}
-.calc{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:center;gap:32px;margin-top:18px}
-.calc h3{margin-bottom:8px}
-.range{width:100%;height:10px;margin:26px 0 12px;border-radius:999px;background:linear-gradient(90deg,#3fd9f5 0,#7f6bff var(--p,50%),rgba(255,255,255,.08) var(--p,50%));cursor:pointer;-webkit-appearance:none;appearance:none}
-.range::-webkit-slider-thumb{width:28px;height:28px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#c6bcff 45%,#7f6bff);box-shadow:0 0 0 6px rgba(127,107,255,.25),0 6px 20px rgba(0,0,0,.5);cursor:grab;-webkit-appearance:none;appearance:none}
-.range::-moz-range-thumb{width:28px;height:28px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#c6bcff 45%,#7f6bff);box-shadow:0 0 0 6px rgba(127,107,255,.25),0 6px 20px rgba(0,0,0,.5);cursor:grab}
-.range:focus-visible{outline:none}
-.range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(63,217,245,.55)}
-.range:focus-visible::-moz-range-thumb{box-shadow:0 0 0 6px rgba(63,217,245,.55)}
-.range-scale{display:flex;justify-content:space-between;color:var(--dim);font:500 .78rem/1 var(--f-mono)}
-.calc-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
-.calc-out>div{padding:16px;border:1px solid var(--line);border-radius:14px;background:#070814}
-.lbl{display:block;margin-bottom:8px;color:var(--dim);font:500 .7rem/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
-.calc-out strong{display:block;font:700 1.22rem/1.15 var(--f-display);letter-spacing:-.02em;white-space:nowrap}
-.calc .btn{width:100%}
+.ribbon{position:absolute;top:-14px;left:50%;padding:8px 12px;border-radius:999px;background:var(--grad);color:#00101f;font:600 .7rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;box-shadow:0 10px 30px -8px rgba(30,107,255,.9);transform:translateX(-50%) translateZ(40px)}
 .ent{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;margin-top:18px}
 .ent h3{margin-bottom:6px}
 .ent p{max-width:640px}
@@ -384,8 +391,8 @@ code{font-family:var(--f-mono)}
    Dúvidas
    ============================================================ */
 .faq-list{display:grid;gap:12px;max-width:860px;margin-inline:auto}
-.faq{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.02);transition:opacity .9s var(--ease) var(--dl,0s),translate .9s var(--ease) var(--dl,0s),background .3s,border-color .3s}
-.faq[open]{border-color:var(--line-2);background:rgba(255,255,255,.04)}
+.faq{border:1px solid var(--line);border-radius:18px;background:rgba(150,200,255,.025);transition:opacity .9s var(--ease) var(--dl,0s),translate .9s var(--ease) var(--dl,0s),background .3s,border-color .3s}
+.faq[open]{border-color:var(--line-2);background:rgba(150,200,255,.05)}
 .faq summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 24px;font:600 1.08rem/1.35 var(--f-display);letter-spacing:-.01em;list-style:none;cursor:pointer}
 .faq summary::-webkit-details-marker{display:none}
 .plus{position:relative;flex:none;width:28px;height:28px;border:1px solid var(--line-2);border-radius:50%}
@@ -393,23 +400,23 @@ code{font-family:var(--f-mono)}
 .plus::after{transform:rotate(90deg)}
 .faq[open] .plus::after{transform:rotate(0)}
 .faq-a{max-width:740px;padding:0 24px 22px;color:var(--muted)}
-.faq-a code{padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.07);color:#d7dcff;font-size:.88em}
+.faq-a code{padding:2px 6px;border-radius:6px;background:rgba(150,200,255,.08);color:#dcecff;font-size:.88em}
 
 /* ============================================================
    Chamada final com giroscópio 3D
    ============================================================ */
 .final{padding-top:40px}
-.final-card{transform:none;transform-style:flat;padding:clamp(44px,7vw,92px) clamp(20px,5vw,60px);text-align:center;background:radial-gradient(640px 320px at 50% 0%,rgba(127,107,255,.24),transparent 70%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),var(--bg-2)}
+.final-card{transform:none;transform-style:flat;padding:clamp(44px,7vw,92px) clamp(20px,5vw,60px);text-align:center;background:radial-gradient(640px 320px at 50% 0%,rgba(30,107,255,.28),transparent 70%),linear-gradient(180deg,rgba(150,200,255,.05),rgba(150,200,255,.015)),var(--bg-2)}
 .final-card .h2{max-width:840px;margin:0 auto 18px;font-size:clamp(2.2rem,5vw,4rem)}
 .final-card .lead{margin-inline:auto}
 .final-card .cta-row{justify-content:center}
 .gyro{position:relative;width:190px;height:190px;margin:0 auto 38px;transform-style:preserve-3d;perspective:700px}
-.g-core{position:absolute;inset:62px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff 0,#a6edff 18%,#7f6bff 58%,#2a1c8a 100%);box-shadow:0 0 50px rgba(127,107,255,.85),0 0 110px rgba(63,217,245,.35);animation:pulse 4s ease-in-out infinite}
-.g-ring{position:absolute;inset:0;border:1.5px solid rgba(160,150,255,.75);border-radius:50%;box-shadow:0 0 22px rgba(127,107,255,.35),inset 0 0 22px rgba(63,217,245,.18)}
-.g-ring::after{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#fff;box-shadow:0 0 14px #7ae9ff,0 0 30px #7f6bff}
+.g-core{position:absolute;inset:62px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff 0,#d9efff 18%,#3b8bff 58%,#0a2a7a 100%);box-shadow:0 0 50px rgba(30,107,255,.9),0 0 110px rgba(168,216,255,.35);animation:pulse 4s ease-in-out infinite}
+.g-ring{position:absolute;inset:0;border:1.5px solid rgba(168,216,255,.75);border-radius:50%;box-shadow:0 0 22px rgba(30,107,255,.4),inset 0 0 22px rgba(168,216,255,.18)}
+.g-ring::after{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#fff;box-shadow:0 0 14px #a8d8ff,0 0 30px #1e6bff}
 .r1{animation:g1 9s linear infinite}
-.r2{inset:16px;border-color:rgba(122,233,255,.75);animation:g2 12s linear infinite}
-.r3{inset:-20px;border-color:rgba(255,130,215,.5);animation:g3 16s linear infinite}
+.r2{inset:16px;border-color:rgba(59,139,255,.85);animation:g2 12s linear infinite}
+.r3{inset:-20px;border-color:rgba(217,239,255,.45);animation:g3 16s linear infinite}
 @keyframes g1{from{transform:rotateX(72deg) rotateZ(0)}to{transform:rotateX(72deg) rotateZ(360deg)}}
 @keyframes g2{from{transform:rotateY(68deg) rotateX(10deg) rotateZ(0)}to{transform:rotateY(68deg) rotateX(10deg) rotateZ(360deg)}}
 @keyframes g3{from{transform:rotateX(-58deg) rotateY(24deg) rotateZ(360deg)}to{transform:rotateX(-58deg) rotateY(24deg) rotateZ(0)}}
@@ -427,7 +434,7 @@ code{font-family:var(--f-mono)}
 .foot-grid a{color:var(--muted);text-decoration:none;overflow-wrap:anywhere}
 .foot-grid a:hover{color:var(--text)}
 .legal{display:grid;gap:10px;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.84rem}
-.wa{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 20px 0 16px;border-radius:999px;background:linear-gradient(135deg,#29d17a,#18a860);color:#04130a;font-weight:600;text-decoration:none;box-shadow:0 18px 40px -12px rgba(24,168,96,.75),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .2s var(--ease)}
+.wa{position:fixed;right:18px;bottom:18px;z-index:40;display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 20px 0 16px;border-radius:999px;background:linear-gradient(135deg,#5aa6ff,#1e6bff);color:#fff;font-weight:600;text-decoration:none;box-shadow:0 18px 40px -12px rgba(30,107,255,.8),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .2s var(--ease)}
 .wa:hover{transform:translateY(-2px)}
 .wa[hidden]{display:none}
 
@@ -435,9 +442,7 @@ code{font-family:var(--f-mono)}
    Responsivo
    ============================================================ */
 @media (max-width:1000px){
-  .models{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .model,.model.lg{grid-column:span 1}
-  .model.lg:first-child{grid-column:span 2}
+  .dev-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:960px){
   .hero{min-height:0;padding:118px 0 60px}
@@ -448,14 +453,16 @@ code{font-family:var(--f-mono)}
   .ghost{display:none}
   .plans{grid-template-columns:minmax(0,1fr);max-width:540px;margin-inline:auto}
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .calc{grid-template-columns:minmax(0,1fr)}
   .foot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .foot-brand{grid-column:1 / -1}
 }
+@media (max-width:860px){
+  .opus-card{grid-template-columns:minmax(0,1fr)}
+  .opus-visual{grid-row:1;max-width:340px}
+}
 @media (max-width:640px){
-  .bento,.models{grid-template-columns:minmax(0,1fr)}
-  .span-2,.model,.model.lg,.model.lg:first-child{grid-column:auto}
-  .model,.model.lg{min-height:0}
+  .bento{grid-template-columns:minmax(0,1fr)}
+  .span-2{grid-column:auto}
   .f1{left:0;top:3%}
   .f2{right:0;bottom:5%}
   .f3{display:none}
@@ -472,12 +479,19 @@ code{font-family:var(--f-mono)}
   .code-body pre{font-size:.76rem}
   .step{gap:16px;padding:18px}
   .num{min-width:50px;font-size:2.1rem}
-  .calc-out{grid-template-columns:1fr 1fr}
-  .calc-out>div:last-child{grid-column:1 / -1}
   .foot-grid{grid-template-columns:1fr 1fr}
   .cta-row .btn{flex:1 1 auto}
+  .ctx-total{margin-left:0}
+  .pill-more{display:none}
+  .tag{font-size:.7rem;padding:8px 11px}
   .wa span{display:none}
   .wa{width:54px;padding:0;justify-content:center}
+}
+@media (max-width:520px){
+  .dev-grid{grid-template-columns:minmax(0,1fr);gap:10px}
+  .tile{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;align-items:start;padding:16px}
+  .tile .feat-ic{grid-row:span 2;margin-bottom:0}
+  .card.tile h3{margin:2px 0 4px}
 }
 @media (hover:none){.card{transform:none}}
 @media (prefers-reduced-motion:reduce){
@@ -491,11 +505,18 @@ code{font-family:var(--f-mono)}
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-code" viewBox="0 0 24 24"><path d="M8.5 7L3.5 12l5 5M15.5 7l5 5-5 5M13.5 4.5l-3 15"/></symbol>
-  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M3.8 17.5a9 9 0 1 1 16.4 0"/><path d="M12 14l4.5-4.5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M16 3v4M8 3v4M3.5 10h17"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3.5 20.5h17M6.5 16.5v-5M11 16.5V6.5M15.5 16.5v-8M20 16.5v-3"/></symbol>
   <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3.5l8.5 4.5-8.5 4.5L3.5 8 12 3.5z"/><path d="M3.5 12.5l8.5 4.5 8.5-4.5"/><path d="M3.5 16.5l8.5 4.5 8.5-4.5"/></symbol>
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.5 11.5a8 8 0 0 1-11.7 7.1L4 19.8l1.3-4.4a8 8 0 1 1 15.2-3.9z"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5V6A2.5 2.5 0 0 0 13 3.5H6A2.5 2.5 0 0 0 3.5 6v7A2.5 2.5 0 0 0 6 15.5h2.5"/></symbol>
+  <symbol id="i-stream" viewBox="0 0 24 24"><path d="M3 12h3.5l2.5-7 4 14 2.5-7H21"/></symbol>
+  <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/></symbol>
+  <symbol id="i-braces" viewBox="0 0 24 24"><path d="M8 3.5H7a2 2 0 0 0-2 2v4.5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4.5a2 2 0 0 0 2 2h1M16 3.5h1a2 2 0 0 1 2 2v4.5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4.5a2 2 0 0 1-2 2h-1"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M20 12c0 1.7-3.6 3-8 3s-8-1.3-8-3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4.5 17l6-5.5-6-5.5M12.5 18.5h7"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L20.5 2.5M16 7l3 3M18.5 4.5l2 2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16.2v.3"/></symbol>
 </svg>
 
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -504,18 +525,18 @@ code{font-family:var(--f-mono)}
 <!-- ============================ Navegação ============================ -->
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="#topo" aria-label="Órbita API, voltar ao início">
+    <a class="brand" href="#topo" aria-label="open33, voltar ao início">
       <span class="logo" aria-hidden="true"><span class="logo-planet"></span><span class="logo-orbit"></span></span>
-      Órbita<small>API</small>
+      <span>open<b>33</b></span><small>API</small>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
     <nav class="nav-links" id="menu" aria-label="Principal">
       <a href="#recursos">Recursos</a>
-      <a href="#modelos">Modelos</a>
-      <a href="#como-funciona">Como funciona</a>
+      <a href="#devs">Para devs</a>
+      <a href="#opus">Opus 5</a>
       <a href="#planos">Planos</a>
       <a href="#duvidas">Dúvidas</a>
-      <a class="btn btn-primary btn-sm" href="#planos">Começar agora</a>
+      <a class="btn btn-primary btn-sm" href="#planos">Assinar agora</a>
     </nav>
   </div>
 </header>
@@ -527,16 +548,16 @@ code{font-family:var(--f-mono)}
   <div class="hero-bg" aria-hidden="true"><div class="stars"></div><div class="floor"><div class="plane"></div></div></div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <a class="pill rv" href="#modelos"><span class="pill-tag">Novo</span>Claude Opus 5.5 já está no catálogo<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <h1 class="rv" style="--dl:.08s">Claude na sua aplicação. <span class="grad-text">Pagando em reais.</span></h1>
-      <p class="lead rv" style="--dl:.16s">Uma API compatível com o SDK oficial para usar os modelos Claude sem cartão internacional. Recarregue com Pix, acompanhe cada centavo no painel e tenha suporte em português.</p>
+      <a class="pill rv" href="#devs"><span class="pill-tag">Devs</span>Especial para devs<span class="pill-more">: integre em 1 minuto</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <h1 class="rv" style="--dl:.08s">Claude Opus 5 na sua aplicação. <span class="grad-text">Pagando em reais.</span></h1>
+      <p class="lead rv" style="--dl:.16s">Uma API compatível com o SDK oficial para usar o Claude Opus 5 sem cartão internacional. Plano mensal em reais, painel de consumo e suporte em português.</p>
       <div class="cta-row rv" style="--dl:.24s">
         <a class="btn btn-primary" href="#planos">Ver planos<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn-ghost" href="#como-funciona"><svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>Integrar em 1 minuto</a>
+        <a class="btn btn-ghost" href="#devs"><svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>Integrar em 1 minuto</a>
       </div>
       <ul class="checks rv" style="--dl:.32s">
+        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Plano mensal em reais</li>
         <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Pix e cartão nacional</li>
-        <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Sem mensalidade</li>
         <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Suporte em português</li>
       </ul>
     </div>
@@ -553,9 +574,9 @@ code{font-family:var(--f-mono)}
       </div></div>
       <div class="float f2"><div class="float-in glass pix">
         <span class="pix-ic"><svg class="ic"><use href="#i-check"/></svg></span>
-        <div><strong>Recarga confirmada</strong><span>Pix de R$ 200,00 · <b>R$ 210,00</b> em créditos</span></div>
+        <div><strong>Plano Pro ativo</strong><span>Renovado via Pix · <b>R$ 197,00/mês</b></span></div>
       </div></div>
-      <div class="float f3"><div class="float-in glass chip"><i></i>até 1M tokens de contexto</div></div>
+      <div class="float f3"><div class="float-in glass chip"><i></i>1M tokens de contexto</div></div>
     </div>
   </div>
 </section>
@@ -563,10 +584,10 @@ code{font-family:var(--f-mono)}
 <div class="marquee">
   <div class="marquee-track">
     <ul>
-      <li>SDK Python</li><li>SDK TypeScript</li><li>cURL e HTTP</li><li>Streaming</li><li>Uso de ferramentas</li><li>Imagens e PDFs</li><li>Saídas estruturadas</li><li>Até 1M tokens de contexto</li>
+      <li>SDK Python</li><li>SDK TypeScript</li><li>cURL e HTTP</li><li>Streaming</li><li>Uso de ferramentas</li><li>JSON estruturado</li><li>Cache de prompt</li><li>1M tokens de contexto</li>
     </ul>
     <ul aria-hidden="true">
-      <li>SDK Python</li><li>SDK TypeScript</li><li>cURL e HTTP</li><li>Streaming</li><li>Uso de ferramentas</li><li>Imagens e PDFs</li><li>Saídas estruturadas</li><li>Até 1M tokens de contexto</li>
+      <li>SDK Python</li><li>SDK TypeScript</li><li>cURL e HTTP</li><li>Streaming</li><li>Uso de ferramentas</li><li>JSON estruturado</li><li>Cache de prompt</li><li>1M tokens de contexto</li>
     </ul>
   </div>
 </div>
@@ -575,16 +596,16 @@ code{font-family:var(--f-mono)}
 <section class="sec" id="recursos">
   <div class="wrap">
     <header class="sec-head rv">
-      <span class="eyebrow">Por que a Órbita</span>
+      <span class="eyebrow">Por que a open33</span>
       <h2 class="h2">O Claude que você já conhece, <span class="grad-text">sem a burocracia do dólar.</span></h2>
-      <p class="lead">Mesma API, mesmos modelos, mesmo código. O que muda é como você paga, acompanha o consumo e recebe suporte.</p>
+      <p class="lead">Mesma API, mesmo modelo, mesmo código. O que muda é como você paga, acompanha o uso e recebe suporte.</p>
     </header>
 
     <div class="bento">
       <article class="card feat-card span-2 rv" data-tilt="5">
         <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-code"/></svg></div>
         <h3>Mude a URL e a chave. Pronto.</h3>
-        <p>Compatível com os SDKs oficiais de Python e TypeScript e com qualquer cliente HTTP. Aponte a base URL para a Órbita, use a sua nova chave e o resto do código continua igual.</p>
+        <p>Compatível com os SDKs oficiais de Python e TypeScript e com qualquer cliente HTTP. Aponte a base URL para a open33, use a sua nova chave e o resto do código continua igual.</p>
         <div class="diff z1" role="img" aria-label="Exemplo: a mudança no código é só a chave e a base URL">
           <span class="del">- client = Anthropic(api_key="sk-ant-...")</span>
           <span class="add">+ client = Anthropic(api_key="SUA_CHAVE",</span>
@@ -600,25 +621,25 @@ code{font-family:var(--f-mono)}
           </div>
         </div>
         <h3>Pix e cartão nacional</h3>
-        <p>Sem cartão internacional, sem IOF e sem susto com o câmbio. Você recarrega e usa em reais.</p>
+        <p>Pague como você já paga tudo: Pix ou cartão de crédito nacional. Sem cartão internacional e sem IOF.</p>
       </article>
 
       <article class="card feat-card rv" data-tilt="8">
-        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></div>
-        <h3>Créditos pré-pagos</h3>
-        <p>Sem mensalidade e sem fatura surpresa. Recarregue quando quiser e gaste só o que usar.</p>
-        <div class="meter-box z1" role="img" aria-label="Exemplo de saldo: R$ 171,60 disponíveis de R$ 210,00">
-          <div class="meter-row"><span>Saldo disponível</span><strong>R$ 171,60</strong></div>
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg></div>
+        <h3>Plano mensal, preço fixo</h3>
+        <p>Você sabe quanto vai pagar antes de começar: valor fixo por mês, em reais, sem susto com o dólar.</p>
+        <div class="meter-box z1" role="img" aria-label="Exemplo: 62% do plano usado no mês">
+          <div class="meter-row"><span>Uso do plano no mês</span><strong>62%</strong></div>
           <div class="meter"><b></b></div>
-          <div class="meter-row small"><span>Usado no mês: R$ 38,40</span><span>de R$ 210,00</span></div>
+          <div class="meter-row small"><span>Renova em 12 dias</span><span>Plano Pro</span></div>
         </div>
       </article>
 
       <article class="card feat-card span-2 rv" data-tilt="5" style="--dl:.08s">
         <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></div>
         <h3>Painel de consumo</h3>
-        <p>Veja tokens e gastos por dia, por modelo e por chave. Crie uma chave para cada projeto e revogue quando quiser.</p>
-        <div class="bars-box z1" role="img" aria-label="Exemplo de gráfico de tokens consumidos por dia">
+        <p>Acompanhe o uso por dia e por chave, e saiba quanto do plano ainda resta. Crie uma chave para cada projeto e revogue quando quiser.</p>
+        <div class="bars-box z1" role="img" aria-label="Exemplo de gráfico de tokens usados por dia">
           <div class="bars">
             <i style="--h:32%;--d:.00s"></i><i style="--h:45%;--d:.04s"></i><i style="--h:38%;--d:.08s"></i><i style="--h:56%;--d:.12s"></i><i style="--h:49%;--d:.16s"></i><i style="--h:63%;--d:.20s"></i><i style="--h:58%;--d:.24s"></i><i style="--h:71%;--d:.28s"></i><i style="--h:66%;--d:.32s"></i><i style="--h:79%;--d:.36s"></i><i style="--h:74%;--d:.40s"></i><i style="--h:86%;--d:.44s"></i><i style="--h:81%;--d:.48s"></i><i style="--h:94%;--d:.52s"></i>
           </div>
@@ -628,11 +649,13 @@ code{font-family:var(--f-mono)}
 
       <article class="card feat-card span-2 rv" data-tilt="5">
         <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-layers"/></svg></div>
-        <h3>Todos os recursos da API</h3>
-        <p>Streaming, uso de ferramentas, imagens, PDFs e saídas estruturadas funcionam como na API original, com o mesmo formato de requisição e resposta.</p>
-        <ul class="chips z1">
-          <li>Streaming (SSE)</li><li>Tool use</li><li>Visão</li><li>PDFs</li><li>JSON estruturado</li><li>Cache de prompt</li>
-        </ul>
+        <h3>Contexto de 1M tokens</h3>
+        <p>No Claude Opus 5 cabem um repositório inteiro, contratos longos ou um histórico grande de conversa numa única chamada.</p>
+        <div class="ctx-box z1" role="img" aria-label="Exemplo: 780 mil de 1 milhão de tokens de contexto usados">
+          <div class="ctx-bar"><i class="c1" style="--w:38%;--d:.2s"></i><i class="c2" style="--w:24%;--d:.35s"></i><i class="c3" style="--w:16%;--d:.5s"></i></div>
+          <div class="ctx-scale" aria-hidden="true"><span>0</span><span>250K</span><span>500K</span><span>750K</span><span>1M</span></div>
+          <div class="ctx-legend"><span><b class="c1"></b>Repositório</span><span><b class="c2"></b>Documentação</span><span><b class="c3"></b>Histórico</span><span class="ctx-total">780K / 1M tokens</span></div>
+        </div>
       </article>
 
       <article class="card feat-card rv" data-tilt="8" style="--dl:.08s">
@@ -648,92 +671,39 @@ code{font-family:var(--f-mono)}
   </div>
 </section>
 
-<!-- ============================ Modelos ============================ -->
-<section class="sec" id="modelos">
+<!-- ============================ Especial para devs ============================ -->
+<section class="sec" id="devs">
   <div class="wrap">
-    <header class="sec-head center rv">
-      <span class="eyebrow">Modelos</span>
-      <h2 class="h2">Os modelos Claude mais recentes, <span class="grad-text">em um só endpoint.</span></h2>
-      <p class="lead">Troque de modelo mudando uma única string. Use o mais capaz onde a qualidade manda e o mais rápido onde o volume manda.</p>
-    </header>
+    <div class="how">
+      <div>
+        <header class="sec-head rv">
+          <span class="eyebrow">Especial para devs</span>
+          <h2 class="h2">Integre em minutos, <span class="grad-text">sem reescrever nada.</span></h2>
+          <p class="lead">Mesma API de Messages, mesmos SDKs e o mesmo formato de resposta. Você só troca a base URL e a chave.</p>
+        </header>
+        <ol class="steps">
+          <li class="step rv"><span class="num" aria-hidden="true">01</span><div><h3>Crie sua conta</h3><p>Cadastro rápido, só com e-mail. Você entra direto no painel.</p></div></li>
+          <li class="step rv" style="--dl:.08s"><span class="num" aria-hidden="true">02</span><div><h3>Escolha seu plano</h3><p>Assine o plano mensal que combina com o volume do seu projeto.</p></div></li>
+          <li class="step rv" style="--dl:.16s"><span class="num" aria-hidden="true">03</span><div><h3>Troque a base URL</h3><p>Gere uma chave no painel, aponte o SDK para a open33 e faça a primeira chamada.</p></div></li>
+        </ol>
+      </div>
 
-    <div class="models">
-      <article class="card model lg rv" data-tilt="6" style="--h1:190;--h2:232">
-        <div class="m-top z2"><span class="badge">Mais capaz</span><span class="orb" aria-hidden="true"></span></div>
-        <h3><span>Claude</span> Fable 5.1</h3>
-        <p>O modelo mais avançado da família, para raciocínio profundo, pesquisa e agentes que executam tarefas longas com autonomia.</p>
-        <dl class="specs"><div><dt>Contexto</dt><dd>1M tokens</dd></div><div><dt>Ideal para</dt><dd>Raciocínio e agentes</dd></div></dl>
-        <button class="m-id z1" type="button" data-copy="claude-fable-5-1" aria-label="Copiar o ID claude-fable-5-1"><code>claude-fable-5-1</code><span class="cp"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar ID</span></span></button>
-      </article>
-
-      <article class="card model lg rv" data-tilt="6" style="--h1:262;--h2:288;--dl:.08s">
-        <div class="m-top z2"><span class="badge">Novo</span><span class="orb" aria-hidden="true"></span></div>
-        <h3><span>Claude</span> Opus 5.5</h3>
-        <p>A geração mais recente do Opus: inteligência de ponta para programação, agentes e análise de documentos longos.</p>
-        <dl class="specs"><div><dt>Contexto</dt><dd>1M tokens</dd></div><div><dt>Ideal para</dt><dd>Código e agentes</dd></div></dl>
-        <button class="m-id z1" type="button" data-copy="claude-opus-5-5" aria-label="Copiar o ID claude-opus-5-5"><code>claude-opus-5-5</code><span class="cp"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar ID</span></span></button>
-      </article>
-
-      <article class="card model rv" data-tilt="7" style="--h1:238;--h2:258">
-        <div class="m-top z2"><span class="badge">Opus</span><span class="orb" aria-hidden="true"></span></div>
-        <h3><span>Claude</span> Opus 5</h3>
-        <p>Alta inteligência para código, agentes e análise, ideal para fluxos que o seu time já validou nele.</p>
-        <dl class="specs"><div><dt>Contexto</dt><dd>1M tokens</dd></div><div><dt>Ideal para</dt><dd>Código e análise</dd></div></dl>
-        <button class="m-id z1" type="button" data-copy="claude-opus-5" aria-label="Copiar o ID claude-opus-5"><code>claude-opus-5</code><span class="cp"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar ID</span></span></button>
-      </article>
-
-      <article class="card model rv" data-tilt="7" style="--h1:160;--h2:186;--dl:.08s">
-        <div class="m-top z2"><span class="badge">Custo-benefício</span><span class="orb" aria-hidden="true"></span></div>
-        <h3><span>Claude</span> Sonnet 5</h3>
-        <p>Equilíbrio entre inteligência, velocidade e custo. O ponto de partida ideal para a maioria dos produtos.</p>
-        <dl class="specs"><div><dt>Contexto</dt><dd>1M tokens</dd></div><div><dt>Ideal para</dt><dd>Produtos e chatbots</dd></div></dl>
-        <button class="m-id z1" type="button" data-copy="claude-sonnet-5" aria-label="Copiar o ID claude-sonnet-5"><code>claude-sonnet-5</code><span class="cp"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar ID</span></span></button>
-      </article>
-
-      <article class="card model rv" data-tilt="7" style="--h1:322;--h2:338;--dl:.16s">
-        <div class="m-top z2"><span class="badge">Mais rápido</span><span class="orb" aria-hidden="true"></span></div>
-        <h3><span>Claude</span> Haiku 4.5</h3>
-        <p>Rápido e econômico para alto volume: classificação, extração de dados e atendimento em tempo real.</p>
-        <dl class="specs"><div><dt>Contexto</dt><dd>200K tokens</dd></div><div><dt>Ideal para</dt><dd>Alto volume</dd></div></dl>
-        <button class="m-id z1" type="button" data-copy="claude-haiku-4-5" aria-label="Copiar o ID claude-haiku-4-5"><code>claude-haiku-4-5</code><span class="cp"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar ID</span></span></button>
-      </article>
-    </div>
-    <p class="note rv">O catálogo acompanha os lançamentos. A lista atualizada, com o preço de cada modelo, fica sempre no painel.</p>
-  </div>
-</section>
-
-<!-- ============================ Como funciona ============================ -->
-<section class="sec" id="como-funciona">
-  <div class="wrap how">
-    <div>
-      <header class="sec-head rv">
-        <span class="eyebrow">Como funciona</span>
-        <h2 class="h2">Da conta criada à primeira resposta <span class="grad-text">em minutos.</span></h2>
-        <p class="lead">Sem contrato, sem cartão internacional e sem reescrever código.</p>
-      </header>
-      <ol class="steps">
-        <li class="step rv"><span class="num" aria-hidden="true">01</span><div><h3>Crie sua conta</h3><p>Cadastro rápido, só com e-mail. Você entra direto no painel.</p></div></li>
-        <li class="step rv" style="--dl:.08s"><span class="num" aria-hidden="true">02</span><div><h3>Recarregue com Pix</h3><p>Escolha o valor, pague com Pix ou cartão e os créditos entram na sua conta.</p></div></li>
-        <li class="step rv" style="--dl:.16s"><span class="num" aria-hidden="true">03</span><div><h3>Troque a base URL</h3><p>Gere uma chave no painel, aponte o SDK para a Órbita e faça a primeira chamada.</p></div></li>
-      </ol>
-    </div>
-
-    <div class="code-scene rv" style="--dl:.12s">
-      <div class="code-rig">
-        <div class="ghost g2" aria-hidden="true"></div>
-        <div class="ghost g1" aria-hidden="true"></div>
-        <div class="code-win">
-          <div class="code-head">
-            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <div class="tabs" role="tablist" aria-label="Exemplo de integração">
-              <button class="tab" type="button" role="tab" id="tab-py" aria-controls="pn-py" aria-selected="true">Python</button>
-              <button class="tab" type="button" role="tab" id="tab-ts" aria-controls="pn-ts" aria-selected="false" tabindex="-1">TypeScript</button>
-              <button class="tab" type="button" role="tab" id="tab-sh" aria-controls="pn-sh" aria-selected="false" tabindex="-1">cURL</button>
-              <button class="tab" type="button" role="tab" id="tab-env" aria-controls="pn-env" aria-selected="false" tabindex="-1">.env</button>
+      <div class="code-scene rv" style="--dl:.12s">
+        <div class="code-rig">
+          <div class="ghost g2" aria-hidden="true"></div>
+          <div class="ghost g1" aria-hidden="true"></div>
+          <div class="code-win">
+            <div class="code-head">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <div class="tabs" role="tablist" aria-label="Exemplo de integração">
+                <button class="tab" type="button" role="tab" id="tab-py" aria-controls="pn-py" aria-selected="true">Python</button>
+                <button class="tab" type="button" role="tab" id="tab-ts" aria-controls="pn-ts" aria-selected="false" tabindex="-1">TypeScript</button>
+                <button class="tab" type="button" role="tab" id="tab-sh" aria-controls="pn-sh" aria-selected="false" tabindex="-1">cURL</button>
+                <button class="tab" type="button" role="tab" id="tab-env" aria-controls="pn-env" aria-selected="false" tabindex="-1">.env</button>
+              </div>
+              <button class="copy" type="button" data-copy="#code" aria-label="Copiar o código"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar</span></button>
             </div>
-            <button class="copy" type="button" data-copy="#code"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar</span></button>
-          </div>
-          <div class="code-body">
+            <div class="code-body">
 <div class="panel" role="tabpanel" id="pn-py" aria-labelledby="tab-py" tabindex="0"><pre><code><span class="k">import</span> anthropic
 
 client = anthropic.<span class="f">Anthropic</span>(
@@ -783,92 +753,151 @@ resposta = client.messages.<span class="f">create</span>(
 
 <span class="c"># Os SDKs oficiais de Python e TypeScript leem</span>
 <span class="c"># essas duas variáveis automaticamente.</span></code></pre></div>
+            </div>
+            <div class="code-foot"><span class="live"></span>Conectado a <b class="ep-host">api.seudominio.com.br</b></div>
           </div>
-          <div class="code-foot"><span class="live"></span>Conectado a <b class="ep-host">api.seudominio.com.br</b></div>
         </div>
       </div>
+    </div>
+
+    <div class="dev-grid">
+      <article class="card tile rv" data-tilt="10">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-code"/></svg></div>
+        <h3>SDKs oficiais</h3>
+        <p>Python e TypeScript, sem biblioteca extra nem adaptador.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10" style="--dl:.06s">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-terminal"/></svg></div>
+        <h3>Variáveis de ambiente</h3>
+        <p><code>ANTHROPIC_BASE_URL</code> e <code>ANTHROPIC_API_KEY</code>, e pronto.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10" style="--dl:.12s">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-stream"/></svg></div>
+        <h3>Streaming (SSE)</h3>
+        <p>Resposta token a token, do jeito da API original.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10" style="--dl:.18s">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-tool"/></svg></div>
+        <h3>Tool use</h3>
+        <p>O modelo chama as funções e ferramentas do seu sistema.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-braces"/></svg></div>
+        <h3>JSON estruturado</h3>
+        <p>Saídas no formato exato do seu schema.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10" style="--dl:.06s">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-db"/></svg></div>
+        <h3>Cache de prompt</h3>
+        <p>Reaproveite contextos longos entre uma chamada e outra.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10" style="--dl:.12s">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-key"/></svg></div>
+        <h3>Chaves por projeto</h3>
+        <p>Uma chave para cada app, que você revoga quando quiser.</p>
+      </article>
+      <article class="card tile rv" data-tilt="10" style="--dl:.18s">
+        <div class="feat-ic z2"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <h3>Erros no padrão da API</h3>
+        <p>Os mesmos códigos HTTP e o mesmo formato de erro.</p>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- ============================ Planos ============================ -->
+<!-- ============================ Claude Opus 5 ============================ -->
+<section class="sec" id="opus">
+  <div class="wrap">
+    <header class="sec-head center rv">
+      <span class="eyebrow">O modelo</span>
+      <h2 class="h2">Claude Opus 5, <span class="grad-text">direto no seu código.</span></h2>
+      <p class="lead">Inteligência de ponta para programação, agentes e análise de documentos longos, com 1M tokens de contexto.</p>
+    </header>
+
+    <article class="card opus-card rv" data-tilt="3">
+      <div class="opus-info">
+        <span class="badge">Em todos os planos</span>
+        <h3 class="opus-name"><span>Claude</span> Opus 5</h3>
+        <p>Escreve e revisa código complexo, conduz agentes que usam ferramentas em várias etapas e analisa documentos longos de uma vez só.</p>
+        <dl class="specs">
+          <div><dt>Contexto</dt><dd>1M tokens</dd></div>
+          <div><dt>Saída máxima</dt><dd>128K tokens</dd></div>
+          <div><dt>Ideal para</dt><dd>Código e agentes</dd></div>
+          <div><dt>Formato</dt><dd>API de Messages</dd></div>
+        </dl>
+        <button class="m-id z1" type="button" data-copy="claude-opus-5" aria-label="Copiar o ID claude-opus-5"><code>claude-opus-5</code><span class="cp"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg><span class="cp-l">Copiar ID</span></span></button>
+      </div>
+      <div class="opus-visual z2" aria-hidden="true">
+        <div class="big-orb"><span class="bo-core"></span><span class="bo-ring r-a"></span><span class="bo-ring r-b"></span></div>
+        <span class="tag t1">Código</span>
+        <span class="tag t2">Agentes</span>
+        <span class="tag t3">Documentos longos</span>
+        <span class="tag t4">Raciocínio</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================ Planos mensais ============================ -->
 <section class="sec" id="planos">
   <div class="wrap">
     <header class="sec-head center rv">
       <span class="eyebrow">Planos</span>
-      <h2 class="h2">Recarregue e use. <span class="grad-text">Sem mensalidade.</span></h2>
-      <p class="lead">Você compra créditos em reais e cada chamada desconta do saldo conforme os tokens usados e o modelo escolhido. Quanto maior a recarga, maior o bônus.</p>
+      <h2 class="h2">Planos mensais. <span class="grad-text">Preço fixo em reais.</span></h2>
+      <p class="lead">Escolha pelo volume do seu projeto. O valor é o mesmo todo mês, e os limites de uso de cada plano aparecem no painel.</p>
     </header>
 
     <div class="plans">
       <article class="card plan rv" data-tilt="6">
         <h3 class="plan-name">Start</h3>
         <p class="plan-desc">Para testar e para projetos pessoais.</p>
-        <div class="price z1"><span class="cur">R$</span><span class="val">50</span></div>
-        <p class="price-sub">R$ 50 em créditos</p>
+        <div class="price z1"><span class="cur">R$</span><span class="val">97</span><span class="per">/mês</span></div>
+        <p class="price-sub">Cobrança mensal · Pix ou cartão</p>
         <ul class="feat">
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Todos os modelos do catálogo</li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limite de requisições padrão</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Acesso ao Claude Opus 5</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limites de uso padrão</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Painel de consumo</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Suporte por e-mail</li>
         </ul>
-        <a class="btn btn-ghost z1" href="#contato" data-checkout="start" data-msg="Olá! Quero recarregar o plano Start (R$ 50) da Órbita API.">Recarregar R$ 50</a>
+        <a class="btn btn-ghost z1" href="#contato" data-checkout="start" data-msg="Olá! Quero assinar o plano Start (R$ 97/mês) da open33.">Assinar o Start</a>
       </article>
 
       <article class="card plan featured rv" data-tilt="6" style="--dl:.08s">
         <span class="ribbon">Recomendado</span>
         <h3 class="plan-name">Pro</h3>
         <p class="plan-desc">Para produtos que já rodam com clientes.</p>
-        <div class="price z2"><span class="cur">R$</span><span class="val">200</span></div>
-        <p class="price-sub"><b>R$ 210</b> em créditos · 5% de bônus</p>
+        <div class="price z2"><span class="cur">R$</span><span class="val">197</span><span class="per">/mês</span></div>
+        <p class="price-sub">Cobrança mensal · Pix ou cartão</p>
         <ul class="feat">
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Todos os modelos do catálogo</li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limites de requisição ampliados</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Acesso ao Claude Opus 5</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limites de uso ampliados</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Chaves separadas por projeto</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Suporte prioritário no WhatsApp</li>
         </ul>
-        <a class="btn btn-primary z2" href="#contato" data-checkout="pro" data-msg="Olá! Quero recarregar o plano Pro (R$ 200) da Órbita API.">Recarregar R$ 200<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-primary z2" href="#contato" data-checkout="pro" data-msg="Olá! Quero assinar o plano Pro (R$ 197/mês) da open33.">Assinar o Pro<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </article>
 
       <article class="card plan rv" data-tilt="6" style="--dl:.16s">
         <h3 class="plan-name">Scale</h3>
         <p class="plan-desc">Para times e alto volume de chamadas.</p>
-        <div class="price z1"><span class="cur">R$</span><span class="val">1.000</span></div>
-        <p class="price-sub"><b>R$ 1.100</b> em créditos · 10% de bônus</p>
+        <div class="price z1"><span class="cur">R$</span><span class="val">497</span><span class="per">/mês</span></div>
+        <p class="price-sub">Cobrança mensal · Pix ou cartão</p>
         <ul class="feat">
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Todos os modelos do catálogo</li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limites de requisição ampliados</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Acesso ao Claude Opus 5</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Limites de uso altos</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Relatórios de uso por chave</li>
           <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Atendimento prioritário dedicado</li>
         </ul>
-        <a class="btn btn-ghost z1" href="#contato" data-checkout="scale" data-msg="Olá! Quero recarregar o plano Scale (R$ 1.000) da Órbita API.">Recarregar R$ 1.000</a>
+        <a class="btn btn-ghost z1" href="#contato" data-checkout="scale" data-msg="Olá! Quero assinar o plano Scale (R$ 497/mês) da open33.">Assinar o Scale</a>
       </article>
-    </div>
-
-    <div class="card calc rv">
-      <div>
-        <h3>Recarga sob medida</h3>
-        <p>Escolha qualquer valor entre R$ 50 e R$ 5.000. A partir de R$ 200 você ganha 5% de bônus e, a partir de R$ 1.000, 10%.</p>
-        <label class="sr-only" for="amount">Valor da recarga em reais</label>
-        <input class="range" id="amount" type="range" min="50" max="5000" step="50" value="500">
-        <div class="range-scale" aria-hidden="true"><span>R$ 50</span><span>R$ 5.000</span></div>
-      </div>
-      <div>
-        <div class="calc-out" aria-live="polite">
-          <div><span class="lbl">Você paga</span><strong id="c-pay">R$ 500,00</strong></div>
-          <div><span class="lbl">Bônus</span><strong id="c-bonus">+5%</strong></div>
-          <div><span class="lbl">Créditos</span><strong id="c-credit"><span class="grad-text">R$ 525,00</span></strong></div>
-        </div>
-        <a class="btn btn-primary" id="c-cta" href="#contato" data-checkout="custom">Recarregar R$ 500,00</a>
-      </div>
     </div>
 
     <div class="card ent rv">
       <div>
         <h3>Empresas e alto volume</h3>
-        <p>Limites dedicados, faturamento mensal com nota fiscal, contrato e um canal direto com o nosso time.</p>
+        <p>Plano sob medida, com limites dedicados, faturamento com nota fiscal, contrato e um canal direto com o nosso time.</p>
       </div>
-      <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero falar sobre o plano para empresas da Órbita API.">Falar com vendas<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero falar sobre um plano para empresas na open33.">Falar com vendas<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
@@ -882,28 +911,28 @@ resposta = client.messages.<span class="f">create</span>(
     </header>
     <div class="faq-list">
       <details class="faq rv" open>
-        <summary>A Órbita é a Anthropic?<span class="plus" aria-hidden="true"></span></summary>
-        <div class="faq-a"><p>Não. A Órbita é um serviço independente que oferece acesso aos modelos Claude por meio de uma API compatível. Não somos afiliados, patrocinados nem endossados pela Anthropic. Claude é uma marca da Anthropic.</p></div>
+        <summary>A open33 é a Anthropic?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><p>Não. A open33 é um serviço independente que oferece acesso ao Claude Opus 5 por meio de uma API compatível. Não somos afiliados, patrocinados nem endossados pela Anthropic. Claude é uma marca da Anthropic.</p></div>
       </details>
       <details class="faq rv">
         <summary>Preciso mudar meu código?<span class="plus" aria-hidden="true"></span></summary>
         <div class="faq-a"><p>Quase nada. Se você usa os SDKs oficiais ou chama a API de Messages por HTTP, basta trocar a base URL e a chave. Se preferir, defina as variáveis <code>ANTHROPIC_BASE_URL</code> e <code>ANTHROPIC_API_KEY</code> e não mude nenhuma linha.</p></div>
       </details>
       <details class="faq rv">
-        <summary>Existe limite de requisições?<span class="plus" aria-hidden="true"></span></summary>
-        <div class="faq-a"><p>Sim. Cada plano tem limites de requisições e de tokens por minuto, informados no painel. Se o seu projeto precisar de mais capacidade, fale com a gente sobre limites dedicados.</p></div>
+        <summary>Qual modelo está disponível?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><p>O Claude Opus 5, em todos os planos. Nas requisições, use <code>claude-opus-5</code> no campo <code>model</code>.</p></div>
       </details>
       <details class="faq rv">
         <summary>Como funciona a cobrança?<span class="plus" aria-hidden="true"></span></summary>
-        <div class="faq-a"><p>Você recarrega créditos em reais. Cada chamada desconta do saldo de acordo com os tokens de entrada e de saída e o preço do modelo usado, que fica visível no painel. Não há mensalidade nem cobrança automática.</p></div>
+        <div class="faq-a"><p>É um plano mensal com valor fixo em reais. Você paga com Pix ou cartão de crédito nacional, e a assinatura renova todo mês.</p></div>
       </details>
       <details class="faq rv">
-        <summary>Quais formas de pagamento vocês aceitam?<span class="plus" aria-hidden="true"></span></summary>
-        <div class="faq-a"><p>Pix e cartão de crédito nacional. Para empresas, também oferecemos faturamento mensal com nota fiscal.</p></div>
+        <summary>Existe limite de uso?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><p>Sim. Cada plano tem limites de requisições e de tokens, informados no painel. Se o seu projeto precisar de mais, você pode mudar de plano ou falar com a gente sobre um plano sob medida.</p></div>
       </details>
       <details class="faq rv">
-        <summary>O que acontece quando os créditos acabam?<span class="plus" aria-hidden="true"></span></summary>
-        <div class="faq-a"><p>As chamadas deixam de ser atendidas até a próxima recarga, e nada é cobrado sem o seu pedido. Você pode recarregar a qualquer momento pelo painel.</p></div>
+        <summary>O que acontece se eu atingir o limite do plano?<span class="plus" aria-hidden="true"></span></summary>
+        <div class="faq-a"><p>As requisições acima do limite são recusadas temporariamente, com o mesmo erro 429 da API, até a janela seguinte. Se isso acontecer com frequência, vale mudar para um plano maior.</p></div>
       </details>
     </div>
   </div>
@@ -914,11 +943,11 @@ resposta = client.messages.<span class="f">create</span>(
   <div class="wrap">
     <div class="card final-card rv">
       <div class="gyro" aria-hidden="true"><span class="g-core"></span><span class="g-ring r1"></span><span class="g-ring r2"></span><span class="g-ring r3"></span></div>
-      <h2 class="h2">Coloque o Claude para trabalhar <span class="grad-text">no seu produto hoje.</span></h2>
-      <p class="lead">Crie sua conta, recarregue com Pix e faça a primeira chamada em minutos.</p>
+      <h2 class="h2">Coloque o Claude Opus 5 para trabalhar <span class="grad-text">no seu produto hoje.</span></h2>
+      <p class="lead">Escolha seu plano, troque a base URL e faça a primeira chamada em minutos.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#planos">Escolher um plano<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero começar a usar a Órbita API."><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>Falar com a equipe</a>
+        <a class="btn btn-primary" href="#planos">Ver planos<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#contato" data-contact data-msg="Olá! Quero começar a usar a open33."><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>Falar com a equipe</a>
       </div>
     </div>
   </div>
@@ -931,16 +960,16 @@ resposta = client.messages.<span class="f">create</span>(
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a class="brand" href="#topo" aria-label="Órbita API, voltar ao início"><span class="logo" aria-hidden="true"><span class="logo-planet"></span><span class="logo-orbit"></span></span>Órbita<small>API</small></a>
-        <p>Acesso aos modelos Claude com pagamento em reais e suporte em português.</p>
+        <a class="brand" href="#topo" aria-label="open33, voltar ao início"><span class="logo" aria-hidden="true"><span class="logo-planet"></span><span class="logo-orbit"></span></span><span>open<b>33</b></span><small>API</small></a>
+        <p>API do Claude Opus 5 para devs, com plano mensal em reais e suporte em português.</p>
       </div>
       <div>
         <h4>Produto</h4>
-        <ul><li><a href="#recursos">Recursos</a></li><li><a href="#modelos">Modelos</a></li><li><a href="#como-funciona">Integração</a></li><li><a href="#planos">Planos</a></li></ul>
+        <ul><li><a href="#recursos">Recursos</a></li><li><a href="#devs">Para devs</a></li><li><a href="#opus">Opus 5</a></li><li><a href="#planos">Planos</a></li></ul>
       </div>
       <div>
         <h4>Ajuda</h4>
-        <ul><li><a href="#duvidas">Dúvidas frequentes</a></li><li><a href="#contato" data-contact data-msg="Olá! Tenho uma dúvida sobre a Órbita API.">Fale com a gente</a></li><li><a href="mailto:contato@seudominio.com.br" data-email>contato@seudominio.com.br</a></li></ul>
+        <ul><li><a href="#duvidas">Dúvidas frequentes</a></li><li><a href="#contato" data-contact data-msg="Olá! Tenho uma dúvida sobre a open33.">Fale com a gente</a></li><li><a href="mailto:contato@seudominio.com.br" data-email>contato@seudominio.com.br</a></li></ul>
       </div>
       <div>
         <h4>Legal</h4>
@@ -948,8 +977,8 @@ resposta = client.messages.<span class="f">create</span>(
       </div>
     </div>
     <div class="legal">
-      <p>A Órbita API é um serviço independente de acesso a modelos de IA. Não somos afiliados, patrocinados nem endossados pela Anthropic. Claude é uma marca da Anthropic, PBC; os nomes dos modelos aparecem aqui apenas para identificar o que está disponível na plataforma.</p>
-      <p>© <span id="year">2026</span> Órbita API. Todos os direitos reservados.</p>
+      <p>A open33 é um serviço independente de acesso a modelos de IA. Não somos afiliados, patrocinados nem endossados pela Anthropic. Claude é uma marca da Anthropic, PBC; o nome do modelo aparece aqui apenas para identificar o que está disponível na plataforma.</p>
+      <p>© <span id="year">2026</span> open33. Todos os direitos reservados.</p>
     </div>
   </div>
 </footer>
@@ -967,16 +996,11 @@ resposta = client.messages.<span class="f">create</span>(
     endpoint: "https://api.seudominio.com.br", // base URL da sua API (sem /v1 no final)
     whatsapp: "",                              // só dígitos, com DDI e DDD. Vazio = botões usam o e-mail
     email: "contato@seudominio.com.br",
-    checkout: {                                // links de pagamento; vazio = abre WhatsApp/e-mail com a mensagem pronta
+    checkout: {                                // links de assinatura; vazio = abre WhatsApp/e-mail com a mensagem pronta
       start: "",
       pro: "",
       scale: "",
-      custom: "",                              // use {valor} onde o valor escolhido deve entrar
     },
-    bonus: [                                   // do maior para o menor
-      { min: 1000, pct: 10 },
-      { min: 200, pct: 5 },
-    ],
   };
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -984,14 +1008,13 @@ resposta = client.messages.<span class="f">create</span>(
   const media = q => !!(window.matchMedia && window.matchMedia(q).matches);
   const reduce = media("(prefers-reduced-motion: reduce)");
   const fine = media("(hover: hover) and (pointer: fine)");
-  const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const pointer = { x: 0, y: 0 };
   const run = fn => { try { fn(); } catch (err) { console.error(err); } };
 
   function contactHref(msg) {
     const phone = CONFIG.whatsapp.replace(/\D/g, "");
     if (phone) return "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
-    return "mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("Órbita API") + "&body=" + encodeURIComponent(msg);
+    return "mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("open33") + "&body=" + encodeURIComponent(msg);
   }
 
   function setLink(a, url) {
@@ -1008,13 +1031,13 @@ resposta = client.messages.<span class="f">create</span>(
     $$(".ep-host").forEach(el => { el.textContent = host; });
     $$("[data-checkout]").forEach(a => {
       const url = CONFIG.checkout[a.dataset.checkout];
-      setLink(a, url || contactHref(a.dataset.msg || "Olá! Quero começar a usar a Órbita API."));
+      setLink(a, url || contactHref(a.dataset.msg || "Olá! Quero assinar a open33."));
     });
-    $$("[data-contact]").forEach(a => setLink(a, contactHref(a.dataset.msg || "Olá! Quero saber mais sobre a Órbita API.")));
+    $$("[data-contact]").forEach(a => setLink(a, contactHref(a.dataset.msg || "Olá! Quero saber mais sobre a open33.")));
     $$("[data-email]").forEach(a => { a.href = "mailto:" + CONFIG.email; a.textContent = CONFIG.email; });
     const wa = $("#wa");
     if (wa && CONFIG.whatsapp.replace(/\D/g, "")) {
-      setLink(wa, contactHref("Olá! Vim pelo site da Órbita API."));
+      setLink(wa, contactHref("Olá! Vim pelo site da open33."));
       wa.hidden = false;
     }
   }
@@ -1161,7 +1184,7 @@ resposta = client.messages.<span class="f">create</span>(
         }
       }
     }
-    const EL = E.length, NB = 6, EA = [0.018, 0.03, 0.05, 0.085, 0.14, 0.22];
+    const EL = E.length, NB = 6, EA = [0.02, 0.034, 0.055, 0.09, 0.15, 0.24];
     const BK = Array.from({ length: NB }, () => new Int32Array(EL)), BC = new Int32Array(NB);
 
     // nós que pulsam e servem de ponta para os arcos de dados
@@ -1180,13 +1203,13 @@ resposta = client.messages.<span class="f">create</span>(
       g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
       return c;
     };
-    const SC = sprite("110,228,255"), SV = sprite("160,140,255"), SP = sprite("255,130,215");
+    const SB = sprite("168,216,255"), SD = sprite("50,120,255"), SW = sprite("225,242,255");
 
     // anéis orbitais com pacotes viajando
     const RS = 220;
     const rings = [
-      { r: 1.36, tx: 0.42, tz: 0.3, sp: 0.06, rgb: "120,225,255", n: 3, img: SC },
-      { r: 1.6, tx: -0.3, tz: -0.42, sp: -0.045, rgb: "175,155,255", n: 2, img: SV },
+      { r: 1.36, tx: 0.42, tz: 0.3, sp: 0.06, rgb: "168,216,255", n: 3, img: SB },
+      { r: 1.6, tx: -0.3, tz: -0.42, sp: -0.045, rgb: "70,140,255", n: 2, img: SD },
     ].map(o => {
       const pts = new Float32Array(RS * 3);
       const cx = Math.cos(o.tx), sx = Math.sin(o.tx), cz = Math.cos(o.tz), sz = Math.sin(o.tz);
@@ -1234,17 +1257,17 @@ resposta = client.messages.<span class="f">create</span>(
 
     const grads = () => {
       gHalo = ctx.createRadialGradient(CX, CY, R * 0.55, CX, CY, R * 2);
-      gHalo.addColorStop(0, "rgba(110,90,255,0.30)");
-      gHalo.addColorStop(0.4, "rgba(60,150,255,0.10)");
-      gHalo.addColorStop(1, "rgba(5,6,13,0)");
+      gHalo.addColorStop(0, "rgba(30,107,255,0.32)");
+      gHalo.addColorStop(0.4, "rgba(90,170,255,0.10)");
+      gHalo.addColorStop(1, "rgba(0,0,0,0)");
       gBody = ctx.createRadialGradient(CX - R * 0.38, CY - R * 0.42, R * 0.05, CX, CY, R * 1.03);
-      gBody.addColorStop(0, "rgba(58,48,150,0.62)");
-      gBody.addColorStop(0.55, "rgba(14,14,42,0.74)");
-      gBody.addColorStop(1, "rgba(6,7,20,0.82)");
+      gBody.addColorStop(0, "rgba(28,70,170,0.62)");
+      gBody.addColorStop(0.55, "rgba(4,14,40,0.76)");
+      gBody.addColorStop(1, "rgba(1,4,14,0.84)");
       gRim = ctx.createRadialGradient(CX, CY, R * 0.9, CX, CY, R * 1.12);
-      gRim.addColorStop(0, "rgba(80,200,255,0)");
-      gRim.addColorStop(0.62, "rgba(90,205,255,0.2)");
-      gRim.addColorStop(1, "rgba(80,200,255,0)");
+      gRim.addColorStop(0, "rgba(168,216,255,0)");
+      gRim.addColorStop(0.62, "rgba(168,216,255,0.2)");
+      gRim.addColorStop(1, "rgba(168,216,255,0)");
     };
 
     // desenha só a metade de trás (front = false) ou só a da frente
@@ -1255,7 +1278,7 @@ resposta = client.messages.<span class="f">create</span>(
         const n = BC[b];
         if (!n) continue;
         const arr = BK[b];
-        ctx.strokeStyle = "rgba(140,175,255," + EA[b] + ")";
+        ctx.strokeStyle = "rgba(120,180,255," + EA[b] + ")";
         ctx.beginPath();
         for (let q = 0; q < n; q += 2) { const i = arr[q], j = arr[q + 1]; ctx.moveTo(X[i], Y[i]); ctx.lineTo(X[j], Y[j]); }
         ctx.stroke();
@@ -1265,14 +1288,14 @@ resposta = client.messages.<span class="f">create</span>(
         if ((z >= 0) !== front) continue;
         const d = (z + 1) * 0.5, w = (3.6 + 7.4 * d) * S[i] * k;
         ctx.globalAlpha = 0.1 + 0.9 * d * d;
-        ctx.drawImage(i % 9 === 0 ? SV : SC, X[i] - w / 2, Y[i] - w / 2, w, w);
+        ctx.drawImage(i % 9 === 0 ? SD : SB, X[i] - w / 2, Y[i] - w / 2, w, w);
       }
       for (let h = 0; h < hubs.length; h++) {
         const hb = hubs[h], i = hb.i, z = Z[i];
         if ((z >= 0) !== front) continue;
         const d = (z + 1) * 0.5, pu = 0.5 + 0.5 * Math.sin(time * hb.sp + hb.ph), w = (11 + 13 * pu) * S[i] * k;
         ctx.globalAlpha = (0.12 + 0.88 * d) * (0.4 + 0.6 * pu);
-        ctx.drawImage(h % 3 ? SC : SP, X[i] - w / 2, Y[i] - w / 2, w, w);
+        ctx.drawImage(h % 3 ? SB : SW, X[i] - w / 2, Y[i] - w / 2, w, w);
       }
       for (const rg of rings) {
         ctx.fillStyle = "rgb(" + rg.rgb + ")";
@@ -1298,7 +1321,7 @@ resposta = client.messages.<span class="f">create</span>(
         }
       }
       ctx.lineWidth = 1.4;
-      ctx.strokeStyle = "rgb(150,225,255)";
+      ctx.strokeStyle = "rgb(170,215,255)";
       for (const A of arcs) {
         if (A.t <= 0) continue;
         const head = Math.min(1, A.t), tail = Math.max(0, A.t - TAIL);
@@ -1318,12 +1341,12 @@ resposta = client.messages.<span class="f">create</span>(
             const x = A.X[i0] + (A.X[i1] - A.X[i0]) * fr, y = A.Y[i0] + (A.Y[i1] - A.Y[i0]) * fr;
             const d = (Math.max(-1, Math.min(1, z)) + 1) * 0.5, w = 16 * k + 4;
             ctx.globalAlpha = 0.3 + 0.7 * d;
-            ctx.drawImage(SP, x - w / 2, y - w / 2, w, w);
+            ctx.drawImage(SW, x - w / 2, y - w / 2, w, w);
           }
         }
       }
       ctx.lineWidth = 1.2;
-      ctx.strokeStyle = "rgb(255,150,225)";
+      ctx.strokeStyle = "rgb(205,233,255)";
       for (const pg of pings) {
         const i = pg.i, z = Z[i];
         if ((z >= 0) !== front) continue;
@@ -1479,31 +1502,9 @@ resposta = client.messages.<span class="f">create</span>(
     });
   }
 
-  /* ---------- calculadora de recarga ---------- */
-  function calc() {
-    const range = $("#amount");
-    if (!range) return;
-    const pay = $("#c-pay"), bonus = $("#c-bonus"), credit = $("#c-credit .grad-text") || $("#c-credit"), cta = $("#c-cta");
-    const min = Number(range.min), max = Number(range.max);
-    const pctFor = v => { for (const t of CONFIG.bonus) if (v >= t.min) return t.pct; return 0; };
-    const update = () => {
-      const v = Number(range.value), pct = pctFor(v), label = brl.format(v);
-      pay.textContent = label;
-      bonus.textContent = pct ? "+" + pct + "%" : "—";
-      credit.textContent = brl.format(v * (1 + pct / 100));
-      range.style.setProperty("--p", ((v - min) / (max - min)) * 100 + "%");
-      range.setAttribute("aria-valuetext", label);
-      cta.textContent = "Recarregar " + label;
-      const custom = CONFIG.checkout.custom;
-      setLink(cta, custom ? custom.split("{valor}").join(String(v)) : contactHref("Olá! Quero recarregar " + label + " em créditos na Órbita API."));
-    };
-    range.addEventListener("input", update);
-    update();
-  }
-
-  [config, nav, reveal, offscreen, tilt, parallax, globe, tabs, copyButtons, calc].forEach(run);
+  [config, nav, reveal, offscreen, tilt, parallax, globe, tabs, copyButtons].forEach(run);
   run(() => { const y = $("#year"); if (y) y.textContent = String(new Date().getFullYear()); });
-  window.__orbitaOk = true;
+  window.__open33Ok = true;
 })();
 </script>
 </body>
