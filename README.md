@@ -9,30 +9,25 @@ Visual em preto, azul e azul bebê.
 
 ## O que tem na página
 
-- **Hero em 3D**: título com uma palavra que gira em 3D (app, SaaS, agente,
-  chatbot, produto). O globo é desenhado em canvas e gira com o mouse ou o dedo,
-  com inércia. Há também cartões de vidro flutuando com paralaxe e um piso em
-  grade com perspectiva.
-- **Números** que sobem quando aparecem na tela: 1.000.000 tokens de contexto,
-  128.000 por resposta, 2 linhas para migrar e 100% em reais.
-- **Recursos** em grade bento. Os cartões inclinam em 3D e as camadas internas
-  saltam para a frente quando o mouse passa. Tem também uma moeda 3D feita em CSS.
-- **Especial para devs**: passo a passo, uma janela de código em 3D com abas de
-  Python, TypeScript, cURL e `.env`, e oito blocos com recursos para
-  desenvolvedores.
-- **Claude Opus 5** em destaque, com as especificações do modelo e o ID pronto
-  para copiar.
-- **Dólar x open33**: comparação lado a lado, logo antes dos preços.
-- **Planos mensais** (Start, Pro e Ultra). Cada plano mostra o preço por dia,
-  calculado sozinho a partir do valor mensal, e o selo de 7 dias de garantia.
-  Depois vêm a tabela comparativa, o bloco de garantia e a faixa para empresas.
-- **Perguntas frequentes** e uma chamada final com um giroscópio 3D.
-- **Conversão**: botões principais "magnéticos", uma luz que segue o cursor e
-  uma barra fixa de assinatura no celular. A barra aparece depois do topo e some
-  perto dos planos.
-- Menu no celular, barra de progresso de leitura, botão flutuante de WhatsApp
-  (aparece quando o número está configurado) e suporte à preferência de
-  "reduzir movimento" do sistema.
+1. **Hero em 3D**: "Claude Opus 5 no Claude Code / Cursor / Antigravity / seu
+   app. Pagando em reais.", com a ferramenta girando em 3D. O globo em canvas
+   gira com o mouse ou com o dedo e continua girando por inércia. Também há
+   cartões de vidro flutuando e um piso em grade.
+2. **Números** animados: 1.000.000 tokens de contexto, 128.000 por resposta,
+   2 linhas para migrar e 100% em reais.
+3. **Por que a open33**: comparação lado a lado entre pagar em dólar e pagar
+   pela open33.
+4. **Especial para devs**: 3 passos e uma janela de código em 3D. As abas são
+   Claude Code, Python, TypeScript e cURL. Por último, 6 blocos de recursos.
+5. **Planos mensais** (Start, Pro e Ultra), com preço por dia calculado
+   sozinho e 7 dias de garantia. Depois vêm os blocos de garantia e de
+   empresas. No celular, os planos viram um carrossel de deslizar que abre no Pro.
+6. **5 perguntas frequentes** e uma chamada final com giroscópio 3D.
+
+Também tem uma barra fixa de assinatura no celular, botões "magnéticos", uma
+luz que segue o cursor, menu no celular e o botão de WhatsApp, que aparece
+quando o número está configurado. A página respeita a opção "reduzir
+movimento" do sistema.
 
 ## Configuração
 
@@ -40,55 +35,48 @@ No fim do `index.html` fica o objeto `CONFIG`:
 
 | Campo | O que é |
 |---|---|
-| `endpoint` | Base URL da sua API. Aparece em todos os exemplos de código. |
+| `endpoint` | Base URL da API. Já está como `https://api.open33.tech` e aparece em todos os exemplos de código. |
 | `whatsapp` | Número só com dígitos, com DDI e DDD. Se ficar vazio, os botões abrem o e-mail. |
-| `email` | E-mail de contato. |
+| `email` | E-mail de contato. Ainda está com `contato@seudominio.com.br`. |
 | `checkout.start` / `pro` / `ultra` | Links de assinatura dos planos. Se ficarem vazios, os botões abrem o WhatsApp ou o e-mail com a mensagem já escrita. |
 
 ## Revise antes de publicar
 
+- **Compatibilidade**: o topo e o FAQ citam Claude Code, Cursor e
+  Antigravity. O Claude Code aceita base URL própria (`ANTHROPIC_BASE_URL`).
+  Mantenha o Cursor e o Antigravity só se você testou que a sua API funciona
+  neles.
 - **Preços**: R$ 97, R$ 197 e R$ 497 por mês são exemplos. Ajuste nos cartões
-  de plano, na tabela comparativa, nas mensagens `data-msg` dos botões e no
-  texto "a partir de R$ 97/mês" do topo e da barra fixa. O preço por dia se
-  recalcula sozinho.
-- **Garantia de 7 dias**: aparece no topo, nos planos, na tabela, no FAQ e na
-  chamada final. Corresponde ao direito de arrependimento do Código de Defesa
-  do Consumidor para compras online. Confirme que vai oferecer.
-- **Limites dos planos**: "padrão", "ampliados" e "os maiores" são descrições
-  genéricas. Se tiver números (requisições por minuto, tokens por mês),
-  coloque nos cartões.
+  de plano, nas mensagens `data-msg` dos botões e no texto "a partir de
+  R$ 97/mês" do topo e da barra fixa. O preço por dia se recalcula sozinho.
+- **Garantia de 7 dias**: corresponde ao direito de arrependimento do Código de
+  Defesa do Consumidor para compras online. Confirme que vai oferecer.
+- **Limites dos planos**: "padrão", "ampliados" e "nosso maior limite" são
+  descrições genéricas. Se tiver números (requisições por minuto, tokens por
+  mês), coloque nos cartões. Toda conta da API da Anthropic tem rate limit,
+  então nenhum plano pode ser chamado de ilimitado ou "Unlimited".
 - **Afirmações sobre o serviço**: Pix e cartão, painel de consumo, chaves por
-  projeto, suporte no WhatsApp, recursos da API (streaming, tool use, JSON
-  estruturado, cache de prompt), erro 429 ao atingir o limite e faturamento com
-  nota fiscal. Deixe só o que você realmente entrega.
-- **Ilustrações**: os cartões "POST /v1/messages" e "Plano Pro ativo", o
-  medidor de uso, o gráfico de consumo e a barra de contexto mostram a
-  interface. Não são dados reais.
+  projeto, suporte no WhatsApp, streaming, tool use, cache de prompt e nota
+  fiscal para empresas. Deixe só o que você realmente entrega.
+- **Ilustrações**: os cartões "POST /v1/messages" e "Plano Pro ativo" mostram
+  a interface. Não são dados reais.
 - **Links do rodapé**: "Termos de uso" e "Política de privacidade" ainda
   apontam para `#`.
-- **Limites**: a página informa que cada plano tem limites de uso, inclusive o
-  Ultra ("nosso maior limite de uso"). Toda conta da API da Anthropic tem rate
-  limit, então não chame nenhum plano de ilimitado ou "Unlimited".
-- **Marca**: mantenha o aviso de que a open33 não é afiliada à Anthropic. Ele
-  aparece no rodapé e na primeira pergunta do FAQ. Não use o logotipo nem a
-  identidade visual da Anthropic.
+- **Marca**: mantenha o aviso de não afiliação à Anthropic, no rodapé e na
+  primeira pergunta do FAQ. Não use logotipos de terceiros.
 
 ## Notas técnicas
 
 - **Globo**: esfera de Fibonacci com 860 pontos (480 no celular), projetada em
-  perspectiva. O desenho é feito em duas passadas, com um corpo translúcido
-  entre elas: primeiro a metade de trás, depois a da frente. Isso dá
-  profundidade real ao globo. Ele pausa quando sai da tela ou quando a aba fica
-  oculta.
-- **Inclinação 3D**: variáveis CSS `--rx` e `--ry` atualizadas a cada quadro.
-  Só funciona em dispositivos com mouse.
-- **Animação ao rolar**: a revelação usa a propriedade `translate`, para não
-  conflitar com o `transform` da inclinação.
-- **Economia de bateria**: animações de seções fora da tela ficam pausadas, e o
-  piso anima só com `transform`, que é composto pela GPU.
-- **Recursos externos**: só as fontes do Google (Space Grotesk, Inter e
-  JetBrains Mono), com fonte do sistema como alternativa.
+  perspectiva e desenhada em duas passadas, primeiro a metade de trás e depois
+  a da frente, com um corpo translúcido entre elas. Pausa quando sai da tela.
+- **Revelação**: usa a propriedade `translate`, para não conflitar com o
+  `transform` da inclinação 3D.
+- **Economia de bateria**: animações de seções fora da tela ficam pausadas.
+- **Recursos externos**: só as fontes do Google, com fonte do sistema como
+  alternativa.
 
 ## Histórico
 
-As versões anteriores (UNBOUND e Órbita) continuam no histórico do git.
+As versões anteriores (UNBOUND, Órbita e a primeira da open33) continuam no
+histórico do git.
