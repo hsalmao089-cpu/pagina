@@ -442,7 +442,7 @@ code{font-family:var(--f-mono)}
 @keyframes vSpin{from{transform:perspective(600px) rotateY(0)}to{transform:perspective(600px) rotateY(360deg)}}
 @keyframes vPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes blink{50%{opacity:0}}
-.vsl:not(.playing) .scene,.vsl:not(.playing) .scene *,.vsl:not(.playing) .scene *::after{animation-play-state:paused!important}
+.vsl:not(.playing) .scene,.vsl:not(.playing) .scene *,.vsl:not(.playing) .scene *::after,.vsl.wait .scene,.vsl.wait .scene *,.vsl.wait .scene *::after{animation-play-state:paused!important}
 /* cena 1 */
 .v-coin{display:grid;place-items:center;width:11cqw;height:11cqw;border-radius:50%;color:#00101f;font:700 5.5cqw/1 var(--f-display);background:radial-gradient(circle at 32% 28%,#f4faff,#a8d8ff 30%,#1e6bff 75%,#0a2a7a);box-shadow:0 0 40px rgba(30,107,255,.6),inset 0 -.6cqw 1.2cqw rgba(0,20,80,.45);animation:vSpin 3s linear infinite}
 /* cena 2 */
@@ -502,14 +502,32 @@ code{font-family:var(--f-mono)}
 .vsl-poster strong{font:700 3.4cqw/1.1 var(--f-display);letter-spacing:-.03em}
 .vsl-poster > span:last-child{color:var(--muted);font-size:1.8cqw}
 .vsl.started .vsl-poster{display:none}
+.vsl-unmute{position:absolute;left:50%;top:50%;z-index:5;display:none;align-items:center;width:max-content;max-width:92%;gap:1.8cqw;padding:1.8cqw 2.8cqw 1.8cqw 1.8cqw;border:1px solid rgba(168,216,255,.4);border-radius:2cqw;background:rgba(8,36,100,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:inherit;text-align:left;cursor:pointer;translate:-50% -50%;box-shadow:0 24px 60px -20px rgba(0,0,0,.95),0 0 0 .6cqw rgba(90,166,255,.14)}
+.vsl.started:not(.unmuted):not(.ended):not(.no-audio) .vsl-unmute{display:flex}
+.vsl-unmute .spk{display:grid;place-items:center;flex:none;width:6.4cqw;height:6.4cqw;border-radius:50%;color:#00101f;background:linear-gradient(135deg,#e3f3ff,#a8d8ff 42%,#3b8bff);animation:vPulse 1.4s ease-in-out infinite}
+.vsl-unmute .spk .ic{width:55%;height:55%;stroke-width:2.2}
+.vsl-unmute .txt{display:grid;gap:.5cqw}
+.vsl-unmute strong{font:700 2.5cqw/1.1 var(--f-display);letter-spacing:-.02em}
+.vsl-unmute .txt span{color:#cfe6ff;font:600 1.9cqw/1.2 var(--f-body)}
+.vsl-unmute.mini{top:2.4cqw;left:auto;right:2.4cqw;gap:1cqw;padding:.8cqw 1.8cqw .8cqw .8cqw;border-radius:99px;translate:none}
+.vsl-unmute.mini .spk{width:3.8cqw;height:3.8cqw}
+.vsl-unmute.mini strong{display:none}
+.vsl-unmute.mini .txt span{font-size:1.6cqw}
+.vsl.wait .vsl-frame::after{content:"";position:absolute;left:50%;top:50%;z-index:6;width:38px;height:38px;margin:-19px 0 0 -19px;border:3px solid rgba(168,216,255,.25);border-top-color:#a8d8ff;border-radius:50%;animation:vRot .8s linear infinite}
+@keyframes vRot{to{transform:rotate(360deg)}}
 .vsl-end{position:absolute;inset:0;z-index:4;display:none;place-items:center;align-content:center;gap:2.4cqw;background:rgba(1,4,11,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:center}
 .vsl.ended .vsl-end{display:grid}
 .vsl-end p{font:700 3.6cqw/1.1 var(--f-display)}
 .vsl-end .row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
-.vsl-bar{display:flex;align-items:center;gap:14px;padding:12px 6px 0}
-.vsl-pp{display:grid;place-items:center;flex:none;width:42px;height:42px;border:1px solid var(--line-2);border-radius:12px;background:rgba(150,200,255,.06);color:var(--text);cursor:pointer}
+.vsl-bar{display:flex;align-items:center;gap:10px;padding:12px 6px 0}
+.vsl-bar .vsl-track{margin-left:4px}
+.vsl-pp,.vsl-snd{display:grid;place-items:center;flex:none;width:42px;height:42px;border:1px solid var(--line-2);border-radius:12px;background:rgba(150,200,255,.06);color:var(--text);cursor:pointer}
 .vsl-pp .i-pause,.vsl.playing .vsl-pp .i-play{display:none}
 .vsl.playing .vsl-pp .i-pause{display:block}
+.vsl-snd .i-vol,.vsl.sound .vsl-snd .i-mute{display:none}
+.vsl.sound .vsl-snd .i-vol{display:block}
+.vsl.sound .vsl-snd{border-color:rgba(168,216,255,.45);background:rgba(30,107,255,.18)}
+.vsl.no-audio .vsl-snd{display:none}
 .vsl-track{position:relative;flex:1;display:flex;align-items:center;height:30px;cursor:pointer;touch-action:none}
 .vsl-rail{position:relative;width:100%;height:6px;overflow:hidden;border-radius:99px;background:rgba(150,200,255,.14)}
 .vsl-fill{position:absolute;inset:0;background:var(--grad);transform-origin:0 50%;transform:scaleX(0)}
@@ -559,6 +577,14 @@ code{font-family:var(--f-mono)}
   .vsl-poster > span:last-child{font-size:3.6cqw}
   .vsl-end{gap:4cqw}
   .vsl-end p{font-size:6.6cqw}
+  .vsl-unmute{gap:3.4cqw;padding:3.4cqw 5cqw 3.4cqw 3.4cqw;border-radius:4cqw}
+  .vsl-unmute .spk{width:13cqw;height:13cqw}
+  .vsl-unmute .txt{gap:1cqw}
+  .vsl-unmute strong{font-size:5cqw}
+  .vsl-unmute .txt span{font-size:4cqw}
+  .vsl-unmute.mini{top:2.6cqw;right:2.6cqw;gap:1.8cqw;padding:1.4cqw 3cqw 1.4cqw 1.4cqw}
+  .vsl-unmute.mini .spk{width:7cqw;height:7cqw}
+  .vsl-unmute.mini .txt span{font-size:3.2cqw}
 }
 
 /* janela de código gira conforme a rolagem (navegadores com suporte) */
@@ -652,6 +678,8 @@ code{font-family:var(--f-mono)}
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-replay" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></symbol>
 </svg>
 
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -726,16 +754,16 @@ code{font-family:var(--f-mono)}
       <h2 class="h2">O Claude Opus 5, <span class="grad-text">sem pagar em dólar.</span></h2>
     </header>
 
-    <div class="vsl rv" id="vsl" data-duration="66">
+    <div class="vsl rv" id="vsl" data-duration="58">
       <div class="vsl-frame">
         <div class="vsl-screen">
           <div class="vsl-scenes" aria-hidden="true">
-            <div class="scene s1" data-start="0" data-end="7">
+            <div class="scene s1" data-start="0" data-end="6">
               <p class="v-big a-up" style="--d:.2s">Você usa o Claude<br>para programar?</p>
-              <div class="a-pop" style="--d:3.5s"><div class="v-coin">$</div></div>
-              <p class="v-mid v-acc a-up" style="--d:3.6s">E paga em dólar?</p>
+              <div class="a-pop" style="--d:2.5s"><div class="v-coin">$</div></div>
+              <p class="v-mid v-acc a-up" style="--d:2.6s">E paga em dólar?</p>
             </div>
-            <div class="scene s2" data-start="7" data-end="17">
+            <div class="scene s2" data-start="6" data-end="13">
               <div class="inv a-flip" style="--d:.1s">
                 <div class="inv-h"><span>Fatura do cartão</span><em>exemplo</em></div>
                 <div class="inv-r"><span>Créditos de API</span><b>US$ 100,00</b></div>
@@ -744,56 +772,60 @@ code{font-family:var(--f-mono)}
                 <div class="inv-t"><span>Total</span><b><span class="tk-total">R$ 560,97</span><i>▲</i></b></div>
               </div>
               <div class="s2-copy">
-                <p class="v-mid a-up" style="--d:.8s">Cartão internacional.</p>
-                <p class="v-mid a-up" style="--d:1.8s">IOF.</p>
-                <p class="v-mid a-up" style="--d:2.8s">Câmbio do dia.</p>
-                <p class="v-mid v-acc a-up" style="--d:5.2s">Todo mês, um valor diferente.</p>
+                <p class="v-mid a-up" style="--d:.5s">Cartão internacional.</p>
+                <p class="v-mid a-up" style="--d:1.1s">IOF.</p>
+                <p class="v-mid a-up" style="--d:2s">Câmbio do dia.</p>
+                <p class="v-mid v-acc a-up" style="--d:3.2s">Todo mês, um valor diferente.</p>
               </div>
             </div>
-            <div class="scene s3" data-start="17" data-end="25">
+            <div class="scene s3" data-start="13" data-end="21.5">
               <div class="v-planet a-zoom" style="--d:.1s"><span class="core"></span><span class="ring"></span><span class="ring r2"></span></div>
-              <p class="v-brand a-up" style="--d:1s">open<b>33</b></p>
-              <p class="v-mid a-up" style="--d:4.2s">Claude Opus 5 com plano mensal <span class="v-acc">em reais.</span></p>
+              <p class="v-brand a-up" style="--d:.8s">open<b>33</b></p>
+              <p class="v-mid a-up" style="--d:3.9s">Claude Opus 5 com plano mensal <span class="v-acc">em reais.</span></p>
             </div>
-            <div class="scene s4" data-start="25" data-end="40">
+            <div class="scene s4" data-start="21.5" data-end="34">
               <div class="term a-flip" style="--d:.1s">
                 <div class="term-h"><i></i><i></i><i></i><span>terminal</span></div>
                 <div class="term-b">
-                  <p class="tl" data-at="26.2" data-narrow='export ANTHROPIC_BASE_URL=\&#10;&gt; "https://api.open33.tech"'><span class="pr">$ </span><span class="ty">export ANTHROPIC_BASE_URL="https://api.open33.tech"</span></p>
-                  <p class="tl" data-at="28.6"><span class="pr">$ </span><span class="ty">export ANTHROPIC_API_KEY="SUA_CHAVE"</span></p>
-                  <p class="tl" data-at="30.6"><span class="pr">$ </span><span class="ty">claude --model claude-opus-5</span></p>
-                  <p class="tl cm" data-at="32.4"><span class="ty"># pronto: o Claude Code já usa a open33</span></p>
+                  <p class="tl" data-at="22.6" data-narrow='export ANTHROPIC_BASE_URL=\&#10;&gt; "https://api.open33.tech"'><span class="pr">$ </span><span class="ty">export ANTHROPIC_BASE_URL="https://api.open33.tech"</span></p>
+                  <p class="tl" data-at="24.5"><span class="pr">$ </span><span class="ty">export ANTHROPIC_API_KEY="SUA_CHAVE"</span></p>
+                  <p class="tl" data-at="26"><span class="pr">$ </span><span class="ty">claude --model claude-opus-5</span></p>
+                  <p class="tl cm" data-at="27.3"><span class="ty"># pronto: o Claude Code já usa a open33</span></p>
                 </div>
               </div>
               <div class="tools">
-                <span class="tool a-pop" style="--d:11s">Claude Code</span>
-                <span class="tool a-pop" style="--d:11.5s">Cursor</span>
-                <span class="tool a-pop" style="--d:12s">Antigravity</span>
-                <span class="tool a-pop" style="--d:12.5s">Seu app</span>
+                <span class="tool a-pop" style="--d:8.2s">Claude Code</span>
+                <span class="tool a-pop" style="--d:9.3s">Cursor</span>
+                <span class="tool a-pop" style="--d:10.1s">Antigravity</span>
+                <span class="tool a-pop" style="--d:11.3s">Seu app</span>
               </div>
             </div>
-            <div class="scene s5" data-start="40" data-end="50">
+            <div class="scene s5" data-start="34" data-end="43">
               <p class="v-mid a-up" style="--d:.1s">Tudo <span class="v-acc">em reais:</span></p>
               <div class="bens">
-                <div class="ben a-card" style="--d:.5s"><i>Pix</i><span>Pix ou cartão nacional</span></div>
-                <div class="ben a-card" style="--d:1.5s"><i>R$</i><span>Preço fixo, sem IOF</span></div>
-                <div class="ben a-card" style="--d:5s"><i>1M</i><span>Tokens de contexto</span></div>
-                <div class="ben a-card" style="--d:5.8s"><i>PT</i><span>Suporte em português</span></div>
+                <div class="ben a-card" style="--d:1.1s"><i>Pix</i><span>Pix ou cartão nacional</span></div>
+                <div class="ben a-card" style="--d:2.8s"><i>R$</i><span>Preço fixo, sem IOF</span></div>
+                <div class="ben a-card" style="--d:5.3s"><i>1M</i><span>Tokens de contexto</span></div>
+                <div class="ben a-card" style="--d:7.2s"><i>PT</i><span>Suporte em português</span></div>
               </div>
             </div>
-            <div class="scene s6" data-start="50" data-end="59">
+            <div class="scene s6" data-start="43" data-end="53.4">
               <p class="v-mid a-up" style="--d:.1s">Planos a partir de</p>
-              <p class="v-price a-zoom" style="--d:.5s"><span class="cur">R$</span><span class="vsl-price">97</span><span class="per">/mês</span></p>
-              <p class="v-small a-up" style="--d:1.6s">cerca de <b class="vsl-day">R$ 3,23</b> por dia</p>
-              <div class="v-guar a-pop" style="--d:5s">✓ 7 dias de garantia</div>
+              <p class="v-price a-zoom" style="--d:1.5s"><span class="cur">R$</span><span class="vsl-price">97</span><span class="per">/mês</span></p>
+              <p class="v-small a-up" style="--d:4.5s">cerca de <b class="vsl-day">R$ 3,23</b> por dia</p>
+              <div class="v-guar a-pop" style="--d:8.3s">✓ 7 dias de garantia</div>
             </div>
-            <div class="scene s7" data-start="59" data-end="66">
+            <div class="scene s7" data-start="53.4" data-end="58">
               <p class="v-big a-up" style="--d:.1s">Escolha seu plano <span class="v-acc">agora.</span></p>
               <div class="a-pop" style="--d:.8s"><span class="v-btn">Ver planos ↓</span></div>
               <p class="v-small a-up" style="--d:1.6s">7 dias de garantia · Pix ou cartão · Suporte em português</p>
             </div>
           </div>
           <p class="vsl-cap" aria-hidden="true"></p>
+          <button class="vsl-unmute" type="button" aria-label="Ativar o som do vídeo e assistir do começo">
+            <span class="spk"><svg class="ic" aria-hidden="true"><use href="#i-mute"/></svg></span>
+            <span class="txt"><strong>Seu vídeo já começou</strong><span>Clique para ouvir</span></span>
+          </button>
           <button class="vsl-poster" type="button" aria-label="Assistir ao vídeo de 1 minuto">
             <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
             <strong>Claude Opus 5, pagando em reais</strong>
@@ -810,13 +842,16 @@ code{font-family:var(--f-mono)}
       </div>
       <div class="vsl-bar">
         <button class="vsl-pp" type="button" aria-label="Reproduzir o vídeo"><svg class="ic i-play" aria-hidden="true"><use href="#i-play"/></svg><svg class="ic i-pause" aria-hidden="true"><use href="#i-pause"/></svg></button>
-        <div class="vsl-track" role="slider" tabindex="0" aria-label="Posição do vídeo" aria-valuemin="0" aria-valuemax="66" aria-valuenow="0"><div class="vsl-rail"><div class="vsl-fill"></div></div><span class="vsl-knob"></span></div>
-        <span class="vsl-time">0:00 / 1:06</span>
+        <button class="vsl-snd" type="button" aria-label="Ativar som" aria-pressed="false"><svg class="ic i-mute" aria-hidden="true"><use href="#i-mute"/></svg><svg class="ic i-vol" aria-hidden="true"><use href="#i-vol"/></svg></button>
+        <div class="vsl-track" role="slider" tabindex="0" aria-label="Posição do vídeo" aria-valuemin="0" aria-valuemax="58" aria-valuenow="0"><div class="vsl-rail"><div class="vsl-fill"></div></div><span class="vsl-knob"></span></div>
+        <span class="vsl-time">0:00 / 0:58</span>
       </div>
+      <!-- narração: data-price é o preço do plano Start falado no áudio -->
+      <audio class="vsl-audio" src="vsl-narracao.mp3" preload="none" data-price="97"></audio>
     </div>
     <details class="vsl-script">
       <summary>Ler a transcrição</summary>
-      <p class="vsl-transcript">Você usa o Claude para programar? E paga em dólar, no cartão internacional? Aí vem o IOF, o câmbio do dia… e todo mês a fatura chega com um valor diferente. Com a open33 é diferente. Você usa o Claude Opus 5 com plano mensal em reais. Para começar, é só trocar a URL e a chave. Duas linhas no terminal e o Claude Code está pronto. Também funciona no Cursor, no Antigravity e no seu app. Você paga no Pix ou no cartão, com preço fixo e sem IOF. Tem 1 milhão de tokens de contexto e suporte em português. Os planos começam em R$ 97 por mês, cerca de R$ 3,23 por dia. E você ainda tem 7 dias de garantia. Escolha seu plano logo abaixo e comece hoje.</p>
+      <p class="vsl-transcript">Você usa o Claude para programar? E paga em dólar, no cartão internacional? Aí vem o IOF, o câmbio do dia… e todo mês a fatura chega com um valor diferente. Com a open33 é diferente. Você usa o Claude Opus 5 com plano mensal em reais. Para começar, é só trocar a URL e a chave. Duas linhas no terminal e o Claude Code está pronto. Também funciona no Cursor, no Antigravity e no seu app. Você paga no Pix ou no cartão, com preço fixo e sem pagar IOF. Tem 1 milhão de tokens de contexto e suporte em português. Os planos começam em R$ 97 por mês, cerca de R$ 3,23 por dia. E você ainda tem 7 dias de garantia. Escolha seu plano logo abaixo e comece hoje.</p>
     </details>
   </div>
 </section>
@@ -1831,27 +1866,28 @@ resposta = client.messages.<span class="f">create</span>(
       return;
     }
 
-    const D = Number(root.dataset.duration) || 66;
+    const D = Number(root.dataset.duration) || 58;
     const valEl = $(".plan .val");
     const price = (valEl && Number(valEl.textContent.replace(/\./g, "").replace(",", "."))) || 97;
     const priceTxt = brl.format(price).replace(/,00$/, ""), dayTxt = brl.format(price / 30);
     $$(".vsl-price", root).forEach(el => { el.textContent = priceTxt.replace(/^R\$\s*/, ""); });
     $$(".vsl-day", root).forEach(el => { el.textContent = dayTxt; });
+    // legendas no tempo da narração (vsl-narracao.mp3)
     const caps = [
-      [0, 3.4, "Você usa o Claude para programar?"],
-      [3.4, 7, "E paga em dólar, no cartão internacional?"],
-      [7, 12, "Aí vem o IOF, o câmbio do dia…"],
-      [12, 17, "…e todo mês a fatura chega com um valor diferente."],
-      [17, 21, "Com a open33 é diferente."],
-      [21, 25, "Você usa o Claude Opus 5 com plano mensal em reais."],
-      [25, 31.5, "Para começar, é só trocar a URL e a chave."],
-      [31.5, 36, "Duas linhas no terminal e o Claude Code está pronto."],
-      [36, 40, "Também funciona no Cursor, no Antigravity e no seu app."],
-      [40, 45, "Você paga no Pix ou no cartão, com preço fixo e sem IOF."],
-      [45, 50, "Tem 1 milhão de tokens de contexto e suporte em português."],
-      [50, 55, "Os planos começam em " + priceTxt + " por mês, cerca de " + dayTxt + " por dia."],
-      [55, 59, "E você ainda tem 7 dias de garantia."],
-      [59, D, "Escolha seu plano logo abaixo e comece hoje."],
+      [0, 2.5, "Você usa o Claude para programar?"],
+      [2.5, 6.3, "E paga em dólar, no cartão internacional?"],
+      [6.3, 9, "Aí vem o IOF, o câmbio do dia…"],
+      [9, 13.8, "…e todo mês a fatura chega com um valor diferente."],
+      [13.8, 16.8, "Com a open33 é diferente."],
+      [16.8, 21.8, "Você usa o Claude Opus 5 com plano mensal em reais."],
+      [21.8, 26, "Para começar, é só trocar a URL e a chave."],
+      [26, 29.6, "Duas linhas no terminal e o Claude Code está pronto."],
+      [29.6, 34.3, "Também funciona no Cursor, no Antigravity e no seu app."],
+      [34.3, 39.1, "Você paga no Pix ou no cartão, com preço fixo e sem pagar IOF."],
+      [39.1, 43.3, "Tem 1 milhão de tokens de contexto e suporte em português."],
+      [43.3, 50.4, "Os planos começam em " + priceTxt + " por mês, cerca de " + dayTxt + " por dia."],
+      [50.4, 53.6, "E você ainda tem 7 dias de garantia."],
+      [53.6, D, "Escolha seu plano logo abaixo e comece hoje."],
     ];
     const transcript = $(".vsl-transcript");
     if (transcript) transcript.textContent = caps.map(c => c[2]).join(" ").replace("… …", "… ");
@@ -1861,13 +1897,61 @@ resposta = client.messages.<span class="f">create</span>(
       const ty = $(".ty", el);
       return { el, ty, full: ty ? ty.textContent : "", alt: el.dataset.narrow || "", at: Number(el.dataset.at) || 0, cps: Number(el.dataset.cps) || 30 };
     });
+    const inv = scenes.find(s => s.el.classList.contains("s2"));
     const rate = $(".tk-rate", root), iof = $(".tk-iof", root), total = $(".tk-total", root);
     const cap = $(".vsl-cap", root), fill = $(".vsl-fill", root), knob = $(".vsl-knob", root);
     const time = $(".vsl-time", root), track = $(".vsl-track", root), pp = $(".vsl-pp", root);
+    const snd = $(".vsl-snd", root), unmute = $(".vsl-unmute", root), au = $(".vsl-audio", root);
     let t = 0, playing = false, last = 0, raf = 0, userPaused = false, visible = false;
     // tela estreita (layout do celular): linhas longas do terminal usam a versão quebrada
     let narrow = screen.clientWidth <= 600;
     const fmt = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+
+    // narração: só toca se o preço falado no áudio (data-price) for o mesmo do plano Start
+    let hasAudio = !!(au && au.getAttribute("src")), sound = false, waiting = false, waitFrom = 0;
+    if (hasAudio && Number(au.dataset.price) && Math.abs(Number(au.dataset.price) - price) > 0.005) {
+      console.warn("open33: a narração fala R$ " + au.dataset.price + ", mas o plano Start custa " + priceTxt + ". O vídeo fica sem som até a narração ser refeita.");
+      hasAudio = false;
+    }
+    const setSnd = on => {
+      sound = on;
+      root.classList.toggle("sound", on);
+      if (snd) { snd.setAttribute("aria-pressed", String(on)); snd.setAttribute("aria-label", on ? "Desativar som" : "Ativar som"); }
+    };
+    const noAudio = () => {
+      hasAudio = false; waiting = false; setSnd(false);
+      root.classList.remove("wait");
+      root.classList.add("no-audio");
+      if (au && !au.paused) au.pause();
+    };
+    if (!hasAudio) noAudio();
+    const startAudio = () => {
+      if (!hasAudio || !sound) return;
+      if (Math.abs(au.currentTime - t) > 0.25) { try { au.currentTime = t; } catch (_) {} }
+      if (!au.paused) return;
+      waiting = true; waitFrom = performance.now();
+      const pr = au.play();
+      if (pr && pr.catch) pr.catch(() => {
+        // o navegador não deixou tocar com som: segue mudo e mostra o aviso de novo
+        waiting = false; setSnd(false);
+        root.classList.remove("wait", "unmuted");
+      });
+    };
+    // liga o som; do começo quando vem do aviso "clique para ouvir" ou da capa
+    const soundOn = fromStart => {
+      userPaused = false;
+      if (!hasAudio) { play(); return; }
+      root.classList.add("unmuted");
+      au.preload = "auto";
+      setSnd(true);
+      if (fromStart) seek(0);
+      if (playing) startAudio(); else play();
+    };
+    const soundOff = () => {
+      waiting = false; setSnd(false);
+      root.classList.remove("wait");
+      if (hasAudio && !au.paused) au.pause();
+    };
 
     // liga a cena já no ponto certo da animação (funciona ao pular para qualquer tempo)
     const activate = (s, lt) => {
@@ -1894,7 +1978,7 @@ resposta = client.messages.<span class="f">create</span>(
           l.ty.classList.toggle("typing", t >= l.at && n < full.length);
         }
       });
-      if (rate && t >= 7 && t < 17.5) {
+      if (rate && inv && t >= inv.a && t < inv.b + 0.5) {
         const r = Math.round((5.3 + 0.28 * (0.5 + 0.5 * Math.sin(t * 1.7)) + 0.06 * Math.sin(t * 6.1)) * 100) / 100;
         const sub = Math.round(r * 100 * 100) / 100, tax = Math.round(sub * 3.5) / 100;
         rate.textContent = brl.format(r); iof.textContent = brl.format(tax); total.textContent = brl.format(sub + tax);
@@ -1903,6 +1987,8 @@ resposta = client.messages.<span class="f">create</span>(
       const txt = c ? c[2] : "";
       if (cap.textContent !== txt) cap.textContent = txt;
       cap.classList.toggle("has", !!txt);
+      // o aviso de som encolhe para o canto depois da primeira cena
+      if (unmute) unmute.classList.toggle("mini", t >= 6);
       fill.style.transform = "scaleX(" + (t / D).toFixed(4) + ")";
       knob.style.left = ((t / D) * 100).toFixed(2) + "%";
       time.textContent = fmt(t) + " / " + fmt(D);
@@ -1911,8 +1997,19 @@ resposta = client.messages.<span class="f">create</span>(
     };
     const loop = now => {
       if (!playing) return;
-      t = Math.min(D, t + Math.min(0.1, (now - last) / 1000));
+      const dt = Math.min(0.1, (now - last) / 1000);
       last = now;
+      if (hasAudio && sound && !au.ended) {
+        if (waiting || au.paused) {
+          // o áudio ainda está carregando: a animação espera junto
+          root.classList.add("wait");
+          if (now - waitFrom > 8000) { soundOff(); root.classList.remove("unmuted"); }
+        } else {
+          root.classList.remove("wait");
+          t = Math.min(D, t + dt);
+          if (Math.abs(au.currentTime - t) > 0.15) t = Math.min(D, au.currentTime); // o áudio manda no tempo
+        }
+      } else t = Math.min(D, t + dt);
       render(false);
       if (t >= D) { pause(); root.classList.add("ended"); return; }
       raf = requestAnimationFrame(loop);
@@ -1924,31 +2021,47 @@ resposta = client.messages.<span class="f">create</span>(
       root.classList.add("playing", "started");
       pp.setAttribute("aria-label", "Pausar o vídeo");
       last = performance.now();
+      startAudio();
       raf = requestAnimationFrame(loop);
     };
     function pause() {
-      playing = false;
-      root.classList.remove("playing");
+      playing = false; waiting = false;
+      root.classList.remove("playing", "wait");
       cancelAnimationFrame(raf);
       pp.setAttribute("aria-label", "Reproduzir o vídeo");
+      if (hasAudio && !au.paused) au.pause();
     }
     const seek = s => {
       t = Math.max(0, Math.min(D, s));
       root.classList.toggle("ended", t >= D);
       if (t < D) root.classList.add("started");
+      if (hasAudio && sound) { try { au.currentTime = t; } catch (_) {} }
       render(true);
     };
 
-    $(".vsl-poster", root).addEventListener("click", () => { userPaused = false; play(); });
+    if (au) {
+      au.addEventListener("waiting", () => { if (sound) { waiting = true; waitFrom = performance.now(); } });
+      au.addEventListener("playing", () => { waiting = false; root.classList.remove("wait"); });
+      au.addEventListener("error", () => { if (hasAudio) noAudio(); }); // o arquivo não carregou: segue sem som
+      // pausado ou retomado por fora (fone desconectado, controles do sistema): o vídeo acompanha
+      au.addEventListener("pause", () => { if (playing && sound && !au.ended) { userPaused = true; pause(); } });
+      au.addEventListener("play", () => { if (!playing && sound) { userPaused = false; play(); } });
+    }
+    $(".vsl-poster", root).addEventListener("click", () => soundOn(true));
+    if (unmute) unmute.addEventListener("click", () => soundOn(true));
+    if (snd) snd.addEventListener("click", () => { if (sound) soundOff(); else soundOn(false); });
     pp.addEventListener("click", () => {
       if (playing) { userPaused = true; pause(); }
       else { userPaused = false; play(); }
     });
     $(".vsl-replay", root).addEventListener("click", () => { seek(0); userPaused = false; play(); });
     screen.addEventListener("click", e => {
-      if (e.target.closest(".vsl-poster, .vsl-end")) return;
+      if (e.target.closest(".vsl-poster, .vsl-end, .vsl-unmute")) return;
       if (e.target.closest(".v-btn")) { const pl = $("#planos"); if (pl) pl.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); return; }
-      if (root.classList.contains("started")) pp.click();
+      if (!root.classList.contains("started")) return;
+      // o primeiro clique no vídeo mudo liga o som e volta para o começo
+      if (hasAudio && !root.classList.contains("unmuted")) { soundOn(true); return; }
+      pp.click();
     });
     const at = e => { const r = track.getBoundingClientRect(); return ((e.clientX - r.left) / r.width) * D; };
     let drag = false;
@@ -1963,14 +2076,16 @@ resposta = client.messages.<span class="f">create</span>(
       else if (e.key === "Home") nt = 0;
       else if (e.key === "End") nt = D;
       else if (e.key === " " || e.key === "Enter") { e.preventDefault(); pp.click(); return; }
+      else if ((e.key === "m" || e.key === "M") && snd && hasAudio) { e.preventDefault(); snd.click(); return; }
       if (nt !== null) { e.preventDefault(); seek(nt); }
     });
 
-    // começa sozinho quando aparece na tela e pausa quando sai
+    // começa sozinho (sem som) quando aparece na tela e pausa quando sai
     const canAuto = () => visible && !userPaused && !reduce && !document.hidden && !root.classList.contains("ended");
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([en]) => {
         visible = en.isIntersecting;
+        if (visible && hasAudio && au.preload === "none") au.preload = "auto"; // já deixa a narração pronta
         if (canAuto()) play();
         else if (!visible && playing) pause();
       }, { threshold: 0.55 }).observe(screen);

@@ -13,10 +13,12 @@ Visual em preto, azul e azul bebê.
    app. Pagando em reais.", com a ferramenta girando em 3D. O globo em canvas
    gira com o mouse ou com o dedo e continua girando por inércia. Também há
    cartões de vidro flutuando e um piso em grade.
-2. **VSL de 1 minuto**: animação com 7 cenas e legendas. Começa sozinha e sem
-   som quando aparece na tela, e pausa quando sai. Tem barra de progresso com
-   arraste e teclado, tela final com "Ver planos" e transcrição. No celular
-   fica em formato vertical 4:5. O roteiro está em
+2. **VSL de 58 segundos**: animação com 7 cenas, narração
+   (`vsl-narracao.mp3`) e legendas. Começa sozinha e sem som quando aparece na
+   tela, com o aviso "Clique para ouvir". O clique liga o som e volta ao
+   começo. Pausa quando sai da tela. Tem barra com play, som, avanço e tempo,
+   tela final com "Ver planos" e transcrição. No celular fica em formato
+   vertical 4:5. Roteiro, narração e como trocar pela sua voz estão em
    [`vsl-roteiro.md`](vsl-roteiro.md).
 3. **Números** animados: 1.000.000 tokens de contexto, 128.000 por resposta,
    2 linhas para migrar e 100% em reais.
@@ -69,8 +71,10 @@ No fim do `index.html` fica o objeto `CONFIG`:
   "exemplo".
 - **VSL**: repete as promessas da página (Pix, preço fixo sem IOF, suporte,
   garantia, Cursor e Antigravity). Se mudar algo na página, ajuste também as
-  cenas e as legendas (lista `caps` na função `vsl()`). O preço é lido do
-  plano Start automaticamente.
+  cenas, as legendas (lista `caps` na função `vsl()`) e a narração. O preço da
+  tela vem do plano Start, mas o áudio fala R$ 97. Se o preço mudar, o vídeo
+  fica sem som até você rodar `ferramentas/gerar_narracao.py` (veja
+  [`vsl-roteiro.md`](vsl-roteiro.md)).
 - **Links do rodapé**: "Termos de uso" e "Política de privacidade" ainda
   apontam para `#`.
 - **Marca**: mantenha o aviso de não afiliação à Anthropic, no rodapé e na
@@ -81,10 +85,14 @@ No fim do `index.html` fica o objeto `CONFIG`:
 - **Globo**: esfera de Fibonacci com 860 pontos (480 no celular), projetada em
   perspectiva e desenhada em duas passadas, primeiro a metade de trás e depois
   a da frente, com um corpo translúcido entre elas. Pausa quando sai da tela.
-- **VSL**: a linha do tempo roda em JavaScript (`requestAnimationFrame`). As
-  animações de CSS de cada cena usam `animation-delay: calc(var(--d) -
-  var(--seek))`, então pular para qualquer ponto mostra o quadro certo. Os
-  tamanhos são em `cqw` (container queries), e a cena escala como um vídeo.
+- **VSL**: a linha do tempo roda em JavaScript (`requestAnimationFrame`).
+  - Com som ligado, o relógio é o `currentTime` do áudio. Enquanto o áudio
+    carrega, a animação espera.
+  - As animações de CSS de cada cena usam `animation-delay: calc(var(--d) -
+    var(--seek))`, então pular para qualquer ponto mostra o quadro certo.
+  - Os tamanhos são em `cqw` (container queries), e a cena escala como um
+    vídeo.
+  - O áudio (464 KB) só baixa quando o vídeo aparece na tela.
 - **Revelação**: usa a propriedade `translate`, para não conflitar com o
   `transform` da inclinação 3D.
 - **Economia de bateria**: animações de seções fora da tela ficam pausadas.
