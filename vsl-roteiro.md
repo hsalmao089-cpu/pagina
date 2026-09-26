@@ -63,8 +63,8 @@ O preço e o valor por dia mostrados na tela vêm do plano Start da página.
   2. Ajuste `PRECO`, `FALA_PRECO` e `FALA_DIA` em
      `ferramentas/gerar_audio.py`.
   3. Rode `python ferramentas/gerar_audio.py`.
-  4. No `index.html`, troque `data-price="97"` da tag
-     `<audio class="vsl-audio">` pelo preço novo.
+  4. No `index.html`, na tag `<audio class="vsl-audio">`, troque
+     `data-price="97"` pelo preço novo e aumente o número de `?v=` no `src`.
 
 ## Trocar pela sua voz
 

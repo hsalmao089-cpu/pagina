@@ -17,8 +17,9 @@ Como usar:
   1. pip install piper-tts imageio-ffmpeg numpy scipy pyloudnorm
   2. Ajuste PRECO, FALA_PRECO e FALA_DIA abaixo.
   3. Na pasta do site: python ferramentas/gerar_audio.py
-  4. No index.html, troque data-price="97" da tag <audio class="vsl-audio">
-     pelo novo preço.
+  4. No index.html, na tag <audio class="vsl-audio">, troque data-price="97"
+     pelo novo preço e aumente o número em src="vsl-narracao.mp3?v=..." (assim
+     ninguém ouve a versão antiga guardada no navegador).
   5. Se os começos das falas mudarem, copie os tempos que o script mostra para
      a lista caps da função vsl().
 
@@ -517,7 +518,8 @@ def main() -> None:
         "-codec:a", "libmp3lame", "-b:a", "112k", "-t", str(D), str(SAIDA),
     ], check=True)
     wav.unlink()
-    print(f"\npronto: {SAIDA.name}. No index.html, use data-price=\"{PRECO}\" na tag <audio class=\"vsl-audio\">.")
+    print(f"\npronto: {SAIDA.name}. No index.html, na tag <audio class=\"vsl-audio\">, use data-price=\"{PRECO}\""
+          " e aumente o número de ?v= no src.")
 
 
 if __name__ == "__main__":
