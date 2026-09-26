@@ -412,6 +412,155 @@ code{font-family:var(--f-mono)}
 .sticky-cta span{color:var(--muted);font-size:.8rem}
 .sticky-cta .btn{--h:44px;flex:none;padding:0 18px}
 
+/* ============================================================
+   VSL — vídeo de vendas animado, com legendas
+   ============================================================ */
+.vsl-sec{padding-top:clamp(56px,7vw,96px)}
+.vsl{position:relative;max-width:980px;margin-inline:auto}
+.vsl-frame{position:relative;padding:10px;border:1px solid var(--line-2);border-radius:26px;background:linear-gradient(180deg,rgba(150,200,255,.07),rgba(150,200,255,.02));box-shadow:0 60px 120px -40px rgba(0,0,0,.95),0 0 120px -40px rgba(30,107,255,.7)}
+.vsl-screen{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:18px;container-type:inline-size;background:radial-gradient(90% 70% at 70% 20%,rgba(30,107,255,.28),transparent 60%),radial-gradient(60% 50% at 10% 90%,rgba(90,166,255,.14),transparent 60%),#01040b;user-select:none;-webkit-user-select:none}
+.vsl-screen::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(90,166,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(90,166,255,.07) 1px,transparent 1px);background-size:5cqw 5cqw;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.vsl-screen iframe,.vsl-screen video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.vsl.real .vsl-bar,.vsl.real ~ .vsl-script{display:none}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2cqw;padding:6cqw 7cqw 13cqw;text-align:center;opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s linear .5s;--seek:0s}
+.scene.on{opacity:1;visibility:visible;transition:opacity .5s}
+.v-big{font:700 5.4cqw/1.05 var(--f-display);letter-spacing:-.04em}
+.v-mid{font:600 3.4cqw/1.15 var(--f-display);letter-spacing:-.03em}
+.v-small{color:var(--muted);font-size:1.9cqw}
+.v-small b{color:var(--baby)}
+.v-acc{color:var(--baby);text-shadow:0 0 30px rgba(90,166,255,.5)}
+.scene.on .a-up{animation:vUp .7s var(--ease) calc(var(--d,0s) - var(--seek)) both}
+.scene.on .a-pop{animation:vPop .6s cubic-bezier(.3,1.5,.5,1) calc(var(--d,0s) - var(--seek)) both}
+.scene.on .a-zoom{animation:vZoom .9s var(--ease) calc(var(--d,0s) - var(--seek)) both}
+.scene.on .a-flip{animation:vFlip 1s var(--ease) calc(var(--d,0s) - var(--seek)) both}
+.scene.on .a-card{animation:vCard .8s var(--ease) calc(var(--d,0s) - var(--seek)) both}
+@keyframes vUp{from{opacity:0;transform:translateY(.7em)}to{opacity:1;transform:none}}
+@keyframes vPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+@keyframes vZoom{from{opacity:0;transform:scale(1.35);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+@keyframes vFlip{from{opacity:0;transform:perspective(900px) rotateX(40deg) rotateY(-30deg) translateY(15%)}to{opacity:1;transform:perspective(900px) rotateX(6deg) rotateY(-12deg)}}
+@keyframes vCard{from{opacity:0;transform:perspective(700px) rotateY(-85deg) translateX(-20%)}to{opacity:1;transform:none}}
+@keyframes vSpin{from{transform:perspective(600px) rotateY(0)}to{transform:perspective(600px) rotateY(360deg)}}
+@keyframes vPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes blink{50%{opacity:0}}
+.vsl:not(.playing) .scene,.vsl:not(.playing) .scene *,.vsl:not(.playing) .scene *::after{animation-play-state:paused!important}
+/* cena 1 */
+.v-coin{display:grid;place-items:center;width:11cqw;height:11cqw;border-radius:50%;color:#00101f;font:700 5.5cqw/1 var(--f-display);background:radial-gradient(circle at 32% 28%,#f4faff,#a8d8ff 30%,#1e6bff 75%,#0a2a7a);box-shadow:0 0 40px rgba(30,107,255,.6),inset 0 -.6cqw 1.2cqw rgba(0,20,80,.45);animation:vSpin 3s linear infinite}
+/* cena 2 */
+.s2{flex-direction:row;gap:5cqw;text-align:left}
+.inv{width:38cqw;padding:2.4cqw;border:1px solid var(--line-2);border-radius:1.6cqw;background:linear-gradient(180deg,#0b1426,#050a14);box-shadow:0 30px 60px -20px rgba(0,0,0,.9);font-size:1.7cqw;transform:perspective(900px) rotateX(6deg) rotateY(-12deg)}
+.inv-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.6cqw;font:600 2cqw/1 var(--f-display)}
+.inv-h em{padding:.4cqw .8cqw;border:1px solid var(--line-2);border-radius:99px;color:var(--dim);font:500 1.2cqw/1 var(--f-mono);font-style:normal}
+.inv-r,.inv-t{display:flex;justify-content:space-between;gap:2cqw;padding:1cqw 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.inv-r b{color:var(--text);font-family:var(--f-mono);font-weight:500;font-variant-numeric:tabular-nums}
+.inv-t{padding-top:1.4cqw;border:0;color:var(--text);font:700 2.4cqw/1 var(--f-display)}
+.inv-t b{display:inline-flex;align-items:center;gap:.6cqw;font-variant-numeric:tabular-nums}
+.inv-t i{color:#ff9b9b;font-size:.7em;font-style:normal}
+.s2-copy{display:grid;gap:1cqw}
+/* cena 3 */
+.v-planet{position:relative;width:18cqw;height:18cqw;transform-style:preserve-3d;perspective:800px}
+.v-planet .core{position:absolute;inset:24%;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff,#d9efff 16%,#6fb4ff 44%,#1a56d6 72%,#051a4d);box-shadow:0 0 6cqw rgba(30,107,255,.8)}
+.v-planet .ring{position:absolute;inset:0;border:.25cqw solid rgba(168,216,255,.8);border-radius:50%;animation:vRing 6s linear infinite}
+.v-planet .ring.r2{inset:10%;border-color:rgba(59,139,255,.9);animation:vRing2 8s linear infinite}
+@keyframes vRing{from{transform:rotateX(74deg) rotateY(-10deg) rotateZ(0)}to{transform:rotateX(74deg) rotateY(-10deg) rotateZ(360deg)}}
+@keyframes vRing2{from{transform:rotateX(62deg) rotateY(30deg) rotateZ(360deg)}to{transform:rotateX(62deg) rotateY(30deg) rotateZ(0)}}
+.v-brand{font:700 7cqw/1 var(--f-display);letter-spacing:-.04em}
+.v-brand b{color:var(--baby)}
+/* cena 4 */
+.s4{flex-direction:row;gap:4cqw}
+.term{width:56cqw;overflow:hidden;border:1px solid var(--line-2);border-radius:1.6cqw;background:linear-gradient(180deg,#07101f,#02060e);box-shadow:0 30px 70px -20px rgba(0,0,0,.95),0 0 80px -30px rgba(30,107,255,.8);text-align:left;transform:perspective(900px) rotateX(6deg) rotateY(-12deg)}
+.term-h{display:flex;align-items:center;gap:.8cqw;padding:1.2cqw 1.6cqw;border-bottom:1px solid var(--line);color:var(--dim);font:500 1.3cqw/1 var(--f-mono)}
+.term-h i{width:1.1cqw;height:1.1cqw;border-radius:50%;background:#1e3a6b}
+.term-h i:nth-child(2){background:#2a56a3}
+.term-h i:nth-child(3){background:#3b8bff}
+.term-h span{margin-left:auto}
+.term-b{display:grid;align-content:start;gap:.9cqw;min-height:17cqw;padding:2cqw 2.2cqw 2.6cqw;color:#d6e6fb;font:500 1.55cqw/1.5 var(--f-mono)}
+.tl{visibility:hidden;white-space:pre-wrap;word-break:break-all}
+.tl.vis,html:not(.js) .tl{visibility:visible}
+.tl .pr{color:var(--baby)}
+.tl.cm{color:#6a7a96;font-style:italic}
+.tl .ty.typing::after{content:"▋";color:var(--baby);animation:blink .8s steps(1) infinite}
+.tools{display:grid;gap:1.2cqw}
+.tool{padding:1.2cqw 2cqw;border:1px solid rgba(168,216,255,.25);border-radius:99px;background:rgba(30,107,255,.12);color:#e6f4ff;font:600 1.9cqw/1 var(--f-display);white-space:nowrap;box-shadow:0 0 30px -10px rgba(30,107,255,.8)}
+/* cena 5 */
+.bens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.6cqw;width:100%}
+.ben{display:grid;justify-items:center;gap:1cqw;padding:2.2cqw 1.4cqw;border:1px solid var(--line-2);border-radius:1.6cqw;background:linear-gradient(180deg,rgba(150,200,255,.08),rgba(150,200,255,.02));box-shadow:0 20px 40px -20px rgba(0,0,0,.9)}
+.ben i{display:grid;place-items:center;width:7cqw;height:7cqw;border-radius:50%;color:#00101f;font:700 2.2cqw/1 var(--f-display);font-style:normal;background:radial-gradient(circle at 32% 28%,#f4faff,#a8d8ff 35%,#3b8bff)}
+.ben span{font:600 1.8cqw/1.25 var(--f-display)}
+/* cena 6 */
+.v-price{display:flex;align-items:flex-start;gap:1cqw;font:700 13cqw/1 var(--f-display);letter-spacing:-.05em;background:linear-gradient(180deg,#fff 30%,#a8d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.v-price .cur{margin-top:2cqw;font-size:4cqw;letter-spacing:0}
+.v-price .per{align-self:flex-end;margin-bottom:1.6cqw;font-size:3cqw;letter-spacing:-.02em}
+.v-guar{display:inline-flex;align-items:center;gap:1cqw;padding:1.2cqw 2.2cqw;border:1px solid rgba(168,216,255,.3);border-radius:99px;background:rgba(30,107,255,.15);font:600 2cqw/1 var(--f-display)}
+/* cena 7 */
+.v-btn{display:inline-block;padding:1.8cqw 3.6cqw;border-radius:1.4cqw;color:#00101f;font:700 2.4cqw/1 var(--f-body);background:linear-gradient(135deg,#e3f3ff,#a8d8ff 42%,#3b8bff);box-shadow:0 1.4cqw 3.4cqw -1cqw rgba(30,107,255,.9);cursor:pointer;animation:vPulse 1.6s ease-in-out infinite}
+/* legenda, capa, fim e controles */
+.vsl-cap{position:absolute;left:50%;bottom:4.5cqw;z-index:3;width:max-content;max-width:88%;padding:.7cqw 1.6cqw;border-radius:1cqw;background:rgba(0,4,12,.74);color:#fff;font:600 2.1cqw/1.35 var(--f-body);text-align:center;translate:-50% 0;opacity:0;transition:opacity .25s}
+.vsl-cap.has{opacity:1}
+.vsl-poster{position:absolute;inset:0;z-index:4;display:grid;place-items:center;align-content:center;gap:2.2cqw;padding:0;border:0;background:radial-gradient(60% 60% at 50% 45%,rgba(30,107,255,.25),rgba(1,4,11,.6));color:var(--text);font:inherit;cursor:pointer}
+.vsl-poster .play{display:grid;place-items:center;width:12cqw;height:12cqw;border-radius:50%;color:#00101f;background:linear-gradient(135deg,#e3f3ff,#a8d8ff 42%,#3b8bff);box-shadow:0 0 0 1.6cqw rgba(90,166,255,.18),0 0 60px rgba(30,107,255,.8);animation:vPulse 2s ease-in-out infinite}
+.vsl-poster .play svg{width:40%;height:40%;margin-left:8%;fill:currentColor}
+.vsl-poster strong{font:700 3.4cqw/1.1 var(--f-display);letter-spacing:-.03em}
+.vsl-poster > span:last-child{color:var(--muted);font-size:1.8cqw}
+.vsl.started .vsl-poster{display:none}
+.vsl-end{position:absolute;inset:0;z-index:4;display:none;place-items:center;align-content:center;gap:2.4cqw;background:rgba(1,4,11,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:center}
+.vsl.ended .vsl-end{display:grid}
+.vsl-end p{font:700 3.6cqw/1.1 var(--f-display)}
+.vsl-end .row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.vsl-bar{display:flex;align-items:center;gap:14px;padding:12px 6px 0}
+.vsl-pp{display:grid;place-items:center;flex:none;width:42px;height:42px;border:1px solid var(--line-2);border-radius:12px;background:rgba(150,200,255,.06);color:var(--text);cursor:pointer}
+.vsl-pp .i-pause,.vsl.playing .vsl-pp .i-play{display:none}
+.vsl.playing .vsl-pp .i-pause{display:block}
+.vsl-track{position:relative;flex:1;display:flex;align-items:center;height:30px;cursor:pointer;touch-action:none}
+.vsl-rail{position:relative;width:100%;height:6px;overflow:hidden;border-radius:99px;background:rgba(150,200,255,.14)}
+.vsl-fill{position:absolute;inset:0;background:var(--grad);transform-origin:0 50%;transform:scaleX(0)}
+.vsl-knob{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(90,166,255,.3),0 0 14px rgba(30,107,255,.8)}
+.vsl-time{flex:none;min-width:88px;color:var(--muted);font:500 .8rem/1 var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.vsl-script{max-width:980px;margin:14px auto 0;color:var(--muted);font-size:.92rem}
+.vsl-script summary{color:var(--dim);font:500 .76rem/1 var(--f-mono);letter-spacing:.08em;text-align:center;text-transform:uppercase;list-style:none;cursor:pointer}
+.vsl-script summary::-webkit-details-marker{display:none}
+.vsl-script p{margin-top:12px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:rgba(150,200,255,.03)}
+@media (max-width:640px){.vsl-screen{aspect-ratio:4/5}.vsl-frame{padding:6px;border-radius:20px}.vsl-screen{border-radius:15px}.vsl.real .vsl-screen{aspect-ratio:16/9}}
+@container (max-width:600px){
+  .scene{gap:4cqw;padding:8cqw 6cqw 22cqw}
+  .v-big{font-size:8.6cqw}
+  .v-mid{font-size:5.8cqw}
+  .v-small{font-size:3.8cqw}
+  .s2,.s4{flex-direction:column}
+  .s2{gap:4cqw;text-align:center}
+  .inv{width:80cqw;padding:4cqw;font-size:3.4cqw}
+  .inv-h{margin-bottom:3cqw;font-size:4cqw}
+  .inv-h em{font-size:2.6cqw;padding:.8cqw 1.6cqw}
+  .inv-r,.inv-t{padding:1.8cqw 0}
+  .inv-t{font-size:4.6cqw}
+  .s2-copy{gap:1.4cqw}
+  .s2-copy .v-mid{font-size:5.2cqw}
+  .term{width:88cqw}
+  .term-h{gap:1.6cqw;padding:2.4cqw 3cqw;font-size:2.8cqw}
+  .term-h i{width:2.2cqw;height:2.2cqw}
+  .term-b{min-height:34cqw;gap:1.6cqw;padding:3.4cqw;font-size:3.1cqw}
+  .tools{grid-template-columns:repeat(2,auto);gap:2.4cqw}
+  .tool{padding:2.2cqw 3.6cqw;font-size:3.6cqw}
+  .bens{grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw}
+  .ben{gap:2cqw;padding:4cqw 2.4cqw}
+  .ben i{width:13cqw;height:13cqw;font-size:4.2cqw}
+  .ben span{font-size:3.6cqw}
+  .v-coin{width:20cqw;height:20cqw;font-size:10cqw}
+  .v-planet{width:34cqw;height:34cqw}
+  .v-brand{font-size:13cqw}
+  .v-price{font-size:22cqw}
+  .v-price .cur{margin-top:3.4cqw;font-size:7cqw}
+  .v-price .per{margin-bottom:2.6cqw;font-size:5.4cqw}
+  .v-guar{gap:2cqw;padding:2.4cqw 4.4cqw;font-size:4cqw}
+  .v-btn{padding:3.4cqw 6.6cqw;border-radius:2.6cqw;font-size:4.6cqw}
+  .vsl-cap{bottom:6cqw;padding:1.6cqw 3cqw;border-radius:2cqw;font-size:4cqw}
+  .vsl-poster{gap:4cqw}
+  .vsl-poster .play{width:22cqw;height:22cqw}
+  .vsl-poster strong{font-size:6.4cqw}
+  .vsl-poster > span:last-child{font-size:3.6cqw}
+  .vsl-end{gap:4cqw}
+  .vsl-end p{font-size:6.6cqw}
+}
+
 /* janela de código gira conforme a rolagem (navegadores com suporte) */
 @supports (animation-timeline: view()){
   @media (min-width:961px) and (prefers-reduced-motion:no-preference){
@@ -500,6 +649,9 @@ code{font-family:var(--f-mono)}
   <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M20 12c0 1.7-3.6 3-8 3s-8-1.3-8-3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13"/></symbol>
   <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4.5 17l6-5.5-6-5.5M12.5 18.5h7"/></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 2.8v5.7c0 4.6-3.2 8.3-7.5 9.9-4.3-1.6-7.5-5.3-7.5-9.9V5.8z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></symbol>
 </svg>
 
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
@@ -536,7 +688,7 @@ code{font-family:var(--f-mono)}
       <p class="lead rv" style="--dl:.16s">API compatível com o SDK oficial. Plano mensal em reais, Pix ou cartão e suporte em português.</p>
       <div class="cta-row rv" style="--dl:.24s">
         <a class="btn btn-primary" href="#planos">Começar agora<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn-ghost" href="#devs"><svg class="ic" aria-hidden="true"><use href="#i-code"/></svg>Integrar em 1 minuto</a>
+        <a class="btn btn-ghost" href="#video"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Assistir em 1 min</a>
       </div>
       <p class="micro rv" style="--dl:.28s">Planos a partir de <b>R$ 97/mês</b>.</p>
       <ul class="checks rv" style="--dl:.32s">
@@ -563,6 +715,109 @@ code{font-family:var(--f-mono)}
       </div></div>
       <div class="float f3"><div class="float-in glass chip"><i></i>1M tokens de contexto</div></div>
     </div>
+  </div>
+</section>
+
+<!-- ============================ VSL ============================ -->
+<section class="sec vsl-sec" id="video">
+  <div class="wrap">
+    <header class="sec-head center rv">
+      <span class="eyebrow">Assista em 1 minuto</span>
+      <h2 class="h2">O Claude Opus 5, <span class="grad-text">sem pagar em dólar.</span></h2>
+    </header>
+
+    <div class="vsl rv" id="vsl" data-duration="66">
+      <div class="vsl-frame">
+        <div class="vsl-screen">
+          <div class="vsl-scenes" aria-hidden="true">
+            <div class="scene s1" data-start="0" data-end="7">
+              <p class="v-big a-up" style="--d:.2s">Você usa o Claude<br>para programar?</p>
+              <div class="a-pop" style="--d:3.5s"><div class="v-coin">$</div></div>
+              <p class="v-mid v-acc a-up" style="--d:3.6s">E paga em dólar?</p>
+            </div>
+            <div class="scene s2" data-start="7" data-end="17">
+              <div class="inv a-flip" style="--d:.1s">
+                <div class="inv-h"><span>Fatura do cartão</span><em>exemplo</em></div>
+                <div class="inv-r"><span>Créditos de API</span><b>US$ 100,00</b></div>
+                <div class="inv-r"><span>Câmbio do dia</span><b class="tk-rate">R$ 5,42</b></div>
+                <div class="inv-r"><span>IOF</span><b class="tk-iof">R$ 18,97</b></div>
+                <div class="inv-t"><span>Total</span><b><span class="tk-total">R$ 560,97</span><i>▲</i></b></div>
+              </div>
+              <div class="s2-copy">
+                <p class="v-mid a-up" style="--d:.8s">Cartão internacional.</p>
+                <p class="v-mid a-up" style="--d:1.8s">IOF.</p>
+                <p class="v-mid a-up" style="--d:2.8s">Câmbio do dia.</p>
+                <p class="v-mid v-acc a-up" style="--d:5.2s">Todo mês, um valor diferente.</p>
+              </div>
+            </div>
+            <div class="scene s3" data-start="17" data-end="25">
+              <div class="v-planet a-zoom" style="--d:.1s"><span class="core"></span><span class="ring"></span><span class="ring r2"></span></div>
+              <p class="v-brand a-up" style="--d:1s">open<b>33</b></p>
+              <p class="v-mid a-up" style="--d:4.2s">Claude Opus 5 com plano mensal <span class="v-acc">em reais.</span></p>
+            </div>
+            <div class="scene s4" data-start="25" data-end="40">
+              <div class="term a-flip" style="--d:.1s">
+                <div class="term-h"><i></i><i></i><i></i><span>terminal</span></div>
+                <div class="term-b">
+                  <p class="tl" data-at="26.2" data-narrow='export ANTHROPIC_BASE_URL=\&#10;&gt; "https://api.open33.tech"'><span class="pr">$ </span><span class="ty">export ANTHROPIC_BASE_URL="https://api.open33.tech"</span></p>
+                  <p class="tl" data-at="28.6"><span class="pr">$ </span><span class="ty">export ANTHROPIC_API_KEY="SUA_CHAVE"</span></p>
+                  <p class="tl" data-at="30.6"><span class="pr">$ </span><span class="ty">claude --model claude-opus-5</span></p>
+                  <p class="tl cm" data-at="32.4"><span class="ty"># pronto: o Claude Code já usa a open33</span></p>
+                </div>
+              </div>
+              <div class="tools">
+                <span class="tool a-pop" style="--d:11s">Claude Code</span>
+                <span class="tool a-pop" style="--d:11.5s">Cursor</span>
+                <span class="tool a-pop" style="--d:12s">Antigravity</span>
+                <span class="tool a-pop" style="--d:12.5s">Seu app</span>
+              </div>
+            </div>
+            <div class="scene s5" data-start="40" data-end="50">
+              <p class="v-mid a-up" style="--d:.1s">Tudo <span class="v-acc">em reais:</span></p>
+              <div class="bens">
+                <div class="ben a-card" style="--d:.5s"><i>Pix</i><span>Pix ou cartão nacional</span></div>
+                <div class="ben a-card" style="--d:1.5s"><i>R$</i><span>Preço fixo, sem IOF</span></div>
+                <div class="ben a-card" style="--d:5s"><i>1M</i><span>Tokens de contexto</span></div>
+                <div class="ben a-card" style="--d:5.8s"><i>PT</i><span>Suporte em português</span></div>
+              </div>
+            </div>
+            <div class="scene s6" data-start="50" data-end="59">
+              <p class="v-mid a-up" style="--d:.1s">Planos a partir de</p>
+              <p class="v-price a-zoom" style="--d:.5s"><span class="cur">R$</span><span class="vsl-price">97</span><span class="per">/mês</span></p>
+              <p class="v-small a-up" style="--d:1.6s">cerca de <b class="vsl-day">R$ 3,23</b> por dia</p>
+              <div class="v-guar a-pop" style="--d:5s">✓ 7 dias de garantia</div>
+            </div>
+            <div class="scene s7" data-start="59" data-end="66">
+              <p class="v-big a-up" style="--d:.1s">Escolha seu plano <span class="v-acc">agora.</span></p>
+              <div class="a-pop" style="--d:.8s"><span class="v-btn">Ver planos ↓</span></div>
+              <p class="v-small a-up" style="--d:1.6s">7 dias de garantia · Pix ou cartão · Suporte em português</p>
+            </div>
+          </div>
+          <p class="vsl-cap" aria-hidden="true"></p>
+          <button class="vsl-poster" type="button" aria-label="Assistir ao vídeo de 1 minuto">
+            <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+            <strong>Claude Opus 5, pagando em reais</strong>
+            <span>Assista em 1 minuto</span>
+          </button>
+          <div class="vsl-end">
+            <p>Pronto para começar?</p>
+            <div class="row">
+              <a class="btn btn-primary" href="#planos">Ver planos<svg class="ic ic-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <button class="btn btn-ghost vsl-replay" type="button"><svg class="ic" aria-hidden="true"><use href="#i-replay"/></svg>Assistir de novo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vsl-bar">
+        <button class="vsl-pp" type="button" aria-label="Reproduzir o vídeo"><svg class="ic i-play" aria-hidden="true"><use href="#i-play"/></svg><svg class="ic i-pause" aria-hidden="true"><use href="#i-pause"/></svg></button>
+        <div class="vsl-track" role="slider" tabindex="0" aria-label="Posição do vídeo" aria-valuemin="0" aria-valuemax="66" aria-valuenow="0"><div class="vsl-rail"><div class="vsl-fill"></div></div><span class="vsl-knob"></span></div>
+        <span class="vsl-time">0:00 / 1:06</span>
+      </div>
+    </div>
+    <details class="vsl-script">
+      <summary>Ler a transcrição</summary>
+      <p class="vsl-transcript">Você usa o Claude para programar? E paga em dólar, no cartão internacional? Aí vem o IOF, o câmbio do dia… e todo mês a fatura chega com um valor diferente. Com a open33 é diferente. Você usa o Claude Opus 5 com plano mensal em reais. Para começar, é só trocar a URL e a chave. Duas linhas no terminal e o Claude Code está pronto. Também funciona no Cursor, no Antigravity e no seu app. Você paga no Pix ou no cartão, com preço fixo e sem IOF. Tem 1 milhão de tokens de contexto e suporte em português. Os planos começam em R$ 97 por mês, cerca de R$ 3,23 por dia. E você ainda tem 7 dias de garantia. Escolha seu plano logo abaixo e comece hoje.</p>
+    </details>
   </div>
 </section>
 
@@ -914,6 +1169,10 @@ resposta = client.messages.<span class="f">create</span>(
       start: "",
       pro: "",
       ultra: "",
+    },
+    video: {                                   // tem um vídeo gravado? cole o link e ele substitui a animação
+      youtube: "",                             // link do YouTube (pode ser "não listado")
+      mp4: "",                                 // ou o endereço de um arquivo .mp4
     },
   };
 
@@ -1544,6 +1803,189 @@ resposta = client.messages.<span class="f">create</span>(
     });
   }
 
+  /* ---------- VSL: vídeo de vendas animado (ou vídeo real, se configurado) ---------- */
+  function vsl() {
+    const root = $("#vsl");
+    if (!root) return;
+    const screen = $(".vsl-screen", root);
+    const yt = (u => {
+      const m = String(u || "").match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/);
+      return m ? m[1] : (/^[\w-]{11}$/.test(String(u || "")) ? String(u) : "");
+    })(CONFIG.video.youtube);
+    if (yt || CONFIG.video.mp4) {
+      root.classList.add("real", "started");
+      screen.textContent = "";
+      if (yt) {
+        const f = document.createElement("iframe");
+        f.src = "https://www.youtube-nocookie.com/embed/" + yt + "?rel=0&playsinline=1";
+        f.title = "Vídeo de apresentação da open33";
+        f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        f.allowFullscreen = true;
+        f.loading = "lazy";
+        screen.appendChild(f);
+      } else {
+        const v = document.createElement("video");
+        v.src = CONFIG.video.mp4 + (CONFIG.video.mp4.includes("#") ? "" : "#t=0.1"); v.controls = true; v.playsInline = true; v.preload = "metadata";
+        screen.appendChild(v);
+      }
+      return;
+    }
+
+    const D = Number(root.dataset.duration) || 66;
+    const valEl = $(".plan .val");
+    const price = (valEl && Number(valEl.textContent.replace(/\./g, "").replace(",", "."))) || 97;
+    const priceTxt = brl.format(price).replace(/,00$/, ""), dayTxt = brl.format(price / 30);
+    $$(".vsl-price", root).forEach(el => { el.textContent = priceTxt.replace(/^R\$\s*/, ""); });
+    $$(".vsl-day", root).forEach(el => { el.textContent = dayTxt; });
+    const caps = [
+      [0, 3.4, "Você usa o Claude para programar?"],
+      [3.4, 7, "E paga em dólar, no cartão internacional?"],
+      [7, 12, "Aí vem o IOF, o câmbio do dia…"],
+      [12, 17, "…e todo mês a fatura chega com um valor diferente."],
+      [17, 21, "Com a open33 é diferente."],
+      [21, 25, "Você usa o Claude Opus 5 com plano mensal em reais."],
+      [25, 31.5, "Para começar, é só trocar a URL e a chave."],
+      [31.5, 36, "Duas linhas no terminal e o Claude Code está pronto."],
+      [36, 40, "Também funciona no Cursor, no Antigravity e no seu app."],
+      [40, 45, "Você paga no Pix ou no cartão, com preço fixo e sem IOF."],
+      [45, 50, "Tem 1 milhão de tokens de contexto e suporte em português."],
+      [50, 55, "Os planos começam em " + priceTxt + " por mês, cerca de " + dayTxt + " por dia."],
+      [55, 59, "E você ainda tem 7 dias de garantia."],
+      [59, D, "Escolha seu plano logo abaixo e comece hoje."],
+    ];
+    const transcript = $(".vsl-transcript");
+    if (transcript) transcript.textContent = caps.map(c => c[2]).join(" ").replace("… …", "… ");
+
+    const scenes = $$(".scene", root).map(el => ({ el, a: Number(el.dataset.start), b: Number(el.dataset.end), on: false }));
+    const lines = $$(".tl", root).map(el => {
+      const ty = $(".ty", el);
+      return { el, ty, full: ty ? ty.textContent : "", alt: el.dataset.narrow || "", at: Number(el.dataset.at) || 0, cps: Number(el.dataset.cps) || 30 };
+    });
+    const rate = $(".tk-rate", root), iof = $(".tk-iof", root), total = $(".tk-total", root);
+    const cap = $(".vsl-cap", root), fill = $(".vsl-fill", root), knob = $(".vsl-knob", root);
+    const time = $(".vsl-time", root), track = $(".vsl-track", root), pp = $(".vsl-pp", root);
+    let t = 0, playing = false, last = 0, raf = 0, userPaused = false, visible = false;
+    // tela estreita (layout do celular): linhas longas do terminal usam a versão quebrada
+    let narrow = screen.clientWidth <= 600;
+    const fmt = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+
+    // liga a cena já no ponto certo da animação (funciona ao pular para qualquer tempo)
+    const activate = (s, lt) => {
+      s.el.classList.remove("on");
+      void s.el.offsetWidth;
+      s.el.style.setProperty("--seek", Math.max(0, lt).toFixed(2) + "s");
+      s.el.classList.add("on");
+      s.on = true;
+    };
+    const sync = force => scenes.forEach(s => {
+      const on = (t >= s.a && t < s.b) || (t >= D && s.b >= D);
+      if (on && (!s.on || force)) activate(s, t - s.a);
+      else if (!on && s.on) { s.el.classList.remove("on"); s.on = false; }
+    });
+    const render = force => {
+      sync(force);
+      lines.forEach(l => {
+        const full = narrow && l.alt ? l.alt : l.full;
+        const n = Math.max(0, Math.min(full.length, Math.floor((t - l.at) * l.cps)));
+        l.el.classList.toggle("vis", t >= l.at);
+        if (l.ty) {
+          const txt = full.slice(0, n);
+          if (l.ty.textContent !== txt) l.ty.textContent = txt;
+          l.ty.classList.toggle("typing", t >= l.at && n < full.length);
+        }
+      });
+      if (rate && t >= 7 && t < 17.5) {
+        const r = Math.round((5.3 + 0.28 * (0.5 + 0.5 * Math.sin(t * 1.7)) + 0.06 * Math.sin(t * 6.1)) * 100) / 100;
+        const sub = Math.round(r * 100 * 100) / 100, tax = Math.round(sub * 3.5) / 100;
+        rate.textContent = brl.format(r); iof.textContent = brl.format(tax); total.textContent = brl.format(sub + tax);
+      }
+      const c = caps.find(x => t >= x[0] && t < x[1]) || (t >= D ? caps[caps.length - 1] : null);
+      const txt = c ? c[2] : "";
+      if (cap.textContent !== txt) cap.textContent = txt;
+      cap.classList.toggle("has", !!txt);
+      fill.style.transform = "scaleX(" + (t / D).toFixed(4) + ")";
+      knob.style.left = ((t / D) * 100).toFixed(2) + "%";
+      time.textContent = fmt(t) + " / " + fmt(D);
+      track.setAttribute("aria-valuenow", String(Math.round(t)));
+      track.setAttribute("aria-valuetext", fmt(t));
+    };
+    const loop = now => {
+      if (!playing) return;
+      t = Math.min(D, t + Math.min(0.1, (now - last) / 1000));
+      last = now;
+      render(false);
+      if (t >= D) { pause(); root.classList.add("ended"); return; }
+      raf = requestAnimationFrame(loop);
+    };
+    const play = () => {
+      if (playing) return;
+      if (t >= D) { t = 0; root.classList.remove("ended"); render(true); }
+      playing = true;
+      root.classList.add("playing", "started");
+      pp.setAttribute("aria-label", "Pausar o vídeo");
+      last = performance.now();
+      raf = requestAnimationFrame(loop);
+    };
+    function pause() {
+      playing = false;
+      root.classList.remove("playing");
+      cancelAnimationFrame(raf);
+      pp.setAttribute("aria-label", "Reproduzir o vídeo");
+    }
+    const seek = s => {
+      t = Math.max(0, Math.min(D, s));
+      root.classList.toggle("ended", t >= D);
+      if (t < D) root.classList.add("started");
+      render(true);
+    };
+
+    $(".vsl-poster", root).addEventListener("click", () => { userPaused = false; play(); });
+    pp.addEventListener("click", () => {
+      if (playing) { userPaused = true; pause(); }
+      else { userPaused = false; play(); }
+    });
+    $(".vsl-replay", root).addEventListener("click", () => { seek(0); userPaused = false; play(); });
+    screen.addEventListener("click", e => {
+      if (e.target.closest(".vsl-poster, .vsl-end")) return;
+      if (e.target.closest(".v-btn")) { const pl = $("#planos"); if (pl) pl.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); return; }
+      if (root.classList.contains("started")) pp.click();
+    });
+    const at = e => { const r = track.getBoundingClientRect(); return ((e.clientX - r.left) / r.width) * D; };
+    let drag = false;
+    track.addEventListener("pointerdown", e => { drag = true; try { track.setPointerCapture(e.pointerId); } catch (_) {} seek(at(e)); });
+    track.addEventListener("pointermove", e => { if (drag) seek(at(e)); });
+    track.addEventListener("pointerup", () => { drag = false; });
+    track.addEventListener("pointercancel", () => { drag = false; });
+    track.addEventListener("keydown", e => {
+      let nt = null;
+      if (e.key === "ArrowRight") nt = t + 5;
+      else if (e.key === "ArrowLeft") nt = t - 5;
+      else if (e.key === "Home") nt = 0;
+      else if (e.key === "End") nt = D;
+      else if (e.key === " " || e.key === "Enter") { e.preventDefault(); pp.click(); return; }
+      if (nt !== null) { e.preventDefault(); seek(nt); }
+    });
+
+    // começa sozinho quando aparece na tela e pausa quando sai
+    const canAuto = () => visible && !userPaused && !reduce && !document.hidden && !root.classList.contains("ended");
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([en]) => {
+        visible = en.isIntersecting;
+        if (canAuto()) play();
+        else if (!visible && playing) pause();
+      }, { threshold: 0.55 }).observe(screen);
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) { if (playing) pause(); }
+      else if (canAuto() && root.classList.contains("started")) play();
+    });
+    addEventListener("resize", () => {
+      const nw = screen.clientWidth <= 600;
+      if (nw !== narrow) { narrow = nw; render(false); }
+    });
+    render(true);
+  }
+
   /* ---------- no celular, o carrossel de planos abre no Pro ---------- */
   function plansCarousel() {
     const box = $(".plans"), feat = $(".plan.featured");
@@ -1556,7 +1998,7 @@ resposta = client.messages.<span class="f">create</span>(
     addEventListener("orientationchange", () => setTimeout(center, 300));
   }
 
-  [config, nav, reveal, offscreen, tilt, parallax, globe, tabs, copyButtons, rotator, counters, magnetic, spotlight, stickyCta, perDay, plansCarousel].forEach(run);
+  [config, nav, reveal, offscreen, tilt, parallax, globe, tabs, copyButtons, rotator, counters, magnetic, spotlight, stickyCta, perDay, plansCarousel, vsl].forEach(run);
   run(() => { const y = $("#year"); if (y) y.textContent = String(new Date().getFullYear()); });
   window.__open33Ok = true;
 })();
