@@ -809,13 +809,13 @@ code{font-family:var(--f-mono)}
                 <div class="ben a-card" style="--d:7.2s"><i>PT</i><span>Suporte em português</span></div>
               </div>
             </div>
-            <div class="scene s6" data-start="43" data-end="53.4">
+            <div class="scene s6" data-start="43" data-end="53.8">
               <p class="v-mid a-up" style="--d:.1s">Planos a partir de</p>
               <p class="v-price a-zoom" style="--d:1.5s"><span class="cur">R$</span><span class="vsl-price">97</span><span class="per">/mês</span></p>
               <p class="v-small a-up" style="--d:4.5s">cerca de <b class="vsl-day">R$ 3,23</b> por dia</p>
               <div class="v-guar a-pop" style="--d:8.3s">✓ 7 dias de garantia</div>
             </div>
-            <div class="scene s7" data-start="53.4" data-end="58">
+            <div class="scene s7" data-start="53.8" data-end="58">
               <p class="v-big a-up" style="--d:.1s">Escolha seu plano <span class="v-acc">agora.</span></p>
               <div class="a-pop" style="--d:.8s"><span class="v-btn">Ver planos ↓</span></div>
               <p class="v-small a-up" style="--d:1.6s">7 dias de garantia · Pix ou cartão · Suporte em português</p>
@@ -1872,22 +1872,22 @@ resposta = client.messages.<span class="f">create</span>(
     const priceTxt = brl.format(price).replace(/,00$/, ""), dayTxt = brl.format(price / 30);
     $$(".vsl-price", root).forEach(el => { el.textContent = priceTxt.replace(/^R\$\s*/, ""); });
     $$(".vsl-day", root).forEach(el => { el.textContent = dayTxt; });
-    // legendas no tempo da narração (vsl-narracao.mp3)
+    // legendas no tempo da narração (vsl-narracao.mp3, gerada por ferramentas/gerar_audio.py)
     const caps = [
       [0, 2.5, "Você usa o Claude para programar?"],
       [2.5, 6.3, "E paga em dólar, no cartão internacional?"],
       [6.3, 9, "Aí vem o IOF, o câmbio do dia…"],
       [9, 13.8, "…e todo mês a fatura chega com um valor diferente."],
-      [13.8, 16.8, "Com a open33 é diferente."],
-      [16.8, 21.8, "Você usa o Claude Opus 5 com plano mensal em reais."],
-      [21.8, 26, "Para começar, é só trocar a URL e a chave."],
-      [26, 29.6, "Duas linhas no terminal e o Claude Code está pronto."],
+      [13.8, 16.9, "Com a open33 é diferente."],
+      [16.9, 21.8, "Você usa o Claude Opus 5 com plano mensal em reais."],
+      [21.8, 26.1, "Para começar, é só trocar a URL e a chave."],
+      [26.1, 29.6, "Duas linhas no terminal e o Claude Code está pronto."],
       [29.6, 34.3, "Também funciona no Cursor, no Antigravity e no seu app."],
-      [34.3, 39.1, "Você paga no Pix ou no cartão, com preço fixo e sem pagar IOF."],
-      [39.1, 43.3, "Tem 1 milhão de tokens de contexto e suporte em português."],
-      [43.3, 50.4, "Os planos começam em " + priceTxt + " por mês, cerca de " + dayTxt + " por dia."],
-      [50.4, 53.6, "E você ainda tem 7 dias de garantia."],
-      [53.6, D, "Escolha seu plano logo abaixo e comece hoje."],
+      [34.3, 39.2, "Você paga no Pix ou no cartão, com preço fixo e sem pagar IOF."],
+      [39.2, 43.2, "Tem 1 milhão de tokens de contexto e suporte em português."],
+      [43.2, 50.4, "Os planos começam em " + priceTxt + " por mês, cerca de " + dayTxt + " por dia."],
+      [50.4, 54, "E você ainda tem 7 dias de garantia."],
+      [54, D, "Escolha seu plano logo abaixo e comece hoje."],
     ];
     const transcript = $(".vsl-transcript");
     if (transcript) transcript.textContent = caps.map(c => c[2]).join(" ").replace("… …", "… ");

@@ -13,7 +13,7 @@ Visual em preto, azul e azul bebê.
    app. Pagando em reais.", com a ferramenta girando em 3D. O globo em canvas
    gira com o mouse ou com o dedo e continua girando por inércia. Também há
    cartões de vidro flutuando e um piso em grade.
-2. **VSL de 58 segundos**: animação com 7 cenas, narração
+2. **VSL de 58 segundos**: animação com 7 cenas, narração com trilha de fundo
    (`vsl-narracao.mp3`) e legendas. Começa sozinha e sem som quando aparece na
    tela, com o aviso "Clique para ouvir". O clique liga o som e volta ao
    começo. Pausa quando sai da tela. Tem barra com play, som, avanço e tempo,
@@ -73,7 +73,7 @@ No fim do `index.html` fica o objeto `CONFIG`:
   garantia, Cursor e Antigravity). Se mudar algo na página, ajuste também as
   cenas, as legendas (lista `caps` na função `vsl()`) e a narração. O preço da
   tela vem do plano Start, mas o áudio fala R$ 97. Se o preço mudar, o vídeo
-  fica sem som até você rodar `ferramentas/gerar_narracao.py` (veja
+  fica sem som até você rodar `ferramentas/gerar_audio.py` (veja
   [`vsl-roteiro.md`](vsl-roteiro.md)).
 - **Links do rodapé**: "Termos de uso" e "Política de privacidade" ainda
   apontam para `#`.
@@ -92,7 +92,7 @@ No fim do `index.html` fica o objeto `CONFIG`:
     var(--seek))`, então pular para qualquer ponto mostra o quadro certo.
   - Os tamanhos são em `cqw` (container queries), e a cena escala como um
     vídeo.
-  - O áudio (464 KB) só baixa quando o vídeo aparece na tela.
+  - O áudio (~800 KB) só baixa quando o vídeo aparece na tela.
 - **Revelação**: usa a propriedade `translate`, para não conflitar com o
   `transform` da inclinação 3D.
 - **Economia de bateria**: animações de seções fora da tela ficam pausadas.

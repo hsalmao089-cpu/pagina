@@ -1,2 +1,3 @@
 ferramentas/vozes/
-ferramentas/narracao.wav
+ferramentas/*.wav
+__pycache__/

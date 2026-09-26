@@ -3,7 +3,7 @@
 O vídeo de vendas (VSL) fica na seção "Assista em 1 minuto", logo depois do
 topo. O botão "Assistir em 1 min" do topo leva até ele.
 
-É uma **animação feita no próprio site, com narração em áudio**
+É uma **animação feita no próprio site, com narração e trilha de fundo**
 (`vsl-narracao.mp3`). São 7 cenas em 58 segundos, com legendas.
 
 - **Começa sozinho e sem som** quando aparece na tela, porque nenhum navegador
@@ -29,24 +29,40 @@ O preço e o valor por dia mostrados na tela vêm do plano Start da página.
 | 0:13–0:21 | Planeta 3D, a marca **open33** e "Claude Opus 5 com plano mensal em reais." | Com a open33 é diferente. Você usa o Claude Opus 5 com plano mensal em reais. |
 | 0:21–0:34 | Terminal digitando `ANTHROPIC_BASE_URL="https://api.open33.tech"`, a chave e `claude --model claude-opus-5`. Depois aparecem os nomes Claude Code, Cursor, Antigravity e Seu app. | Para começar, é só trocar a URL e a chave. Duas linhas no terminal e o Claude Code está pronto. Também funciona no Cursor, no Antigravity e no seu app. |
 | 0:34–0:43 | "Tudo em reais:" com 4 cartões: Pix ou cartão nacional; Preço fixo, sem IOF; 1M tokens de contexto; Suporte em português. | Você paga no Pix ou no cartão, com preço fixo e sem pagar IOF. Tem 1 milhão de tokens de contexto e suporte em português. |
-| 0:43–0:53 | "Planos a partir de R$ 97/mês", "cerca de R$ 3,23 por dia" e o selo "7 dias de garantia". | Os planos começam em R$ 97 por mês, cerca de R$ 3,23 por dia. E você ainda tem 7 dias de garantia. |
-| 0:53–0:58 | "Escolha seu plano agora." e o botão "Ver planos". | Escolha seu plano logo abaixo e comece hoje. |
+| 0:43–0:54 | "Planos a partir de R$ 97/mês", "cerca de R$ 3,23 por dia" e o selo "7 dias de garantia". | Os planos começam em R$ 97 por mês, cerca de R$ 3,23 por dia. E você ainda tem 7 dias de garantia. |
+| 0:54–0:58 | "Escolha seu plano agora." e o botão "Ver planos". | Escolha seu plano logo abaixo e comece hoje. |
 
-## A narração
+## O áudio
 
-- A voz é sintética. É a voz "cadu", em português do Brasil, do
+- **Voz**: sintética, a voz "cadu" em português do Brasil do
   [Piper](https://github.com/OHF-Voice/piper1-gpl), um sistema de voz aberto.
   Ela foi treinada num conjunto de dados CC0 e pode ser usada em site
-  comercial.
+  comercial. Recebeu tratamento para soar mais suave:
+  - fala um pouco mais devagar;
+  - menos agudo e chiado;
+  - mais corpo;
+  - compressão leve;
+  - um pouco de ambiência.
+- **Trilha**: composta por código para este vídeo, então não há direitos de
+  terceiros. É leve e animada (110 BPM, piano elétrico, tapete de teclado,
+  baixo e bateria suave):
+  - começa calma;
+  - a bateria entra quando aparece a marca open33 (0:13);
+  - fica mais cheia na oferta;
+  - termina num acorde final.
+- **Volume**: a trilha abaixa sozinha quando a voz fala e volta nas pausas.
 - Cada frase começa junto com o que aparece na tela.
-- **Se mudar o preço do plano Start, refaça a narração.** O áudio fala
-  "noventa e sete reais". Se o preço da página for outro, o site deixa o vídeo
-  sem som e mostra só as legendas, para o vídeo não dizer um preço e a página
-  outro. Para refazer:
-  1. `pip install piper-tts imageio-ffmpeg numpy`
+- **Trocar a música**: coloque uma música com licença de uso na pasta
+  `ferramentas/` e preencha `TRILHA_ARQUIVO` em `ferramentas/gerar_audio.py`.
+  Pode ser da Biblioteca de Áudio do YouTube ou de um banco pago, por exemplo.
+- **Se mudar o preço do plano Start, refaça o áudio.** A voz fala "noventa e
+  sete reais". Se o preço da página for outro, o site deixa o vídeo sem som e
+  mostra só as legendas, para o vídeo não dizer um preço e a página outro.
+  Para refazer:
+  1. `pip install piper-tts imageio-ffmpeg numpy scipy pyloudnorm`
   2. Ajuste `PRECO`, `FALA_PRECO` e `FALA_DIA` em
-     `ferramentas/gerar_narracao.py`.
-  3. Rode `python ferramentas/gerar_narracao.py`.
+     `ferramentas/gerar_audio.py`.
+  3. Rode `python ferramentas/gerar_audio.py`.
   4. No `index.html`, troque `data-price="97"` da tag
      `<audio class="vsl-audio">` pelo preço novo.
 
@@ -59,9 +75,8 @@ caminhos.
 
 1. Grave a narração da tabela acima no celular, num lugar silencioso, num
    ritmo calmo.
-2. Me mande o arquivo. Eu ajusto as legendas e as cenas ao tempo da sua fala.
-3. Se preferir fazer sozinho: grave cada frase começando no tempo da tabela.
-   Salve como `vsl-narracao.mp3`, com 58 segundos, e substitua o arquivo.
+2. Me mande o arquivo. Eu mixo com a trilha e ajusto as legendas e as cenas
+   ao tempo da sua fala.
 
 **Vídeo gravado, no lugar da animação:** grave na horizontal (16:9,
 1920×1080), com legendas no próprio vídeo. Depois cole o link no `CONFIG`, no
